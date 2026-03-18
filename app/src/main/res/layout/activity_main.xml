@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="#f8efe4">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="285dp"
+                android:background="@drawable/doodles_fondo"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="285dp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.4"
+                android:background="@drawable/button_rounded"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Espacio superior -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            />
+
+        <!-- Título UDLAP SACU -->
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@drawable/logito"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="58dp"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="sans-serif-medium"
+            android:text="UDLAP"
+            android:textColor="#ff7420"
+            android:textSize="52sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="SACU"
+            android:textColor="#7f9c87"
+            android:textSize="28sp"
+            android:textStyle="italic"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginBottom="68dp" />
+
+        <!-- Etiqueta Ingrese su ID -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingrese su ID:"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="32dp"
+            android:textStyle="bold"/>
+
+        <!-- Campo ID con fondo gris claro y texto tipo placeholder -->
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/white"
+            android:inputType="number"
+            android:maxLines="1"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="#########"
+            android:textColor="#000000"
+            android:textColorHint="#999999"
+            android:textSize="16sp"
+            android:layout_gravity="center"/>
+
+        <!-- Etiqueta Contraseña -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contraseña:"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="32dp"
+            android:textStyle="bold"/>
+
+        <!-- Campo Contraseña con fondo gris claro y texto oculto -->
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="32dp"
+            android:background="@color/white"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="**************"
+            android:textColor="#000000"
+            android:textColorHint="#999999"
+            android:textSize="16sp"
+            android:layout_gravity="center"/>
+
+        <!-- Botón Ingresar -->
+        <Button
+            android:layout_width="199dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/white"
+            android:text="Ingresar"
+            android:textColor="#2e6417"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Frase inferior "Pide tu comida donde sea, cuando sea..." -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pide tu comida donde sea, cuando sea..."
+            android:textColor="#2E6417"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"
+            android:textStyle="italic"
+            />
+
+
+    </LinearLayout>
+
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

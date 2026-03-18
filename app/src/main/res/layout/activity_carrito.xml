@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Carrito"
+    android:background="#f8efe4"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="457dp"
+                android:layout_height="122dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="509dp"
+                />
+
+            <View
+                android:layout_width="457dp"
+                android:layout_height="211dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="270dp" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="557dp"
+                android:layout_height="87dp"
+                android:layout_gravity="center"
+                android:background="@color/white" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                />
+
+            <TextView
+                android:id="@+id/carrito"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mi Carrito"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
+
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvComidas"
+                android:layout_width="wrap_content"
+                android:layout_height="420dp"
+                android:layout_gravity="center"
+                />
+
+            <Button
+                android:id="@+id/btnComprar"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Comprar"
+                android:layout_gravity="center"
+                android:backgroundTint="#FF7420"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="57dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="bottom">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+                <ImageButton
+                    android:id="@+id/btnHome"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/icono_home"
+                    android:backgroundTint="#00FFFFFF"
+                    />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnCarrito"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="centerCrop"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2"
+                    tools:srcCompat="@drawable/icono_cartnaranja" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnNotif"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/icono_notif"
+                    android:backgroundTint="#00FFFFFF"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnPerfil"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/icono_perfil"
+                    android:backgroundTint="#00FFFFFF"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="28dp" />
+        </LinearLayout>
+    </FrameLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

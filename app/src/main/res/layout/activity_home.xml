@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home"
+    android:background="#f8efe4"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="457dp"
+                android:layout_height="211dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="420dp"
+                />
+
+            <View
+                android:layout_width="457dp"
+                android:layout_height="211dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="557dp"
+                android:layout_height="87dp"
+                android:layout_gravity="center"
+                android:background="@color/white" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                />
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                />
+
+            <TextView
+                android:id="@+id/txtNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre Apellido"
+                android:layout_marginLeft="50dp"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/txtID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="123456"
+                android:layout_marginLeft="50dp"
+                android:textSize="15dp"
+                android:textColor="#4D4C4C"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                />
+
+            <ImageView
+                android:id="@+id/contenedor"
+                android:layout_width="270dp"
+                android:layout_height="98dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/round_container" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="32dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/desayunos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Desayunos"
+                    android:textStyle="bold" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btnDesayunos"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="Ver todo"
+                    android:textColor="#ff7420" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginLeft="70dp"
+                android:id="@+id/rvDesayunos"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/comidas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Comidas"
+                    android:textStyle="bold" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btnComidas"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="Ver todo"
+                    android:textColor="#ff7420" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginLeft="70dp"
+                android:id="@+id/rvComidas"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="90dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="bottom">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+                <ImageButton
+                    android:id="@+id/btnHome"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/icono_homenaranja" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnCarrito"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/icono_cart"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnNotif"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/icono_notif"
+                    android:backgroundTint="#00FFFFFF"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnPerfil"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/icono_perfil"
+                    android:backgroundTint="#00FFFFFF"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="28dp" />
+        </LinearLayout>
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="139dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="85dp"
+                    android:layout_height="150dp" />
+
+                <FrameLayout
+                    android:id="@+id/frameEnFila"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:scaleType="centerCrop"
+                            tools:srcCompat="@drawable/icono_nota" />
+
+                        <TextView
+                            android:id="@+id/TotalPedidos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="54"
+                            android:textStyle="bold"
+                            android:textSize="20dp"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/EnFila"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="2"
+                            android:text="Pedidos en Fila"
+                            android:gravity="center"
+                            android:textSize="12dp"
+                            android:textColor="#737373"/>
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        />
+
+                </FrameLayout>
+
+
+
+
+                <FrameLayout
+                    android:id="@+id/frameTiempo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_marginTop="10dp"
+                        android:layout_width="2dp"
+                        android:layout_height="96dp"
+                        android:background="#EDE4DA"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_width="70dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="10dp">
+
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="50dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:scaleType="centerCrop"
+                            tools:srcCompat="@drawable/icono_tiempo" />
+
+                        <TextView
+                            android:id="@+id/TiempoEspera"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10:00"
+                            android:textStyle="bold"
+                            android:textSize="20dp"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/Tiemp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="2"
+                            android:text="Tiempo de espera aprox"
+                            android:gravity="center"
+                            android:textSize="12dp"
+                            android:textColor="#737373"/>
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        />
+                </FrameLayout>
+
+
+
+                <FrameLayout
+                    android:id="@+id/framePedido"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dp">
+
+                    <View
+                        android:layout_marginTop="10dp"
+                        android:layout_width="2dp"
+                        android:layout_height="96dp"
+                        android:background="#EDE4DA"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="70dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp">
+
+                        <ImageView
+                            android:id="@+id/imageView5"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:scaleType="centerCrop"
+                            android:scaleY="1.2"
+                            android:scaleX="1.2"
+                            tools:srcCompat="@drawable/icono_num"
+                            android:paddingTop="5dp"/>
+
+                        <TextView
+                            android:id="@+id/NumPedido"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="26"
+                            android:textStyle="bold"
+                            android:textSize="20dp"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="2"
+                            android:text="Mi número de pedido"
+                            android:gravity="center"
+                            android:textSize="12dp"
+                            android:textColor="#737373"/>
+                    </LinearLayout>
+                    <Space
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        />
+                </FrameLayout>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

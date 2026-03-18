@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Perfil"
+    android:background="#f8efe4">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="457dp"
+                android:layout_height="211dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="420dp"
+                />
+
+            <View
+                android:layout_width="457dp"
+                android:layout_height="211dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="139dp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="557dp"
+                android:layout_height="87dp"
+                android:layout_gravity="center"
+                android:background="@color/white" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                />
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                />
+
+            <TextView
+                android:id="@+id/txtNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre Apellido"
+                android:layout_marginLeft="50dp"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/txtID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="123456"
+                android:layout_marginLeft="50dp"
+                android:textSize="15dp"
+                android:textColor="#4D4C4C"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/metodos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Métodos de Pago"
+                    android:textStyle="bold" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btnMetodos"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="Ver todo"
+                    android:textColor="#ff7420" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                     />
+
+                <ImageView
+                android:id="@+id/TarjetaPred"
+                android:layout_width="232dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:alpha="0.5"
+                app:srcCompat="@drawable/button_rounded" />
+
+
+                <ImageButton
+                    android:id="@+id/btnEditar"
+                    android:layout_width="114dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:backgroundTint="#00000000"
+                    android:gravity="right"
+                    app:srcCompat="@drawable/round_container" />
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnMasTarjetas"
+                android:layout_width="360dp"
+                android:layout_height="85dp"
+                android:backgroundTint="#00000000"
+                app:srcCompat="@drawable/round_container"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginTop="-15dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/ultimos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Últimos Pedidos"
+                    android:textStyle="bold" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btnComidas"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="Ver todo"
+                    android:textColor="#ff7420" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginLeft="70dp"
+                android:id="@+id/rvComidas"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="67dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="bottom">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+                <ImageButton
+                    android:id="@+id/btnHome"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/icono_home"
+                    android:backgroundTint="#00FFFFFF"
+                    />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnCarrito"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="centerCrop"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2"
+                    tools:srcCompat="@drawable/icono_cart" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnNotif"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/icono_notif"
+                    android:backgroundTint="#00FFFFFF"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnPerfil"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/icono_perfilnaranja" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="28dp" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="52dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Space
+                    android:layout_width="300dp"
+                    android:layout_height="70dp" />
+
+                <ImageButton
+                    android:id="@+id/btnLogOut"
+                    android:layout_width="73dp"
+                    android:layout_height="73dp"
+                    android:backgroundTint="@android:color/white"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/icono_logout" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="175dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="50dp"
+                android:scaleType="centerCrop"
+                tools:srcCompat="@drawable/icono_tarjetapred" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+            <TextView
+                android:id="@+id/textTarjetaPred"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tarjeta Predeterminada"
+                android:textStyle="bold"
+                android:textSize="12dp"
+                android:layout_marginLeft="10dp"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <TextView
+                    android:id="@+id/textNumTarjeta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="522 ****** ***** 993"
+                    android:textStyle="italic"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#737373"/>
+
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="50dp"
+                android:layout_height="15dp" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btnEditar2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:srcCompat="@drawable/icono_edit"
+                    android:scaleType="centerCrop"
+                    android:backgroundTint="@color/white"
+                    android:layout_marginTop="-10dp"
+                    android:layout_gravity="center"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Editar"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="-10dp"
+                    android:paddingLeft="3dp"/>
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+            <Space
+                android:layout_width="50dp"
+                android:layout_height="20dp" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+               android:scaleType="centerCrop"
+                tools:srcCompat="@drawable/icono_mas"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Agregar Tarjeta"
+                android:textSize="12dp"
+                android:textColor="@color/black"
+                android:layout_gravity="center"/>
+
+
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
