@@ -5,13 +5,13 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Notificaciones"
+    tools:context=".CambiarMetodo"
     android:background="#f8efe4">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/v1"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -29,10 +29,11 @@
     </FrameLayout>
 
 
-
     <FrameLayout
+        android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -52,6 +53,7 @@
 
     <View
         android:layout_width="match_parent"
+        android:id="@+id/v2"
         android:layout_height="150dp"
         android:layout_gravity="center"
         android:background="@drawable/circle_background"
@@ -68,9 +70,14 @@
 
 
 
+
+
+
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,10 +90,9 @@
                 />
 
             <TextView
-                android:id="@+id/txtnotificaciones"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notificaciones"
+                android:text="Métodos de Pago"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:layout_gravity="center"/>
@@ -94,19 +100,11 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                />
+                android:layout_height="36dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvNotif"
-                android:layout_width="wrap_content"
-                android:layout_height="470dp"
-                android:layout_gravity="center"
-                />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="57dp" />
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -114,7 +112,9 @@
                 android:orientation="horizontal"
                 android:gravity="bottom"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="50dp">
+                android:layout_marginBottom="50dp"
+
+                >
 
                 <Space
                     android:layout_width="wrap_content"
@@ -125,10 +125,9 @@
                     android:id="@+id/btnHome"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_home"
                     android:backgroundTint="#00FFFFFF"
-                    />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_home" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -139,11 +138,11 @@
                     android:id="@+id/btnCarrito"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_cart"
                     android:backgroundTint="#00FFFFFF"
+                    android:scaleType="centerCrop"
                     android:scaleX="1.2"
-                    android:scaleY="1.2"/>
+                    android:scaleY="1.2"
+                    android:src="@drawable/icono_cartnaranja" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -154,9 +153,9 @@
                     android:id="@+id/btnNotif"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/icono_notifnaranja" />
+                    android:src="@drawable/icono_notif"
+                    android:backgroundTint="#00FFFFFF"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -178,9 +177,81 @@
 
 
             </LinearLayout>
-
         </LinearLayout>
     </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/l1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/v1"
+        app:layout_constraintBottom_toTopOf="@id/v2"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTarjetas"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="30dp"
+            />
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="14dp" />
+
+        <ImageButton
+            android:id="@+id/btnMasTarjetas"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:backgroundTint="#00000000"
+            app:srcCompat="@drawable/round_container"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="-15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="30dp"
+            />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/l1">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icono_mas" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Agregar Tarjeta"
+            android:textColor="@color/black"
+            android:textSize="12dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="18dp" />
+
+    </LinearLayout>
 
 
 

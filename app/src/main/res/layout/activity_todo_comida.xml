@@ -5,19 +5,21 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Notificaciones"
+    tools:context=".TodoComida"
     android:background="#f8efe4">
 
     <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <View
                 android:layout_width="match_parent"
@@ -48,9 +50,8 @@
     </FrameLayout>
 
 
-
-
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_gravity="center"
@@ -58,13 +59,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
+
     <View
+        android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
 
 
 
@@ -83,10 +87,10 @@
                 />
 
             <TextView
-                android:id="@+id/txtnotificaciones"
+                android:id="@+id/txtComida"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notificaciones"
+                android:text="Comida"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:layout_gravity="center"/>
@@ -94,19 +98,9 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                />
+                android:layout_height="55dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvNotif"
-                android:layout_width="wrap_content"
-                android:layout_height="470dp"
-                android:layout_gravity="center"
-                />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="57dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -125,10 +119,9 @@
                     android:id="@+id/btnHome"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_home"
                     android:backgroundTint="#00FFFFFF"
-                    />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_homenaranja" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -139,11 +132,11 @@
                     android:id="@+id/btnCarrito"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_cart"
                     android:backgroundTint="#00FFFFFF"
+                    android:scaleType="centerCrop"
                     android:scaleX="1.2"
-                    android:scaleY="1.2"/>
+                    android:scaleY="1.2"
+                    android:src="@drawable/icono_cart" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -154,9 +147,9 @@
                     android:id="@+id/btnNotif"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/icono_notifnaranja" />
+                    android:src="@drawable/icono_notif"
+                    android:backgroundTint="#00FFFFFF"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -181,6 +174,29 @@
 
         </LinearLayout>
     </FrameLayout>
+
+
+    <Button
+        android:id="@+id/btnComprar"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:backgroundTint="#FF7420"
+        android:text="Comprar"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="30dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvComidas"
+        android:layout_width="wrap_content"
+        android:layout_height="407dp"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/btnComprar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
 
 
 
