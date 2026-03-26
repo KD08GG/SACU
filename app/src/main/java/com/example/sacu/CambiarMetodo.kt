@@ -1,71 +1,34 @@
-package com.example.sacu
+package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.RecyclerView
 
-class Perfil : AppCompatActivity() {
+class CambiarMetodo : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_perfil)
+        setContentView(R.layout.activity_cambiar_metodo)
 
         //BOTONES MENU
         botonesMenu()
 
-        //VARIABLES
-        val nombre = findViewById<TextView>(R.id.txtNombre)
-        val id = findViewById<TextView>(R.id.txtID)
-        val tarjeta = findViewById<TextView>(R.id.textTarjetaPred)
-
-        //BOTONES DE LA PANTALLA
-        val btnEditar = findViewById<ImageButton>(R.id.btnEditar)
-        val btnEditar2 = findViewById<ImageButton>(R.id.btnEditar2)
-        val btnMasTarjetas = findViewById<ImageButton>(R.id.btnMasTarjetas)
-        val btnMetodos = findViewById<Button>(R.id.btnMetodos)
-        val btnUltimos = findViewById<Button>(R.id.btnComidas)
-        val btnLogOut = findViewById<ImageButton>(R.id.btnLogOut)
+        //BOTONES
+        val btnAgregarTarjeta = findViewById<ImageButton>(R.id.btnMasTarjetas)
 
         //RECYCLE VIEW
-        val rvUltimosPedidos = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rvComidas)
+        val rvTarjetas = findViewById<RecyclerView>(R.id.rvTarjetas)
 
         //FUNCIONES BOTONES
-        btnEditar.setOnClickListener {
-            intent = Intent(this, TarjetaPred::class.java)
-            startActivity(intent)
-        }
-
-        btnEditar2.setOnClickListener {
-            intent = Intent(this, TarjetaPred::class.java)
-            startActivity(intent)
-        }
-
-        btnMasTarjetas.setOnClickListener {
+        btnAgregarTarjeta.setOnClickListener {
             intent = Intent(this, AgregarTarjeta::class.java)
             startActivity(intent)
         }
-
-        btnMetodos.setOnClickListener {
-            intent = Intent(this, MetodosDePago::class.java)
-            startActivity(intent)
-        }
-
-        btnUltimos.setOnClickListener {
-            intent = Intent(this, Notificaciones::class.java)
-            startActivity(intent)
-        }
-
-        btnLogOut.setOnClickListener {
-            intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-
 
     }
 
@@ -101,4 +64,5 @@ class Perfil : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
 }
