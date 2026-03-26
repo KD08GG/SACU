@@ -45,13 +45,13 @@ class Home : AppCompatActivity() {
 
         //FUNCIONES BOTONES
         btnDesayunos.setOnClickListener {
-            intent = Intent(this, TodoComida::class.java)
+            val intent = Intent(this, TodoComida::class.java)
             intent.putExtra("tipo", "Desayunos")
             startActivity(intent)
         }
 
         btnComidas.setOnClickListener {
-            intent = Intent(this, TodoComida::class.java)
+            val intent = Intent(this, TodoComida::class.java)
             intent.putExtra("tipo", "Comidas")
             startActivity(intent)
         }
@@ -83,25 +83,25 @@ class Home : AppCompatActivity() {
         //FUNCIONES BOTONES DE MENU
         btnHome.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Home::class.java)
+            val intent = Intent(this, Home::class.java)
             startActivity(intent)
         }
 
         btnPerfil.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Perfil::class.java)
+            val intent = Intent(this, Perfil::class.java)
             startActivity(intent)
         }
 
         btnCarrito.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Carrito::class.java)
+            val intent = Intent(this, Carrito::class.java)
             startActivity(intent)
         }
 
         btnNotif.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Notificaciones::class.java)
+            val intent = Intent(this, Notificaciones::class.java)
             startActivity(intent)
         }
 

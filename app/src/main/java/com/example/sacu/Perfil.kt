@@ -37,32 +37,32 @@ class Perfil : AppCompatActivity() {
 
         //FUNCIONES BOTONES
         btnEditar.setOnClickListener {
-            intent = Intent(this, TarjetaPred::class.java)
+            val intent = Intent(this, TarjetaPred::class.java)
             startActivity(intent)
         }
 
         btnEditar2.setOnClickListener {
-            intent = Intent(this, TarjetaPred::class.java)
+            val intent = Intent(this, TarjetaPred::class.java)
             startActivity(intent)
         }
 
         btnMasTarjetas.setOnClickListener {
-            intent = Intent(this, AgregarTarjeta::class.java)
+            val intent = Intent(this, AgregarTarjeta::class.java)
             startActivity(intent)
         }
 
         btnMetodos.setOnClickListener {
-            intent = Intent(this, MetodosDePago::class.java)
+            val intent = Intent(this, MetodosDePago::class.java)
             startActivity(intent)
         }
 
         btnUltimos.setOnClickListener {
-            intent = Intent(this, Notificaciones::class.java)
+            val intent = Intent(this, Notificaciones::class.java)
             startActivity(intent)
         }
 
         btnLogOut.setOnClickListener {
-            intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
@@ -79,25 +79,25 @@ class Perfil : AppCompatActivity() {
         //FUNCIONES BOTONES DE MENU
         btnHome.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Home::class.java)
+            val intent = Intent(this, Home::class.java)
             startActivity(intent)
         }
 
         btnPerfil.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Perfil::class.java)
+            val intent = Intent(this, Perfil::class.java)
             startActivity(intent)
         }
 
         btnCarrito.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Carrito::class.java)
+            val intent = Intent(this, Carrito::class.java)
             startActivity(intent)
         }
 
         btnNotif.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Notificaciones::class.java)
+            val intent = Intent(this, Notificaciones::class.java)
             startActivity(intent)
         }
     }
