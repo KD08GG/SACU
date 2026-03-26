@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.sacu
 
 import android.content.Intent
 import android.os.Bundle
@@ -26,7 +26,7 @@ class PagoProcesado : AppCompatActivity() {
 
         //FUNCIONES BOTONES
         btnAceptar.setOnClickListener {
-            intent = Intent(this, Home::class.java)
+            val intent = Intent(this, Home::class.java)
             startActivity(intent)
          }
 
