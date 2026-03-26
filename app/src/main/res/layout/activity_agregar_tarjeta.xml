@@ -265,7 +265,7 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="-10dp"
-                android:text="Tarjeta Nueva"
+                android:hint="Tarjeta Nueva"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -290,7 +290,7 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="-10dp"
-                android:text="Nombre Apellido"
+                android:hint="Nombre Apellido"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -315,7 +315,7 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="-10dp"
-                android:text="522 ****** ***** 993"
+                android:hint="522 ****** ***** 993"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -340,7 +340,7 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="-10dp"
-                android:text="26/10/2026"
+                android:hint="26/10/2026"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -365,7 +365,7 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="-10dp"
-                android:text="123"
+                android:hint="123"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold" />

@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.sacu
 
 import android.content.Intent
 import android.os.Bundle
@@ -32,7 +32,7 @@ class AgregarTarjeta : AppCompatActivity() {
 
         // FUNCION BOTON GUARDAR
         btnGuardar.setOnClickListener {
-            intent = Intent(this, MetodosDePago::class.java)
+            val intent = Intent(this, MetodosDePago::class.java)
             startActivity(intent)
         }
 
@@ -48,25 +48,25 @@ class AgregarTarjeta : AppCompatActivity() {
         //FUNCIONES BOTONES DE MENU
         btnHome.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Home::class.java)
+            val intent = Intent(this, Home::class.java)
             startActivity(intent)
         }
 
         btnPerfil.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Perfil::class.java)
+            val intent = Intent(this, Perfil::class.java)
             startActivity(intent)
         }
 
         btnCarrito.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Carrito::class.java)
+            val intent = Intent(this, Carrito::class.java)
             startActivity(intent)
         }
 
         btnNotif.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Notificaciones::class.java)
+            val intent = Intent(this, Notificaciones::class.java)
             startActivity(intent)
         }
     }

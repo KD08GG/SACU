@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.sacu
 
 import android.content.Intent
 import android.os.Bundle
@@ -36,12 +36,12 @@ class Pagar : AppCompatActivity() {
 
         //FUNCIONES BOTONES
         btnComprar.setOnClickListener {
-            intent = Intent(this, PagoProcesado::class.java)
+            val intent = Intent(this, PagoProcesado::class.java)
             startActivity(intent)
         }
 
         btncambiarMetodo.setOnClickListener {
-            intent = Intent(this, CambiarMetodo::class.java)
+            val intent = Intent(this, CambiarMetodo::class.java)
             startActivity(intent)
         }
 
@@ -58,25 +58,25 @@ class Pagar : AppCompatActivity() {
         //FUNCIONES BOTONES DE MENU
         btnHome.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Home::class.java)
+            val intent = Intent(this, Home::class.java)
             startActivity(intent)
         }
 
         btnPerfil.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Perfil::class.java)
+            val intent = Intent(this, Perfil::class.java)
             startActivity(intent)
         }
 
         btnCarrito.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Carrito::class.java)
+            val intent = Intent(this, Carrito::class.java)
             startActivity(intent)
         }
 
         btnNotif.setOnClickListener {
             // Lógica para el botón de inicio de sesión
-            intent = Intent(this, Notificaciones::class.java)
+            val intent = Intent(this, Notificaciones::class.java)
             startActivity(intent)
         }
     }
