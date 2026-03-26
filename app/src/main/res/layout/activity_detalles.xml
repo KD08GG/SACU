@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Detalles"
+    android:background="#f8efe4">
+
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="122dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_background"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/v2"
+        android:paddingBottom="20dp"/>
+
+
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:background="@color/white" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp"
+        android:id="@+id/v1"/>
+
+    <View
+
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_gravity="center"
+        android:background="@drawable/round_container"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/v1"
+        app:layout_constraintTop_toBottomOf="@+id/v2"  />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            />
+
+
+        <TextView
+            android:id="@+id/txtnotificaciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notificaciones"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/v2"
+        app:layout_constraintBottom_toBottomOf="@+id/v1"
+
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="15dp"
+            >
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pedido"
+                android:textSize="27dp"
+                android:textColor="#737373"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/txtNumPedido"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:text="56"
+                android:textSize="49dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/txtEstado"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:text="Recogido"
+                android:textSize="30dp"
+                android:textColor="#737373"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="22dp"
+                android:text="Fecha"
+                android:textSize="20dp"
+                android:textColor="#737373"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/txtFecha"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:text="26/10/2026"
+                android:textSize="25dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="22dp"
+                android:text="Hora"
+                android:textSize="20dp"
+                android:textColor="#737373"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/txtHora"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:text="10:33 am"
+                android:textSize="25dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+               />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="22dp"
+                android:text="Método de Pago"
+                android:textSize="20dp"
+                android:textColor="#737373"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/txtMetodo"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:text="54 #### ### 204"
+                android:textSize="25dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Folio"
+                android:textColor="#737373"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/txtFolio"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:text="129uu348951346"
+                android:textSize="25dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                />
+
+
+
+        </LinearLayout>
+
+        </FrameLayout>
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="bottom"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="50dp">
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+                <ImageButton
+                    android:id="@+id/btnHome"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_home"
+                    android:backgroundTint="#00FFFFFF"
+                    />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnCarrito"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_cart"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnNotif"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_notifnaranja" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnPerfil"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_perfil"
+                    android:backgroundTint="#00FFFFFF"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+
+            </LinearLayout>
+
+
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

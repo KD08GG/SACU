@@ -1,4 +1,4 @@
-package com.example.sacu
+package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,28 +10,26 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class Carrito : AppCompatActivity() {
+class TarjetaPred : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_carrito)
+        setContentView(R.layout.activity_tarjeta_pred)
 
-        //BOTONES MENU
+        // BOTONES MENU
         botonesMenu()
 
-        //BOTONES DE LA PANTALLA
-        val btnComprar = findViewById<Button>(R.id.btnComprar)
+        //BOTONES
+        val btnGuardar = findViewById<Button>(R.id.btnGuardar)
 
-        //RECYCLE VIEW
-        val rvProductos = findViewById<RecyclerView>(R.id.rvComidas)
+        //RECYCLER
+        val rvTarjetas = findViewById<RecyclerView>(R.id.rvTarjetas)
 
-        // FUNCION BOTON COMPRAR
-        btnComprar.setOnClickListener {
-            intent = Intent(this, Pagar::class.java)
+        //FUNCIONES BOTONES
+        btnGuardar.setOnClickListener {
+            intent = Intent(this, Perfil::class.java)
             startActivity(intent)
         }
-
-
 
     }
 

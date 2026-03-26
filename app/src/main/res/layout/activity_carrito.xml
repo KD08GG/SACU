@@ -11,34 +11,25 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <View
-                android:layout_width="457dp"
+                android:layout_width="match_parent"
                 android:layout_height="122dp"
                 android:layout_gravity="center"
                 android:background="@drawable/circle_background" />
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="509dp"
-                />
-
-            <View
-                android:layout_width="457dp"
-                android:layout_height="211dp"
-                android:layout_gravity="center"
-                android:background="@drawable/circle_background" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="270dp" />
 
         </LinearLayout>
     </FrameLayout>
+
+
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -49,13 +40,34 @@
             android:orientation="vertical">
 
             <View
-                android:layout_width="557dp"
-                android:layout_height="87dp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:background="@color/white" />
 
         </LinearLayout>
     </FrameLayout>
+
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -107,9 +119,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:gravity="bottom">
+                android:gravity="bottom"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="50dp">
 
                 <Space
                     android:layout_width="wrap_content"
@@ -121,7 +135,7 @@
                     android:layout_width="53dp"
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@drawable/icono_home"
+                    android:src="@drawable/icono_home"
                     android:backgroundTint="#00FFFFFF"
                     />
 
@@ -138,7 +152,7 @@
                     android:scaleType="centerCrop"
                     android:scaleX="1.2"
                     android:scaleY="1.2"
-                    tools:srcCompat="@drawable/icono_cartnaranja" />
+                    android:src="@drawable/icono_cartnaranja" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -150,7 +164,7 @@
                     android:layout_width="53dp"
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@drawable/icono_notif"
+                    android:src="@drawable/icono_notif"
                     android:backgroundTint="#00FFFFFF"/>
 
                 <Space
@@ -163,7 +177,7 @@
                     android:layout_width="53dp"
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@drawable/icono_perfil"
+                    android:src="@drawable/icono_perfil"
                     android:backgroundTint="#00FFFFFF"/>
 
                 <Space
