@@ -2,6 +2,7 @@ package com.example.sacu
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,17 +10,26 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class Notificaciones : AppCompatActivity() {
+class TarjetaPred : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_notificaciones)
+        setContentView(R.layout.activity_tarjeta_pred)
 
-        //BOTONES MENU
+        // BOTONES MENU
         botonesMenu()
 
-        //RECYCLE VIEW
-        val rvNotif = findViewById<RecyclerView>(R.id.rvNotif)
+        //BOTONES
+        val btnGuardar = findViewById<Button>(R.id.btnGuardar)
+
+        //RECYCLER
+        val rvTarjetas = findViewById<RecyclerView>(R.id.rvTarjetas)
+
+        //FUNCIONES BOTONES
+        btnGuardar.setOnClickListener {
+            val intent = Intent(this, Perfil::class.java)
+            startActivity(intent)
+        }
 
     }
 
@@ -55,4 +65,5 @@ class Notificaciones : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
 }

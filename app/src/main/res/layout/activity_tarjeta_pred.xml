@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Notificaciones"
+    tools:context=".TarjetaPred"
     android:background="#f8efe4">
 
     <FrameLayout
@@ -83,10 +83,9 @@
                 />
 
             <TextView
-                android:id="@+id/txtnotificaciones"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notificaciones"
+                android:text="Tarjeta Predeterminada"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:layout_gravity="center"/>
@@ -96,13 +95,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Elige tu tarjeta tredeterminada"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_margin="30dp"
+                android:layout_gravity="left"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvNotif"
-                android:layout_width="wrap_content"
-                android:layout_height="470dp"
+                android:id="@+id/rvTarjetas"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_margin="30dp"
                 android:layout_gravity="center"
                 />
+
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Guardar"
+                android:layout_gravity="center"
+                android:textColor="#FF7420"
+                android:backgroundTint="@color/white"/>
 
             <Space
                 android:layout_width="match_parent"
@@ -139,11 +157,11 @@
                     android:id="@+id/btnCarrito"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_cart"
                     android:backgroundTint="#00FFFFFF"
+                    android:scaleType="centerCrop"
                     android:scaleX="1.2"
-                    android:scaleY="1.2"/>
+                    android:scaleY="1.2"
+                    android:src="@drawable/icono_cart" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -154,9 +172,9 @@
                     android:id="@+id/btnNotif"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/icono_notifnaranja" />
+                    android:src="@drawable/icono_notif"
+                    android:backgroundTint="#00FFFFFF"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -167,9 +185,9 @@
                     android:id="@+id/btnPerfil"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
+                    android:backgroundTint="#00FFFFFF"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/icono_perfil"
-                    android:backgroundTint="#00FFFFFF"/>
+                    android:src="@drawable/icono_perfilnaranja" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -179,9 +197,11 @@
 
             </LinearLayout>
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="28dp" />
         </LinearLayout>
     </FrameLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

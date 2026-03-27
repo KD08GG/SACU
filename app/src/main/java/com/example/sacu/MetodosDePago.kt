@@ -3,67 +3,55 @@ package com.example.sacu
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.RecyclerView
 
-class Perfil : AppCompatActivity() {
+class MetodosDePago : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_perfil)
+        setContentView(R.layout.activity_metodos_de_pago)
 
         //BOTONES MENU
         botonesMenu()
 
         //VARIABLES
-        val nombre = findViewById<TextView>(R.id.txtNombre)
-        val id = findViewById<TextView>(R.id.txtID)
-        val tarjeta = findViewById<TextView>(R.id.textTarjetaPred)
+        val tarjetaPred = findViewById<TextView>(R.id.textNumTarjeta)
 
-        //BOTONES DE LA PANTALLA
-        val btnEditar = findViewById<ImageButton>(R.id.btnEditar)
-        val btnEditar2 = findViewById<ImageButton>(R.id.btnEditar2)
-        val btnMasTarjetas = findViewById<ImageButton>(R.id.btnMasTarjetas)
-        val btnMetodos = findViewById<Button>(R.id.btnMetodos)
-        val btnUltimos = findViewById<Button>(R.id.btnComidas)
-        val btnLogOut = findViewById<ImageButton>(R.id.btnLogOut)
+        //BOTONES
+        val btnBorrar = findViewById<ImageButton>(R.id.btnBorrar)
+        val btnAgregarTarjetas = findViewById<ImageButton>(R.id.btnMasTarjetas)
+        val btnCancelar = findViewById<Button>(R.id.btnCancelar)
+        val btnBorrarTarjeta = findViewById<Button>(R.id.btnBorrarTarjeta)
 
         //RECYCLE VIEW
-        val rvUltimosPedidos = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rvComidas)
+        val rvTarjetas = findViewById<RecyclerView>(R.id.rvProductos)
+
+        //FRAMES LAYOUT
+        val frameBorrar = findViewById<FrameLayout>(R.id.borrarNotif)
 
         //FUNCIONES BOTONES
-        btnEditar.setOnClickListener {
-            val intent = Intent(this, TarjetaPred::class.java)
-            startActivity(intent)
-        }
-
-        btnEditar2.setOnClickListener {
-            val intent = Intent(this, TarjetaPred::class.java)
-            startActivity(intent)
-        }
-
-        btnMasTarjetas.setOnClickListener {
+        btnAgregarTarjetas.setOnClickListener {
             val intent = Intent(this, AgregarTarjeta::class.java)
             startActivity(intent)
         }
 
-        btnMetodos.setOnClickListener {
-            val intent = Intent(this, MetodosDePago::class.java)
-            startActivity(intent)
+        btnBorrar.setOnClickListener {
+            frameBorrar.visibility = FrameLayout.VISIBLE
         }
 
-        btnUltimos.setOnClickListener {
-            val intent = Intent(this, Notificaciones::class.java)
-            startActivity(intent)
+        btnCancelar.setOnClickListener {
+            frameBorrar.visibility = FrameLayout.INVISIBLE
         }
 
-        btnLogOut.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        btnBorrarTarjeta.setOnClickListener {
+            frameBorrar.visibility = FrameLayout.INVISIBLE
         }
 
 
@@ -101,4 +89,5 @@ class Perfil : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
 }

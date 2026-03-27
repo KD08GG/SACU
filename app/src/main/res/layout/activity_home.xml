@@ -11,30 +11,25 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <View
-                android:layout_width="457dp"
-                android:layout_height="211dp"
-                android:layout_gravity="center"
-                android:background="@drawable/circle_background" />
-            <Space
                 android:layout_width="match_parent"
-                android:layout_height="420dp"
-                />
-
-            <View
-                android:layout_width="457dp"
-                android:layout_height="211dp"
+                android:layout_height="167dp"
                 android:layout_gravity="center"
                 android:background="@drawable/circle_background" />
 
         </LinearLayout>
     </FrameLayout>
+
+
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -45,16 +40,35 @@
             android:orientation="vertical">
 
             <View
-                android:layout_width="557dp"
-                android:layout_height="87dp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:background="@color/white" />
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="270dp"
-                />
+
         </LinearLayout>
     </FrameLayout>
+
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+
+
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -90,15 +104,17 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                />
+                android:layout_height="60dp" />
 
             <ImageView
                 android:id="@+id/contenedor"
-                android:layout_width="270dp"
+                android:layout_width="match_parent"
                 android:layout_height="98dp"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/round_container" />
+                app:srcCompat="@drawable/round_container"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="50dp"/>
 
             <Space
                 android:layout_width="match_parent"
@@ -109,18 +125,16 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+
 
                 <TextView
                     android:id="@+id/desayunos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:text="Desayunos"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginLeft="50dp"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -129,18 +143,15 @@
 
                 <Button
                     android:id="@+id/btnDesayunos"
-                    android:layout_width="50dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="Ver todo"
-                    android:textColor="#ff7420" />
+                    android:textColor="#ff7420"
+                    android:layout_marginRight="50dp"/>
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -155,18 +166,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/comidas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:text="Comidas"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginLeft="50dp"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -175,18 +183,16 @@
 
                 <Button
                     android:id="@+id/btnComidas"
-                    android:layout_width="50dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="Ver todo"
-                    android:textColor="#ff7420" />
+                    android:textColor="#ff7420"
+                    android:layout_marginRight="50dp"/>
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -202,9 +208,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:gravity="bottom">
+                android:gravity="bottom"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="50dp">
 
                 <Space
                     android:layout_width="wrap_content"
@@ -217,7 +225,7 @@
                     android:layout_height="53dp"
                     android:backgroundTint="#00FFFFFF"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@drawable/icono_homenaranja" />
+                    android:src="@drawable/icono_homenaranja" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -229,7 +237,7 @@
                     android:layout_width="53dp"
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@drawable/icono_cart"
+                    android:src="@drawable/icono_cart"
                     android:backgroundTint="#00FFFFFF"
                     android:scaleX="1.2"
                     android:scaleY="1.2"/>
@@ -244,7 +252,7 @@
                     android:layout_width="53dp"
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@drawable/icono_notif"
+                    android:src="@drawable/icono_notif"
                     android:backgroundTint="#00FFFFFF"/>
 
                 <Space
@@ -257,7 +265,7 @@
                     android:layout_width="53dp"
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@drawable/icono_perfil"
+                    android:src="@drawable/icono_perfil"
                     android:backgroundTint="#00FFFFFF"/>
 
                 <Space
@@ -268,16 +276,14 @@
 
             </LinearLayout>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="28dp" />
         </LinearLayout>
     </FrameLayout>
 
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -285,26 +291,36 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="139dp" />
+                android:layout_height="169dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="50dp">
 
                 <Space
-                    android:layout_width="85dp"
-                    android:layout_height="150dp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="150dp"
+                    android:layout_weight="1"/>
 
                 <FrameLayout
                     android:id="@+id/frameEnFila"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    >
 
                     <LinearLayout
                         android:layout_width="60dp"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_gravity="center">
 
                         <ImageView
                             android:id="@+id/imageView3"
@@ -312,7 +328,7 @@
                             android:layout_height="40dp"
                             android:layout_gravity="center"
                             android:scaleType="centerCrop"
-                            tools:srcCompat="@drawable/icono_nota" />
+                            android:src="@drawable/icono_nota"/>
 
                         <TextView
                             android:id="@+id/TotalPedidos"
@@ -347,7 +363,8 @@
                 <FrameLayout
                     android:id="@+id/frameTiempo"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2">
 
                     <View
                         android:layout_marginTop="10dp"
@@ -361,7 +378,8 @@
                         android:layout_width="70dp"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:layout_marginLeft="10dp">
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center">
 
                         <ImageView
                             android:id="@+id/imageView4"
@@ -369,7 +387,7 @@
                             android:layout_height="40dp"
                             android:layout_gravity="center"
                             android:scaleType="centerCrop"
-                            tools:srcCompat="@drawable/icono_tiempo" />
+                            android:src="@drawable/icono_tiempo" />
 
                         <TextView
                             android:id="@+id/TiempoEspera"
@@ -403,7 +421,9 @@
                     android:id="@+id/framePedido"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="15dp">
+                    android:paddingLeft="15dp"
+                    android:layout_weight="2"
+                    android:visibility="gone">
 
                     <View
                         android:layout_marginTop="10dp"
@@ -416,7 +436,8 @@
                         android:layout_width="70dp"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:paddingLeft="10dp">
+                        android:paddingLeft="10dp"
+                        android:layout_gravity="center">
 
                         <ImageView
                             android:id="@+id/imageView5"
@@ -426,7 +447,7 @@
                             android:scaleType="centerCrop"
                             android:scaleY="1.2"
                             android:scaleX="1.2"
-                            tools:srcCompat="@drawable/icono_num"
+                            android:src="@drawable/icono_num"
                             android:paddingTop="5dp"/>
 
                         <TextView
@@ -451,6 +472,7 @@
                     <Space
                         android:layout_width="70dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         />
                 </FrameLayout>
 
