@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Pagar"
+    android:background="#f8efe4">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/v1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="122dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_background" />
+
+            </LinearLayout>
+        </FrameLayout>
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:background="@color/white" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:id="@+id/v2"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:background="@drawable/circle_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+
+
+
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pagar"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
+
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="36dp" />
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="bottom"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="50dp"
+
+                >
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+                <ImageButton
+                    android:id="@+id/btnHome"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_home" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnCarrito"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:backgroundTint="#00FFFFFF"
+                    android:scaleType="centerCrop"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2"
+                    android:src="@drawable/icono_cartnaranja" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnNotif"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_notif"
+                    android:backgroundTint="#00FFFFFF"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btnPerfil"
+                    android:layout_width="53dp"
+                    android:layout_height="53dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_perfil"
+                    android:backgroundTint="#00FFFFFF"/>
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/l1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/v1"
+        app:layout_constraintBottom_toTopOf="@id/btnComprar"
+        >
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="match_parent"
+            android:layout_height="123dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="36dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/round_container" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/txtFecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="26/10/2026"
+            android:gravity="center"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Método de Pago"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="11dp" />
+
+        <LinearLayout
+            android:id="@+id/metodosLayout"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="30dp">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:alpha="0.6"
+                app:srcCompat="@drawable/button_rounded"/>
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="match_parent"/>
+
+            <ImageButton
+                android:id="@+id/btncambiar"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#00FFFFFF"
+                app:srcCompat="@drawable/round_container"
+                android:scaleY="1.4"
+                android:scaleX="1.2"/>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Productos"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="5dp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductos"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="30dp"
+            />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="14dp" />
+
+        <ImageView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/button_rounded"
+            android:layout_marginBottom="20dp"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/v1"
+        app:layout_constraintBottom_toTopOf="@id/btnComprar"
+        android:layout_marginBottom="10dp"
+        >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pedido"
+            android:textSize="30dp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/txtNumPedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="56"
+            android:textSize="50dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_gravity="center"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="80dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="35dp">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="centerInside"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                android:src="@drawable/icono_tarjetapred"
+                android:layout_weight="1"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="2"
+                android:layout_marginRight="10dp">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:id="@+id/textTarjetaPred"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tarjeta Predeterminada"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="10dp"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <TextView
+                    android:id="@+id/textNumTarjeta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="522 ****** ***** 993"
+                    android:textStyle="italic"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#737373"/>
+
+
+            </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="Cambiar\n Método"
+                    android:minLines="2"
+                    android:textSize="12dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:layout_weight="2"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginRight="5dp"
+                    />
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="160dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="30dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Total"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/txtTotal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="$100"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="center"
+            android:gravity="right"
+            android:layout_weight="2"/>
+
+        </LinearLayout>
+    </LinearLayout>
+    </FrameLayout>
+
+
+    <Button
+        android:id="@+id/btnComprar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="#FF7420"
+        android:text="Comprar"
+        app:layout_constraintBottom_toTopOf="@+id/v2"
+        app:layout_constraintTop_toBottomOf="@id/l1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

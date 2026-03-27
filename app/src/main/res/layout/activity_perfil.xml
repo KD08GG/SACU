@@ -10,42 +10,25 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <View
-                android:layout_width="457dp"
-                android:layout_height="211dp"
+                android:layout_width="match_parent"
+                android:layout_height="207dp"
                 android:layout_gravity="center"
                 android:background="@drawable/circle_background" />
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="420dp"
-                />
-
-            <View
-                android:layout_width="457dp"
-                android:layout_height="211dp"
-                android:layout_gravity="center"
-                android:background="@drawable/circle_background" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="139dp" />
-
-
-            </LinearLayout>
 
         </LinearLayout>
     </FrameLayout>
+
+
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -56,20 +39,38 @@
             android:orientation="vertical">
 
             <View
-                android:layout_width="557dp"
-                android:layout_height="87dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:background="@color/white" />
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="270dp"
-                />
+
         </LinearLayout>
     </FrameLayout>
 
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,18 +109,18 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="30dp"
+                >
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/metodos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:text="Métodos de Pago"
                     android:textStyle="bold" />
 
@@ -130,7 +131,7 @@
 
                 <Button
                     android:id="@+id/btnMetodos"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
@@ -138,10 +139,7 @@
                     android:text="Ver todo"
                     android:textColor="#ff7420" />
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+
             </LinearLayout>
 
             <Space
@@ -151,75 +149,90 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="20dp">
+
 
                 <Space
-                    android:layout_width="40dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="2"
                      />
 
                 <ImageView
                 android:id="@+id/TarjetaPred"
-                android:layout_width="232dp"
+                android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:alpha="0.5"
-                app:srcCompat="@drawable/button_rounded" />
+                    android:padding="5dp"
+                app:srcCompat="@drawable/button_rounded"
+                    android:layout_weight="25"/>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    />
 
 
                 <ImageButton
                     android:id="@+id/btnEditar"
-                    android:layout_width="114dp"
+                    android:layout_width="0dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:backgroundTint="#00000000"
                     android:gravity="right"
-                    app:srcCompat="@drawable/round_container" />
+                    app:srcCompat="@drawable/round_container"
+                    android:layout_weight="10"/>
 
                 <Space
-                    android:layout_width="30dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     />
 
             </LinearLayout>
 
             <ImageButton
                 android:id="@+id/btnMasTarjetas"
-                android:layout_width="360dp"
+                android:layout_width="match_parent"
                 android:layout_height="85dp"
                 android:backgroundTint="#00000000"
                 app:srcCompat="@drawable/round_container"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:layout_marginTop="-15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="40dp"
                 />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="30dp">
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/ultimos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:text="Últimos Pedidos"
                     android:textStyle="bold" />
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
                 <Button
                     android:id="@+id/btnComidas"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_weight="1"
@@ -227,17 +240,17 @@
                     android:text="Ver todo"
                     android:textColor="#ff7420" />
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginLeft="70dp"
+                android:layout_marginLeft="180dp"
                 android:id="@+id/rvComidas"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="40dp"
                 />
 
             <Space
@@ -246,9 +259,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:gravity="bottom">
+                android:gravity="bottom"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="50dp">
 
                 <Space
                     android:layout_width="wrap_content"
@@ -260,7 +275,7 @@
                     android:layout_width="53dp"
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@drawable/icono_home"
+                    android:src="@drawable/icono_home"
                     android:backgroundTint="#00FFFFFF"
                     />
 
@@ -277,7 +292,7 @@
                     android:scaleType="centerCrop"
                     android:scaleX="1.2"
                     android:scaleY="1.2"
-                    tools:srcCompat="@drawable/icono_cart" />
+                    android:src="@drawable/icono_cart" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -289,7 +304,7 @@
                     android:layout_width="53dp"
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@drawable/icono_notif"
+                    android:src="@drawable/icono_notif"
                     android:backgroundTint="#00FFFFFF"/>
 
                 <Space
@@ -303,7 +318,7 @@
                     android:layout_height="53dp"
                     android:backgroundTint="#00FFFFFF"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@drawable/icono_perfilnaranja" />
+                    android:src="@drawable/icono_perfilnaranja" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -312,9 +327,6 @@
 
             </LinearLayout>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="28dp" />
         </LinearLayout>
     </FrameLayout>
 
@@ -336,7 +348,8 @@
                 android:orientation="horizontal">
                 <Space
                     android:layout_width="300dp"
-                    android:layout_height="70dp" />
+                    android:layout_height="70dp"
+                    android:layout_weight="2"/>
 
                 <ImageButton
                     android:id="@+id/btnLogOut"
@@ -344,7 +357,8 @@
                     android:layout_height="73dp"
                     android:backgroundTint="@android:color/white"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@drawable/icono_logout" />
+                    android:src="@drawable/icono_logout"
+                    />
 
             </LinearLayout>
 
@@ -355,20 +369,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="43dp">
 
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginLeft="50dp"
-                android:scaleType="centerCrop"
-                tools:srcCompat="@drawable/icono_tarjetapred" />
+                android:scaleType="centerInside"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                android:src="@drawable/icono_tarjetapred"
+                android:layout_weight="1"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_weight="3">
 
                 <Space
                     android:layout_width="match_parent"
@@ -400,21 +421,19 @@
 
             </LinearLayout>
 
-            <Space
-                android:layout_width="50dp"
-                android:layout_height="15dp" />
 
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_weight="2">
 
                 <ImageButton
                     android:id="@+id/btnEditar2"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    app:srcCompat="@drawable/icono_edit"
+                    android:src="@drawable/icono_edit"
                     android:scaleType="centerCrop"
                     android:backgroundTint="@color/white"
                     android:layout_marginTop="-10dp"
@@ -425,7 +444,7 @@
                     android:layout_height="wrap_content"
                     android:text="Editar"
                     android:textSize="12dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center"
                     android:textColor="@color/black"
                     android:layout_marginTop="-10dp"
                     android:paddingLeft="3dp"/>
@@ -444,7 +463,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                android:scaleType="centerCrop"
-                tools:srcCompat="@drawable/icono_mas"
+                android:src="@drawable/icono_mas"
                 android:layout_gravity="center"/>
 
             <TextView
@@ -454,8 +473,6 @@
                 android:textSize="12dp"
                 android:textColor="@color/black"
                 android:layout_gravity="center"/>
-
-
 
         </LinearLayout>
 
