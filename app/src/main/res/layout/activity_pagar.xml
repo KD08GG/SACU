@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Pagar"
-    android:background="#f8efe4">
+    android:background="@color/background">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -124,7 +124,7 @@
                     android:id="@+id/btnHome"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_home" />
 
@@ -137,7 +137,7 @@
                     android:id="@+id/btnCarrito"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleType="centerCrop"
                     android:scaleX="1.2"
                     android:scaleY="1.2"
@@ -154,7 +154,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_notif"
-                    android:backgroundTint="#00FFFFFF"/>
+                    android:backgroundTint="@color/transparent"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -167,7 +167,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_perfil"
-                    android:backgroundTint="#00FFFFFF"/>
+                    android:backgroundTint="@color/transparent"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -254,7 +254,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="#00FFFFFF"
+                android:backgroundTint="@color/transparent"
                 app:srcCompat="@drawable/round_container"
                 android:scaleY="1.4"
                 android:scaleX="1.2"/>
@@ -387,7 +387,7 @@
                     android:textStyle="italic"
                     android:textSize="12dp"
                     android:layout_marginLeft="10dp"
-                    android:textColor="#737373"/>
+                    android:textColor="@color/gray_medium"/>
 
 
             </LinearLayout>
@@ -457,7 +457,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:backgroundTint="#FF7420"
+        android:backgroundTint="@color/primary"
         android:text="Comprar"
         app:layout_constraintBottom_toTopOf="@+id/v2"
         app:layout_constraintTop_toBottomOf="@id/l1"

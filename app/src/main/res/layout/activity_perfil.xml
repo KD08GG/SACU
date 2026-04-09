@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Perfil"
-    android:background="#f8efe4">
+    android:background="@color/background">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -98,7 +98,7 @@
                 android:text="123456"
                 android:layout_marginLeft="50dp"
                 android:textSize="15dp"
-                android:textColor="#4D4C4C"/>
+                android:textColor="@color/gray_dark"/>
 
             <Space
                 android:layout_width="match_parent"
@@ -137,7 +137,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="Ver todo"
-                    android:textColor="#ff7420" />
+                    android:textColor="@color/primary" />
 
 
             </LinearLayout>
@@ -185,7 +185,7 @@
                     android:layout_width="0dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
-                    android:backgroundTint="#00000000"
+                    android:backgroundTint="@color/transparent"
                     android:gravity="right"
                     app:srcCompat="@drawable/round_container"
                     android:layout_weight="10"/>
@@ -202,7 +202,7 @@
                 android:id="@+id/btnMasTarjetas"
                 android:layout_width="match_parent"
                 android:layout_height="85dp"
-                android:backgroundTint="#00000000"
+                android:backgroundTint="@color/transparent"
                 app:srcCompat="@drawable/round_container"
                 android:gravity="center"
                 android:layout_gravity="center"
@@ -238,7 +238,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="Ver todo"
-                    android:textColor="#ff7420" />
+                    android:textColor="@color/primary" />
 
 
             </LinearLayout>
@@ -276,7 +276,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_home"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     />
 
                 <Space
@@ -288,7 +288,7 @@
                     android:id="@+id/btnCarrito"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleType="centerCrop"
                     android:scaleX="1.2"
                     android:scaleY="1.2"
@@ -305,7 +305,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_notif"
-                    android:backgroundTint="#00FFFFFF"/>
+                    android:backgroundTint="@color/transparent"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -316,7 +316,7 @@
                     android:id="@+id/btnPerfil"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_perfilnaranja" />
 
@@ -355,7 +355,7 @@
                     android:id="@+id/btnLogOut"
                     android:layout_width="73dp"
                     android:layout_height="73dp"
-                    android:backgroundTint="@android:color/white"
+                    android:backgroundTint="@color/white"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_logout"
                     />
@@ -416,7 +416,7 @@
                     android:textStyle="italic"
                     android:textSize="12dp"
                     android:layout_marginLeft="10dp"
-                    android:textColor="#737373"/>
+                    android:textColor="@color/gray_medium"/>
 
 
             </LinearLayout>

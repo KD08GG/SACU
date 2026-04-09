@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Home"
-    android:background="#f8efe4"
+    android:background="@color/background"
     >
 
     <FrameLayout
@@ -100,7 +100,7 @@
                 android:text="123456"
                 android:layout_marginLeft="50dp"
                 android:textSize="15dp"
-                android:textColor="#4D4C4C"/>
+                android:textColor="@color/gray_dark"/>
 
             <Space
                 android:layout_width="match_parent"
@@ -148,7 +148,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="Ver todo"
-                    android:textColor="#ff7420"
+                    android:textColor="@color/primary"
                     android:layout_marginRight="50dp"/>
 
 
@@ -189,7 +189,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="Ver todo"
-                    android:textColor="#ff7420"
+                    android:textColor="@color/primary"
                     android:layout_marginRight="50dp"/>
 
 
@@ -223,7 +223,7 @@
                     android:id="@+id/btnHome"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_homenaranja" />
 
@@ -238,7 +238,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_cart"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleX="1.2"
                     android:scaleY="1.2"/>
 
@@ -253,7 +253,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_notif"
-                    android:backgroundTint="#00FFFFFF"/>
+                    android:backgroundTint="@color/transparent"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -266,7 +266,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_perfil"
-                    android:backgroundTint="#00FFFFFF"/>
+                    android:backgroundTint="@color/transparent"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -347,7 +347,7 @@
                             android:text="Pedidos en Fila"
                             android:gravity="center"
                             android:textSize="12dp"
-                            android:textColor="#737373"/>
+                            android:textColor="@color/gray_medium"/>
                     </LinearLayout>
 
                     <Space
@@ -370,7 +370,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_width="2dp"
                         android:layout_height="96dp"
-                        android:background="#EDE4DA"
+                        android:background="@color/divider"
                         />
 
 
@@ -406,7 +406,7 @@
                             android:text="Tiempo de espera aprox"
                             android:gravity="center"
                             android:textSize="12dp"
-                            android:textColor="#737373"/>
+                            android:textColor="@color/gray_medium"/>
                     </LinearLayout>
 
                     <Space
@@ -429,7 +429,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_width="2dp"
                         android:layout_height="96dp"
-                        android:background="#EDE4DA"
+                        android:background="@color/divider"
                         />
 
                     <LinearLayout
@@ -467,7 +467,7 @@
                             android:text="Mi número de pedido"
                             android:gravity="center"
                             android:textSize="12dp"
-                            android:textColor="#737373"/>
+                            android:textColor="@color/gray_medium"/>
                     </LinearLayout>
                     <Space
                         android:layout_width="70dp"

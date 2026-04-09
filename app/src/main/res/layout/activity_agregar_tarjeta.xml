@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AgregarTarjeta"
-    android:background="#f8efe4">
+    android:background="@color/background">
 
     <FrameLayout
         android:id="@+id/frameLayout4"
@@ -124,7 +124,7 @@
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/white"
                 android:text="Guardar"
-                android:textColor="#FF7420" />
+                android:textColor="@color/primary" />
 
         </LinearLayout>
     </FrameLayout>
@@ -183,7 +183,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_home"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     />
 
                 <Space
@@ -195,7 +195,7 @@
                     android:id="@+id/btnCarrito"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleType="centerCrop"
                     android:scaleX="1.2"
                     android:scaleY="1.2"
@@ -212,7 +212,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_notif"
-                    android:backgroundTint="#00FFFFFF"/>
+                    android:backgroundTint="@color/transparent"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -223,7 +223,7 @@
                     android:id="@+id/btnPerfil"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_perfilnaranja" />
 
@@ -255,7 +255,7 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="60dp"
                 android:text="Apodo para la tarjeta"
-                android:textColor="#737373"
+                android:textColor="@color/gray_medium"
                 android:textSize="15dp" />
 
             <EditText
@@ -280,7 +280,7 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="60dp"
                 android:text="Nombre"
-                android:textColor="#737373"
+                android:textColor="@color/gray_medium"
                 android:textSize="15dp" />
 
             <EditText
@@ -305,7 +305,7 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="60dp"
                 android:text="Digitos"
-                android:textColor="#737373"
+                android:textColor="@color/gray_medium"
                 android:textSize="15dp" />
 
             <EditText
@@ -330,7 +330,7 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="60dp"
                 android:text="Fecha de vencimiento"
-                android:textColor="#737373"
+                android:textColor="@color/gray_medium"
                 android:textSize="15dp" />
 
             <EditText
@@ -355,7 +355,7 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="60dp"
                 android:text="CVV"
-                android:textColor="#737373"
+                android:textColor="@color/gray_medium"
                 android:textSize="15dp" />
 
             <EditText

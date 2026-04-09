@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary">#FF7420</color>
+    <color name="primary_variant">#C05D10</color>
+    <color name="on_primary">#FFFFFF</color>
+    
+    <color name="secondary">#2E6417</color>
+    <color name="secondary_variant">#1E4210</color>
+    <color name="on_secondary">#FFFFFF</color>
+    
+    <color name="accent_green">#7F9C87</color>
+
+    <color name="background">#F8EFE4</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="on_surface">#333333</color>
+    <color name="error">#E74C3C</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
+    
+    <color name="gray_light">#F5F5F5</color>
+    <color name="gray_medium">#737373</color>
+    <color name="gray_dark">#4D4C4C</color>
+    <color name="gray_hint">#999999</color>
+    
+    <color name="divider">#EDE4DA</color>
 </resources>
