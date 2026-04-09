@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Notificaciones"
-    android:background="#f8efe4">
+    android:background="@color/background">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -127,7 +127,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_home"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     />
 
                 <Space
@@ -141,7 +141,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_cart"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleX="1.2"
                     android:scaleY="1.2"/>
 
@@ -154,7 +154,7 @@
                     android:id="@+id/btnNotif"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_notifnaranja" />
 
@@ -169,7 +169,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_perfil"
-                    android:backgroundTint="#00FFFFFF"/>
+                    android:backgroundTint="@color/transparent"/>
 
                 <Space
                     android:layout_width="wrap_content"

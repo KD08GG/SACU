@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="#f8efe4">
+    android:background="@color/background">
 
 
     <FrameLayout
@@ -86,7 +86,7 @@
             android:layout_gravity="center_horizontal"
             android:fontFamily="sans-serif-medium"
             android:text="UDLAP"
-            android:textColor="#ff7420"
+            android:textColor="@color/primary"
             android:textSize="52sp"
             android:textStyle="bold" />
 
@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="SACU"
-            android:textColor="#7f9c87"
+            android:textColor="@color/accent_green"
             android:textSize="28sp"
             android:textStyle="italic"
             android:fontFamily="sans-serif-medium"
@@ -124,8 +124,8 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:hint="#########"
-            android:textColor="#000000"
-            android:textColorHint="#999999"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray_hint"
             android:textSize="16sp"
             android:layout_gravity="center"/>
 
@@ -152,8 +152,8 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:hint="**************"
-            android:textColor="#000000"
-            android:textColorHint="#999999"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray_hint"
             android:textSize="16sp"
             android:layout_gravity="center"/>
 
@@ -166,7 +166,7 @@
             android:layout_marginBottom="24dp"
             android:backgroundTint="@color/white"
             android:text="Ingresar"
-            android:textColor="#2e6417"
+            android:textColor="@color/secondary"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -180,7 +180,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Pide tu comida donde sea, cuando sea..."
-            android:textColor="#2E6417"
+            android:textColor="@color/secondary"
             android:textSize="14sp"
             android:gravity="center"
             android:layout_marginBottom="16dp"

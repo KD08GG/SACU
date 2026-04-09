@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MetodosDePago"
-    android:background="#f8efe4">
+    android:background="@color/background">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -125,7 +125,7 @@
                     android:id="@+id/btnHome"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_home" />
 
@@ -138,7 +138,7 @@
                     android:id="@+id/btnCarrito"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleType="centerCrop"
                     android:scaleX="1.2"
                     android:scaleY="1.2"
@@ -155,7 +155,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_notif"
-                    android:backgroundTint="#00FFFFFF"/>
+                    android:backgroundTint="@color/transparent"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -168,7 +168,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_perfil"
-                    android:backgroundTint="#00FFFFFF"/>
+                    android:backgroundTint="@color/transparent"/>
 
                 <Space
                     android:layout_width="wrap_content"
@@ -255,7 +255,7 @@
             android:id="@+id/btnMasTarjetas"
             android:layout_width="match_parent"
             android:layout_height="85dp"
-            android:backgroundTint="#00000000"
+            android:backgroundTint="@color/transparent"
             app:srcCompat="@drawable/round_container"
             android:gravity="center"
             android:layout_gravity="center"
@@ -345,7 +345,7 @@
                     android:layout_height="60dp"
                     android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleType="fitCenter"
                     android:src="@drawable/icono_borrar" />
 
@@ -422,7 +422,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="40dp"
                 android:scaleType="centerCrop"
-                android:src="#ff7420"
+                android:src="@color/primary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -478,7 +478,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@color/white"
                         android:text="Cancelar"
-                        android:textColor="#ff7420" />
+                        android:textColor="@color/primary" />
 
                     <Space
                         android:layout_width="0dp"
@@ -492,7 +492,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@color/white"
                         android:text="Borrar"
-                        android:textColor="#ff7420" />
+                        android:textColor="@color/primary" />
                 </LinearLayout>
             </LinearLayout>
         </FrameLayout>
