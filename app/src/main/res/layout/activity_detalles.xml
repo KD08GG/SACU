@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Detalles"
-    android:background="#f8efe4">
+    android:background="@color/background">
 
 
 
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:text="Pedido"
                 android:textSize="27dp"
-                android:textColor="#737373"
+                android:textColor="@color/gray_medium"
                 android:layout_gravity="center"
                 />
 
@@ -145,7 +145,7 @@
                 android:layout_height="60dp"
                 android:text="Recogido"
                 android:textSize="30dp"
-                android:textColor="#737373"
+                android:textColor="@color/gray_medium"
                 android:textStyle="bold"
                 android:layout_gravity="center"/>
 
@@ -154,7 +154,7 @@
                 android:layout_height="22dp"
                 android:text="Fecha"
                 android:textSize="20dp"
-                android:textColor="#737373"
+                android:textColor="@color/gray_medium"
                 android:layout_gravity="center"
                 />
 
@@ -174,7 +174,7 @@
                 android:layout_height="22dp"
                 android:text="Hora"
                 android:textSize="20dp"
-                android:textColor="#737373"
+                android:textColor="@color/gray_medium"
                 android:layout_gravity="center"
                 />
 
@@ -194,7 +194,7 @@
                 android:layout_height="22dp"
                 android:text="Método de Pago"
                 android:textSize="20dp"
-                android:textColor="#737373"
+                android:textColor="@color/gray_medium"
                 android:layout_gravity="center"
                 />
 
@@ -214,7 +214,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Folio"
-                android:textColor="#737373"
+                android:textColor="@color/gray_medium"
                 android:textSize="20dp" />
 
             <TextView
@@ -260,7 +260,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_home"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     />
 
                 <Space
@@ -274,7 +274,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_cart"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleX="1.2"
                     android:scaleY="1.2"/>
 
@@ -287,7 +287,7 @@
                     android:id="@+id/btnNotif"
                     android:layout_width="53dp"
                     android:layout_height="53dp"
-                    android:backgroundTint="#00FFFFFF"
+                    android:backgroundTint="@color/transparent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_notifnaranja" />
 
@@ -302,7 +302,7 @@
                     android:layout_height="53dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/icono_perfil"
-                    android:backgroundTint="#00FFFFFF"/>
+                    android:backgroundTint="@color/transparent"/>
 
                 <Space
                     android:layout_width="wrap_content"

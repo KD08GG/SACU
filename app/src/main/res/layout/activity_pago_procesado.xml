@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PagoProcesado"
-    android:background="#f8efe4">
+    android:background="@color/background">
 
 
     <FrameLayout
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="UDLAP"
-                android:textColor="#ff7420"
+                android:textColor="@color/primary"
                 android:textStyle="bold"
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-medium"
@@ -73,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="SACU"
-                android:textColor="#7f9c87"
+                android:textColor="@color/accent_green"
                 android:textStyle="italic"
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-medium"
@@ -150,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Aceptar"
-                android:textColor="#ff7420"
+                android:textColor="@color/primary"
                 android:textSize="15dp"
                 android:textStyle="bold"
                 android:backgroundTint="@color/white"
