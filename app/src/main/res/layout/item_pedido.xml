@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="110dp"
+    android:layout_height="130dp"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/imgPedido"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icono_nota" />
+
+        <TextView
+            android:id="@+id/txtNombrePedido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chilaquiles rojos"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="@color/on_surface"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/txtFechaPedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="07/03/2026"
+            android:textSize="10sp"
+            android:textColor="@color/gray_medium"
+            android:layout_marginTop="2dp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
