@@ -100,8 +100,9 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvComidas"
-                android:layout_width="wrap_content"
-                android:layout_height="420dp"
+                android:layout_width="match_parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_height="520dp"
                 android:layout_gravity="center"
                 />
 
@@ -113,9 +114,6 @@
                 android:layout_gravity="center"
                 android:backgroundTint="@color/primary"/>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="57dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

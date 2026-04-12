@@ -2,19 +2,38 @@ package com.example.sacu
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sacu.adapter.ItemCarritoAdapter
+import com.example.sacu.adapter.ProductoAdapter
+import com.example.sacu.model.ItemPedido
+import com.example.sacu.model.Producto
+import com.example.sacu.repository.Compra
+import com.example.sacu.repository.carritoTotal
+
+private var carritoTotal = carritoTotal
+
 
 class Carrito : AppCompatActivity() {
+    private lateinit var comidasAdapter: ItemCarritoAdapter
+    private var listaComidas = carritoTotal
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_carrito)
+
+        //carrito = compra.carrito
+        Log.d("SACU_CARRITO", "Carrito: $listaComidas")
+
 
         //BOTONES MENU
         botonesMenu()
@@ -31,9 +50,23 @@ class Carrito : AppCompatActivity() {
             startActivity(intent)
         }
 
+        setupRecyclerViews(rvProductos)
+
 
 
     }
+
+    private fun setupRecyclerViews(rvComidas: RecyclerView) {
+        val layoutManagerComidas = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        rvComidas.layoutManager = layoutManagerComidas
+
+        comidasAdapter = ItemCarritoAdapter(listaComidas)
+
+        rvComidas.adapter = comidasAdapter
+    }
+
+
 
     private fun botonesMenu () {
         //MENU DE BOTONES DE NAVEGACION

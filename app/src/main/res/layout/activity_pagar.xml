@@ -278,7 +278,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvProductos"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:layout_gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -411,7 +411,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="160dp" />
+            android:layout_height="180dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -424,7 +424,7 @@
             android:layout_marginHorizontal="30dp">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Total"
             android:textSize="40dp"
@@ -432,7 +432,7 @@
             android:textColor="@color/black"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
-            android:layout_weight="1"/>
+            />
 
         <TextView
             android:id="@+id/txtTotal"
@@ -445,7 +445,7 @@
             android:layout_marginRight="20dp"
             android:layout_gravity="center"
             android:gravity="right"
-            android:layout_weight="2"/>
+            android:layout_weight="1"/>
 
         </LinearLayout>
     </LinearLayout>

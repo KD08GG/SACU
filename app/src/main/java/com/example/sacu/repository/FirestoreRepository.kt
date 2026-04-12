@@ -1,5 +1,7 @@
 package com.example.sacu.repository
 
+import android.util.Log
+import com.example.sacu.model.ItemPedido
 import com.example.sacu.model.Notificacion
 import com.example.sacu.model.Pedido
 import com.example.sacu.model.Producto
@@ -90,18 +92,38 @@ class FirestoreRepository {
         onSuccess: (List<Producto>) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        db.collection("productos")
-            .whereEqualTo("categoria", categoria)
-            .whereEqualTo("disponible", true)
-            .get()
-            .addOnSuccessListener { result ->
-                val productos = result.documents.map { doc ->
-                    val producto = doc.toObject(Producto::class.java)!!
-                    producto.copy(id = doc.id)
+
+        Log.d("SACU_CAT", "Cat a buscar $categoria")
+        if (categoria == "Comidas") {
+            db.collection("productos")
+                .whereEqualTo("categoria", "Comidas")
+                .get()
+                .addOnSuccessListener { result ->
+                    val productos = result.documents.map { doc ->
+                        val producto = doc.toObject(Producto::class.java)!!
+                        producto.copy(id = doc.id)
+                    }
+                    Log.d("SACU_CAT", "Prod ${productos.size} encontrado en $categoria")
+
+                    onSuccess(productos)
                 }
-                onSuccess(productos)
-            }
-            .addOnFailureListener { onError(it) }
+                .addOnFailureListener { onError(it) }
+        } else {
+            db.collection("productos")
+                .whereEqualTo("categoria", categoria)
+                .whereEqualTo("disponible", true)
+                .get()
+                .addOnSuccessListener { result ->
+                    val productos = result.documents.map { doc ->
+                        val producto = doc.toObject(Producto::class.java)!!
+                        producto.copy(id = doc.id)
+                    }
+                    Log.d("SACU_CAT", "Prod ${productos.size} encontrado en $categoria")
+
+                    onSuccess(productos)
+                }
+                .addOnFailureListener { onError(it) }
+        }
     }
 
     // ─────────────────────────────────────────
@@ -212,4 +234,39 @@ class FirestoreRepository {
             .addOnSuccessListener { ref -> onSuccess(ref.id) }
             .addOnFailureListener { onError(it) }
     }
+
+    // En FirestoreRepository.kt
+    fun obtenerTodosLosProductos(onSuccess: (List<Producto>) -> Unit, onError: (Exception) -> Unit) {
+        db.collection("productos")
+            .get()
+            .addOnSuccessListener { result ->
+                val productos = result.toObjects(Producto::class.java)
+                onSuccess(productos)
+            }
+            .addOnFailureListener(onError)
+    }
+
+    fun obtenerHistorialPedidos(usuarioId: String, onResult: (List<ItemPedido>) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("transacciones")
+            .whereEqualTo("usuario_id", usuarioId)
+            .get()
+            .addOnSuccessListener { result ->
+                val lista = mutableListOf<ItemPedido>()
+
+                for (doc in result) {
+                    val item = ItemPedido(
+                        producto_id = doc.getString("pedido_id") ?: "",
+                        nombre = "", // ajusta si tienes nombre
+                        cantidad = 1,
+                        precio_unitario = doc.getString("monto")?.toDoubleOrNull() ?: 0.0
+                    )
+                    lista.add(item)
+                }
+
+                onResult(lista)
+            }
+    }
+
 }

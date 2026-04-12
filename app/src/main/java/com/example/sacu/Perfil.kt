@@ -9,12 +9,29 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.sacu.adapter.ItemCarritoAdapter
+import com.example.sacu.adapter.PedidoAdapter
+import com.example.sacu.model.ItemPedido
+import com.example.sacu.repository.FirestoreRepository
+import com.google.firebase.auth.FirebaseAuth
+
 
 class Perfil : AppCompatActivity() {
+    private lateinit var comidasAdapter: PedidoAdapter
+    private val repository = FirestoreRepository()
+    private var listaComidas = mutableListOf<ItemPedido>()
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_perfil)
+
+        val user = FirebaseAuth.getInstance().currentUser
+
 
         //BOTONES MENU
         botonesMenu()
@@ -66,7 +83,19 @@ class Perfil : AppCompatActivity() {
             startActivity(intent)
         }
 
+        setupRecyclerViews(rvUltimosPedidos)
 
+
+    }
+
+    private fun setupRecyclerViews(rvComidas: RecyclerView) {
+        val layoutManagerComidas = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        rvComidas.layoutManager = layoutManagerComidas
+
+        //comidasAdapter = PedidoAdapter(listaComidas)
+
+        //rvComidas.adapter = comidasAdapter
     }
 
     private fun botonesMenu () {

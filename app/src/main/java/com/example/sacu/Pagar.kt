@@ -9,9 +9,19 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sacu.adapter.ItemCarritoAdapter
+import com.example.sacu.repository.carritoTotal
+import com.example.sacu.repository.Compra
 
 class Pagar : AppCompatActivity() {
+
+    private lateinit var comidasAdapter: ItemCarritoAdapter
+    private var listaComidas = carritoTotal
+
+    private val compra = Compra()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -45,7 +55,20 @@ class Pagar : AppCompatActivity() {
             startActivity(intent)
         }
 
+        setupRecyclerViews(rvProductos)
 
+        total.text = "$" + compra.totalAPagar().toString()
+
+    }
+
+    private fun setupRecyclerViews(rvComidas: RecyclerView) {
+        val layoutManagerComidas = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        rvComidas.layoutManager = layoutManagerComidas
+
+        comidasAdapter = ItemCarritoAdapter(listaComidas)
+
+        rvComidas.adapter = comidasAdapter
     }
 
     private fun botonesMenu () {
