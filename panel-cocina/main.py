@@ -25,6 +25,7 @@ from typing import Optional, Callable
 import threading
 import time
 
+<<<<<<< HEAD
 # ── FIREBASE ──────────────────────────────────────────
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -33,6 +34,8 @@ cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
+=======
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
 
 # ════════════════════════════════════════════════════════
 #  DATA MODELS  (mirrors types.ts)
@@ -129,7 +132,10 @@ class AppState:
         self._listeners: list = []
         self._next_id: int = 1
         self._menu_items: list = self._default_menu()
+<<<<<<< HEAD
         self._firestore_ids: dict = {}  # mapea order.id → firestore document id
+=======
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
 
     def subscribe(self, callback: Callable):
         self._listeners.append(callback)
@@ -160,6 +166,7 @@ class AppState:
     def next_order_number(self) -> int:
         return self._next_order_number
 
+<<<<<<< HEAD
     def start_order_listener(self, ui_callback):
         """
         Escucha en tiempo real los pedidos con estado PENDIENTE o EN_PREPARACION.
@@ -216,6 +223,74 @@ class AppState:
         Marca el pedido como LISTO en Firestore.
         La app Android lo detecta al instante por su Firestore Listener
         y notifica al usuario que su pedido está listo.
+=======
+    def add_order(self, user_id: str, user_name: str,
+                  payment_type: str, items: list) -> Order:
+        """
+        ── DATABASE HOOK: ADD ORDER ──────────────────────────
+        In production, orders are created by the Android app.
+        Replace this method with a Firebase real-time listener
+        that fires whenever a new order document is added.
+
+        Example (Firestore):
+            def on_new_order(col_snapshot, changes, read_time):
+                for change in changes:
+                    if change.type.name == 'ADDED':
+                        data = change.document.to_dict()
+                        items = [OrderItem(i['name'], i['quantity'],
+                                           i.get('notes',''))
+                                 for i in data.get('items', [])]
+                        order = Order(
+                            id=int(change.document.id, 16),
+                            order_number=data['orderNumber'],
+                            user_id=data['userId'],
+                            user_name=data['userName'],
+                            payment_type=data.get('paymentType','cash'),
+                            items=items,
+                            timestamp=data['createdAt'].datetime,
+                            status=data['status'],
+                        )
+                        self._orders.append(order)
+                        self._notify()   # <-- triggers UI refresh
+
+            query = db.collection('orders').where('status','in',
+                        ['pending','in-progress'])
+            self._watcher = query.on_snapshot(on_new_order)
+        ─────────────────────────────────────────────────────
+        """
+        order = Order(
+            id=self._next_id,
+            order_number=str(self._next_order_number).zfill(4),
+            user_id=user_id,
+            user_name=user_name,
+            payment_type=payment_type,
+            items=items,
+            timestamp=datetime.now(),
+            status="pending",
+        )
+        self._next_id += 1
+        self._next_order_number += 1
+        self._orders.append(order)
+        self._notify()
+        return order
+
+    def mark_order_ready(self, order_id: int):
+        """
+        ── DATABASE HOOK: MARK ORDER READY ──────────────────
+        After updating local state, write the new status back
+        to Firebase so the student's app is notified instantly.
+
+        Example (Firestore):
+            db.collection('orders').document(str(order_id)).update({
+                'status': 'ready',
+                'completedAt': firestore.SERVER_TIMESTAMP,
+            })
+
+        Firebase Cloud Messaging or a Firestore listener on the
+        student's app will pick up the status change and notify
+        the student their food is ready for pickup.
+        ─────────────────────────────────────────────────────
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
         """
         order = next((o for o in self._orders if o.id == order_id), None)
         if order:
@@ -226,6 +301,7 @@ class AppState:
             self._total_completed += 1
             self._notify()
 
+<<<<<<< HEAD
             # Actualizar en Firestore
             firestore_id = self._firestore_ids.get(order_id)
             if firestore_id:
@@ -234,6 +310,8 @@ class AppState:
                     'fecha_completado': firestore.SERVER_TIMESTAMP,
                 })
 
+=======
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
     # ── MENU ITEMS ───────────────────────────────────────
 
     def get_menu_items(self) -> list:
@@ -285,6 +363,7 @@ class AppState:
 
     def _default_menu(self) -> list:
         """
+<<<<<<< HEAD
         Carga los productos reales desde Firestore en lugar del menú hardcodeado.
         """
         try:
@@ -309,6 +388,34 @@ class AppState:
         except Exception as e:
             print(f"Error cargando menú: {e}")
             return []
+=======
+        ── DATABASE HOOK: LOAD MENU ON STARTUP ──────────────
+        Replace this with a Firestore read:
+
+        Example:
+            docs = db.collection('menuItems').stream()
+            return [MenuItem(id=d.id, **d.to_dict()) for d in docs]
+        ─────────────────────────────────────────────────────
+        """
+        raw = [
+            ("1",  "Scrambled Eggs",           "breakfast", 4.99, True,  ""),
+            ("2",  "Pancakes",                  "breakfast", 5.99, True,  ""),
+            ("3",  "Breakfast Burrito",          "breakfast", 6.99, True,  ""),
+            ("4",  "Grilled Chicken Sandwich",   "main",      8.99, True,  ""),
+            ("5",  "Caesar Salad",               "main",      7.99, True,  ""),
+            ("6",  "Veggie Burger",              "main",      8.49, True,  ""),
+            ("7",  "Pizza Slice (Pepperoni)",    "main",      3.99, True,  ""),
+            ("8",  "Pasta Carbonara",            "main",      9.99, True,  ""),
+            ("9",  "Fish Tacos",                 "main",      9.49, True,  ""),
+            ("10", "French Fries",               "all-day",   2.99, True,  ""),
+            ("11", "Sweet Potato Fries",         "all-day",   3.49, True,  ""),
+            ("12", "Smoothie Bowl",              "all-day",   6.99, True,  ""),
+            ("13", "Coffee",                     "all-day",   2.49, True,  ""),
+            ("14", "Soda",                       "all-day",   1.99, True,  ""),
+        ]
+        return [MenuItem(*r) for r in raw]
+
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
 
 # ════════════════════════════════════════════════════════
 #  MOCK ORDER SIMULATOR
@@ -1197,11 +1304,20 @@ class CafeteriaApp(ctk.CTk):
         self.configure(fg_color=C["app_bg"])
 
         self._state = AppState()
+<<<<<<< HEAD
         #self._simulator = MockOrderSimulator(self._state)
         self._build()
 
         # ── DATABASE HOOK: CONNECTING TO FIREBASE ──
         self._state.start_order_listener(self._build)
+=======
+        self._simulator = MockOrderSimulator(self._state)
+        self._build()
+
+        # ── DATABASE HOOK: REMOVE THIS LINE WHEN CONNECTING TO FIREBASE ──
+        # Remove self._simulator.start() and set up your Firestore listener instead.
+        self._simulator.start()
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
 
         self.after(60_000, self._date_check_loop)
 
@@ -1275,8 +1391,15 @@ class CafeteriaApp(ctk.CTk):
         self.after(1000, self._tick_clock)
 
     def on_close(self):
+<<<<<<< HEAD
         self.destroy()
 
+=======
+        self._simulator.stop()
+        self.destroy()
+
+
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
 # ════════════════════════════════════════════════════════
 #  ENTRY POINT
 # ════════════════════════════════════════════════════════
