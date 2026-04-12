@@ -1,0 +1,79 @@
+# ══════════════════════════════════════════════════════
+#  CAFETERIA ORDER MANAGEMENT — Requirements & Setup
+# ══════════════════════════════════════════════════════
+
+# ── STEP 1: Install dependencies ──────────────────────
+#
+#   pip install customtkinter
+#
+#   When you're ready to add Firebase, also run:
+#   pip install firebase-admin
+
+customtkinter>=5.2.0
+
+# firebase-admin>=6.2.0   ← uncomment when adding Firebase
+
+
+# ── STEP 2: Run the prototype ─────────────────────────
+#
+#   python main.py
+#
+#   Mock orders appear automatically every 5 seconds.
+#   Click "✓ Mark as Ready" to complete an order.
+#   Switch to Admin Panel to view history and manage menu.
+
+
+# ── STEP 3: Connect Firebase ──────────────────────────
+#
+#   Search the file for "── DATABASE HOOK ──" to find
+#   every integration point. There are 6 hooks total:
+#
+#   1. _default_menu()       → Load menu items on startup
+#   2. add_order()           → Real-time listener for new orders
+#   3. mark_order_ready()    → Write 'ready' status back to Firestore
+#   4. add_menu_item()       → Persist new menu item
+#   5. update_menu_item()    → Update existing menu item
+#   6. delete_menu_item()    → Delete menu item
+#
+#   Also remove the MockOrderSimulator.start() call
+#   in CafeteriaApp.__init__() once Firebase is live.
+
+
+# ── Firebase service account setup ───────────────────
+#
+#   1. Go to https://console.firebase.google.com
+#   2. Your project → ⚙️ Settings → Service accounts
+#   3. Click "Generate new private key"
+#   4. Save the JSON as: serviceAccountKey.json
+#      (in the same folder as main.py)
+#
+#   Then initialize Firebase at the top of main.py:
+#
+#     import firebase_admin
+#     from firebase_admin import credentials, firestore
+#
+#     cred = credentials.Certificate("serviceAccountKey.json")
+#     firebase_admin.initialize_app(cred)
+#     db = firestore.client()
+
+
+# ── Expected Firestore data structure ────────────────
+#
+#   orders/{orderId}
+#     status:      "pending" | "ready" | "completed"
+#     orderNumber: "0001"
+#     userId:      "STU-2847"
+#     userName:    "Sarah Johnson"
+#     paymentType: "meal-plan" | "credit" | "debit" | "cash"
+#     createdAt:   Timestamp
+#     completedAt: Timestamp (set when ready)
+#     items: [
+#       { name: "Burger", quantity: 2, notes: "No onions" }
+#     ]
+#
+#   menuItems/{itemId}
+#     name:        "Grilled Chicken Sandwich"
+#     category:    "breakfast" | "main" | "all-day"
+#     price:       8.99
+#     available:   true
+#     description: "..."
