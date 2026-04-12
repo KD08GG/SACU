@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+panel-cocina/serviceAccountKey.json
+
