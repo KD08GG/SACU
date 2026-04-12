@@ -247,7 +247,7 @@
                 android:layout_marginLeft="180dp"
                 android:id="@+id/rvComidas"
                 android:layout_width="wrap_content"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginHorizontal="40dp"

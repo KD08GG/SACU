@@ -2,6 +2,7 @@ package com.example.sacu
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -9,9 +10,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sacu.adapter.ProductoAdapter
+import com.example.sacu.model.Producto
+import com.example.sacu.repository.Compra
+import com.example.sacu.repository.FirestoreRepository
 
 class TodoComida : AppCompatActivity() {
+    private val repository = FirestoreRepository()
+    private val compra = Compra()
+    private lateinit var comidasAdapter: ProductoAdapter
+    private var listaComidas = mutableListOf<Producto>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,6 +37,7 @@ class TodoComida : AppCompatActivity() {
         var nombre  = findViewById<TextView>(R.id.txtComida)
         nombre.text = tipoRecibido
 
+
         //BOTONES
         val btnComprar = findViewById<Button>(R.id.btnComprar)
 
@@ -37,6 +50,54 @@ class TodoComida : AppCompatActivity() {
             startActivity(intent)
         }
 
+        setupRecyclerViews(rvComidas)
+        cargarComidas(tipoRecibido!!)
+
+    }
+
+
+    private fun setupRecyclerViews(rvComidas: RecyclerView) {
+        // Grid con 2 columnas
+        val layoutManagerComidas = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
+
+        rvComidas.layoutManager = layoutManagerComidas
+
+        comidasAdapter = ProductoAdapter(listaComidas) { producto ->
+            onAgregarProductoClick(producto)
+        }
+        rvComidas.adapter = comidasAdapter
+    }
+
+    private fun onAgregarProductoClick(producto: Producto) {
+        // Por ahora solo mostramos en log que se agregó
+        Log.d("SACU_HOME", "Agregar al carrito: ${producto.nombre}")
+        compra.agregarProducto(producto)
+    }
+
+    private fun cargarComidas(tipo: String) {
+        Log.d("SACU_HOME", "Iniciando carga de comidas...")
+
+        repository.obtenerProductosPorCategoria(
+            categoria = tipo,
+            onSuccess = { productos ->
+                Log.d("SACU_HOME", "Comidas encontradas: ${productos.size}")
+
+                // Imprime cada producto para depurar
+                productos.forEach { producto ->
+                    Log.d("SACU_HOME", "Comida: ${producto.nombre} - Categoría: ${producto.categoria}")
+                }
+
+                listaComidas.clear()
+                listaComidas.addAll(productos)
+                comidasAdapter.notifyDataSetChanged()
+
+                // Verifica si el adapter tiene los datos
+                Log.d("SACU_HOME", "Adapter de comidas tiene: ${comidasAdapter.itemCount} items")
+            },
+            onError = { error ->
+                Log.e("SACU_HOME", "Error cargando comidas: ${error.message}")
+            }
+        )
     }
 
     private fun botonesMenu () {

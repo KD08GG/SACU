@@ -155,10 +155,11 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginLeft="70dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="30dp"
                 android:id="@+id/rvDesayunos"
                 android:layout_width="wrap_content"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 />
 
             <LinearLayout
@@ -196,15 +197,14 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginLeft="70dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="30dp"
                 android:id="@+id/rvComidas"
                 android:layout_width="wrap_content"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="90dp" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"

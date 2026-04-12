@@ -23,7 +23,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/icono_mas" />
+            android:src="@drawable/logito" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -63,6 +63,19 @@
             android:textSize="14sp"
             android:background="@drawable/circle_background"
             android:backgroundTint="@color/secondary" />
+
+        <ImageButton
+            android:layout_marginLeft="10dp"
+            android:id="@+id/btnEliminar"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:textColor="@color/on_secondary"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:background="@drawable/icono_borrar"
+            android:backgroundTint="@color/primary" />
+
 
     </LinearLayout>
 
