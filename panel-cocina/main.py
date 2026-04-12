@@ -25,6 +25,17 @@ from typing import Optional, Callable
 import threading
 import time
 
+<<<<<<< HEAD
+# ── FIREBASE ──────────────────────────────────────────
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+cred = credentials.Certificate("serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
+=======
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
 
 # ════════════════════════════════════════════════════════
 #  DATA MODELS  (mirrors types.ts)
@@ -121,6 +132,10 @@ class AppState:
         self._listeners: list = []
         self._next_id: int = 1
         self._menu_items: list = self._default_menu()
+<<<<<<< HEAD
+        self._firestore_ids: dict = {}  # mapea order.id → firestore document id
+=======
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
 
     def subscribe(self, callback: Callable):
         self._listeners.append(callback)
@@ -151,6 +166,64 @@ class AppState:
     def next_order_number(self) -> int:
         return self._next_order_number
 
+<<<<<<< HEAD
+    def start_order_listener(self, ui_callback):
+        """
+        Escucha en tiempo real los pedidos con estado PENDIENTE o EN_PREPARACION.
+        Cada vez que la app Android crea un pedido nuevo, este método lo recibe
+        y actualiza la UI del panel de cocina automáticamente.
+        """
+        def on_snapshot(col_snapshot, changes, read_time):
+            for change in changes:
+                if change.type.name == 'ADDED':
+                    data = change.document.to_dict()
+
+                    # Convertir items de Firestore a objetos OrderItem
+                    items_raw = data.get('items', [])
+                    items = [
+                        OrderItem(
+                            name=i.get('nombre', ''),
+                            quantity=i.get('cantidad', 1),
+                            notes=i.get('notas', '')
+                        )
+                        for i in items_raw
+                    ]
+
+                    # Crear el objeto Order con datos reales
+                    order = Order(
+                        id=hash(change.document.id) % 100000,
+                        order_number=str(data.get('numero_fila', 0)).zfill(4),
+                        user_id=data.get('usuario_id', ''),
+                        user_name=data.get('nombre_usuario', 'Usuario'),
+                        payment_type=data.get('metodo_pago', 'cash'),
+                        items=items,
+                        timestamp=data.get('fecha', datetime.now()),
+                        status='pending',
+                    )
+
+                    # Guardar referencia al ID de Firestore para actualizarlo después
+                    self._firestore_ids[order.id] = change.document.id
+
+                    self._orders.append(order)
+                    self._notify()
+
+                elif change.type.name == 'MODIFIED':
+                    # Si el pedido se modificó desde la app, actualizar localmente
+                    self._notify()
+
+        # Escuchar solo pedidos activos
+        query = (db.collection('pedidos')
+                   .where('estado', 'in', ['PENDIENTE', 'EN_PREPARACION']))
+
+        self._watcher = query.on_snapshot(on_snapshot)
+
+
+    def mark_order_ready(self, order_id: int):
+        """
+        Marca el pedido como LISTO en Firestore.
+        La app Android lo detecta al instante por su Firestore Listener
+        y notifica al usuario que su pedido está listo.
+=======
     def add_order(self, user_id: str, user_name: str,
                   payment_type: str, items: list) -> Order:
         """
@@ -217,6 +290,7 @@ class AppState:
         student's app will pick up the status change and notify
         the student their food is ready for pickup.
         ─────────────────────────────────────────────────────
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
         """
         order = next((o for o in self._orders if o.id == order_id), None)
         if order:
@@ -227,6 +301,17 @@ class AppState:
             self._total_completed += 1
             self._notify()
 
+<<<<<<< HEAD
+            # Actualizar en Firestore
+            firestore_id = self._firestore_ids.get(order_id)
+            if firestore_id:
+                db.collection('pedidos').document(firestore_id).update({
+                    'estado': 'LISTO',
+                    'fecha_completado': firestore.SERVER_TIMESTAMP,
+                })
+
+=======
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
     # ── MENU ITEMS ───────────────────────────────────────
 
     def get_menu_items(self) -> list:
@@ -278,6 +363,32 @@ class AppState:
 
     def _default_menu(self) -> list:
         """
+<<<<<<< HEAD
+        Carga los productos reales desde Firestore en lugar del menú hardcodeado.
+        """
+        try:
+            docs = db.collection('productos').get()
+            menu = []
+            for doc in docs:
+                data = doc.to_dict()
+                # Mapear categorías de español a las del panel
+                cat_map = {
+                    'Desayunos': 'breakfast',
+                    'Comidas': 'main',
+                }
+                menu.append(MenuItem(
+                    id=doc.id,
+                    name=data.get('nombre', ''),
+                    category=cat_map.get(data.get('categoria', ''), 'all-day'),
+                    price=float(data.get('precio', 0)),
+                    available=data.get('disponible', True),
+                    description=data.get('descripcion', ''),
+                ))
+            return menu
+        except Exception as e:
+            print(f"Error cargando menú: {e}")
+            return []
+=======
         ── DATABASE HOOK: LOAD MENU ON STARTUP ──────────────
         Replace this with a Firestore read:
 
@@ -304,6 +415,7 @@ class AppState:
         ]
         return [MenuItem(*r) for r in raw]
 
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
 
 # ════════════════════════════════════════════════════════
 #  MOCK ORDER SIMULATOR
@@ -1192,12 +1304,20 @@ class CafeteriaApp(ctk.CTk):
         self.configure(fg_color=C["app_bg"])
 
         self._state = AppState()
+<<<<<<< HEAD
+        #self._simulator = MockOrderSimulator(self._state)
+        self._build()
+
+        # ── DATABASE HOOK: CONNECTING TO FIREBASE ──
+        self._state.start_order_listener(self._build)
+=======
         self._simulator = MockOrderSimulator(self._state)
         self._build()
 
         # ── DATABASE HOOK: REMOVE THIS LINE WHEN CONNECTING TO FIREBASE ──
         # Remove self._simulator.start() and set up your Firestore listener instead.
         self._simulator.start()
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
 
         self.after(60_000, self._date_check_loop)
 
@@ -1271,10 +1391,15 @@ class CafeteriaApp(ctk.CTk):
         self.after(1000, self._tick_clock)
 
     def on_close(self):
+<<<<<<< HEAD
+        self.destroy()
+
+=======
         self._simulator.stop()
         self.destroy()
 
 
+>>>>>>> 2a28d54de2124cbd1f964621c701d8af2b0ea77d
 # ════════════════════════════════════════════════════════
 #  ENTRY POINT
 # ════════════════════════════════════════════════════════
