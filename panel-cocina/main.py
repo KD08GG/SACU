@@ -25,6 +25,14 @@ from typing import Optional, Callable
 import threading
 import time
 
+# ── FIREBASE ──────────────────────────────────────────
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+cred = credentials.Certificate("serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
 
 # ════════════════════════════════════════════════════════
 #  DATA MODELS  (mirrors types.ts)
@@ -121,6 +129,7 @@ class AppState:
         self._listeners: list = []
         self._next_id: int = 1
         self._menu_items: list = self._default_menu()
+        self._firestore_ids: dict = {}  # mapea order.id → firestore document id
 
     def subscribe(self, callback: Callable):
         self._listeners.append(callback)
@@ -151,72 +160,62 @@ class AppState:
     def next_order_number(self) -> int:
         return self._next_order_number
 
-    def add_order(self, user_id: str, user_name: str,
-                  payment_type: str, items: list) -> Order:
+    def start_order_listener(self, ui_callback):
         """
-        ── DATABASE HOOK: ADD ORDER ──────────────────────────
-        In production, orders are created by the Android app.
-        Replace this method with a Firebase real-time listener
-        that fires whenever a new order document is added.
+        Escucha en tiempo real los pedidos con estado PENDIENTE o EN_PREPARACION.
+        Cada vez que la app Android crea un pedido nuevo, este método lo recibe
+        y actualiza la UI del panel de cocina automáticamente.
+        """
+        def on_snapshot(col_snapshot, changes, read_time):
+            for change in changes:
+                if change.type.name == 'ADDED':
+                    data = change.document.to_dict()
 
-        Example (Firestore):
-            def on_new_order(col_snapshot, changes, read_time):
-                for change in changes:
-                    if change.type.name == 'ADDED':
-                        data = change.document.to_dict()
-                        items = [OrderItem(i['name'], i['quantity'],
-                                           i.get('notes',''))
-                                 for i in data.get('items', [])]
-                        order = Order(
-                            id=int(change.document.id, 16),
-                            order_number=data['orderNumber'],
-                            user_id=data['userId'],
-                            user_name=data['userName'],
-                            payment_type=data.get('paymentType','cash'),
-                            items=items,
-                            timestamp=data['createdAt'].datetime,
-                            status=data['status'],
+                    # Convertir items de Firestore a objetos OrderItem
+                    items_raw = data.get('items', [])
+                    items = [
+                        OrderItem(
+                            name=i.get('nombre', ''),
+                            quantity=i.get('cantidad', 1),
+                            notes=i.get('notas', '')
                         )
-                        self._orders.append(order)
-                        self._notify()   # <-- triggers UI refresh
+                        for i in items_raw
+                    ]
 
-            query = db.collection('orders').where('status','in',
-                        ['pending','in-progress'])
-            self._watcher = query.on_snapshot(on_new_order)
-        ─────────────────────────────────────────────────────
-        """
-        order = Order(
-            id=self._next_id,
-            order_number=str(self._next_order_number).zfill(4),
-            user_id=user_id,
-            user_name=user_name,
-            payment_type=payment_type,
-            items=items,
-            timestamp=datetime.now(),
-            status="pending",
-        )
-        self._next_id += 1
-        self._next_order_number += 1
-        self._orders.append(order)
-        self._notify()
-        return order
+                    # Crear el objeto Order con datos reales
+                    order = Order(
+                        id=hash(change.document.id) % 100000,
+                        order_number=str(data.get('numero_fila', 0)).zfill(4),
+                        user_id=data.get('usuario_id', ''),
+                        user_name=data.get('nombre_usuario', 'Usuario'),
+                        payment_type=data.get('metodo_pago', 'cash'),
+                        items=items,
+                        timestamp=data.get('fecha', datetime.now()),
+                        status='pending',
+                    )
+
+                    # Guardar referencia al ID de Firestore para actualizarlo después
+                    self._firestore_ids[order.id] = change.document.id
+
+                    self._orders.append(order)
+                    self._notify()
+
+                elif change.type.name == 'MODIFIED':
+                    # Si el pedido se modificó desde la app, actualizar localmente
+                    self._notify()
+
+        # Escuchar solo pedidos activos
+        query = (db.collection('pedidos')
+                   .where('estado', 'in', ['PENDIENTE', 'EN_PREPARACION']))
+
+        self._watcher = query.on_snapshot(on_snapshot)
+
 
     def mark_order_ready(self, order_id: int):
         """
-        ── DATABASE HOOK: MARK ORDER READY ──────────────────
-        After updating local state, write the new status back
-        to Firebase so the student's app is notified instantly.
-
-        Example (Firestore):
-            db.collection('orders').document(str(order_id)).update({
-                'status': 'ready',
-                'completedAt': firestore.SERVER_TIMESTAMP,
-            })
-
-        Firebase Cloud Messaging or a Firestore listener on the
-        student's app will pick up the status change and notify
-        the student their food is ready for pickup.
-        ─────────────────────────────────────────────────────
+        Marca el pedido como LISTO en Firestore.
+        La app Android lo detecta al instante por su Firestore Listener
+        y notifica al usuario que su pedido está listo.
         """
         order = next((o for o in self._orders if o.id == order_id), None)
         if order:
@@ -226,6 +225,14 @@ class AppState:
             self._order_history.insert(0, order)
             self._total_completed += 1
             self._notify()
+
+            # Actualizar en Firestore
+            firestore_id = self._firestore_ids.get(order_id)
+            if firestore_id:
+                db.collection('pedidos').document(firestore_id).update({
+                    'estado': 'LISTO',
+                    'fecha_completado': firestore.SERVER_TIMESTAMP,
+                })
 
     # ── MENU ITEMS ───────────────────────────────────────
 
@@ -278,32 +285,30 @@ class AppState:
 
     def _default_menu(self) -> list:
         """
-        ── DATABASE HOOK: LOAD MENU ON STARTUP ──────────────
-        Replace this with a Firestore read:
-
-        Example:
-            docs = db.collection('menuItems').stream()
-            return [MenuItem(id=d.id, **d.to_dict()) for d in docs]
-        ─────────────────────────────────────────────────────
+        Carga los productos reales desde Firestore en lugar del menú hardcodeado.
         """
-        raw = [
-            ("1",  "Scrambled Eggs",           "breakfast", 4.99, True,  ""),
-            ("2",  "Pancakes",                  "breakfast", 5.99, True,  ""),
-            ("3",  "Breakfast Burrito",          "breakfast", 6.99, True,  ""),
-            ("4",  "Grilled Chicken Sandwich",   "main",      8.99, True,  ""),
-            ("5",  "Caesar Salad",               "main",      7.99, True,  ""),
-            ("6",  "Veggie Burger",              "main",      8.49, True,  ""),
-            ("7",  "Pizza Slice (Pepperoni)",    "main",      3.99, True,  ""),
-            ("8",  "Pasta Carbonara",            "main",      9.99, True,  ""),
-            ("9",  "Fish Tacos",                 "main",      9.49, True,  ""),
-            ("10", "French Fries",               "all-day",   2.99, True,  ""),
-            ("11", "Sweet Potato Fries",         "all-day",   3.49, True,  ""),
-            ("12", "Smoothie Bowl",              "all-day",   6.99, True,  ""),
-            ("13", "Coffee",                     "all-day",   2.49, True,  ""),
-            ("14", "Soda",                       "all-day",   1.99, True,  ""),
-        ]
-        return [MenuItem(*r) for r in raw]
-
+        try:
+            docs = db.collection('productos').get()
+            menu = []
+            for doc in docs:
+                data = doc.to_dict()
+                # Mapear categorías de español a las del panel
+                cat_map = {
+                    'Desayunos': 'breakfast',
+                    'Comidas': 'main',
+                }
+                menu.append(MenuItem(
+                    id=doc.id,
+                    name=data.get('nombre', ''),
+                    category=cat_map.get(data.get('categoria', ''), 'all-day'),
+                    price=float(data.get('precio', 0)),
+                    available=data.get('disponible', True),
+                    description=data.get('descripcion', ''),
+                ))
+            return menu
+        except Exception as e:
+            print(f"Error cargando menú: {e}")
+            return []
 
 # ════════════════════════════════════════════════════════
 #  MOCK ORDER SIMULATOR
@@ -1192,12 +1197,11 @@ class CafeteriaApp(ctk.CTk):
         self.configure(fg_color=C["app_bg"])
 
         self._state = AppState()
-        self._simulator = MockOrderSimulator(self._state)
+        #self._simulator = MockOrderSimulator(self._state)
         self._build()
 
-        # ── DATABASE HOOK: REMOVE THIS LINE WHEN CONNECTING TO FIREBASE ──
-        # Remove self._simulator.start() and set up your Firestore listener instead.
-        self._simulator.start()
+        # ── DATABASE HOOK: CONNECTING TO FIREBASE ──
+        self._state.start_order_listener(self._build)
 
         self.after(60_000, self._date_check_loop)
 
@@ -1271,9 +1275,7 @@ class CafeteriaApp(ctk.CTk):
         self.after(1000, self._tick_clock)
 
     def on_close(self):
-        self._simulator.stop()
         self.destroy()
-
 
 # ════════════════════════════════════════════════════════
 #  ENTRY POINT
