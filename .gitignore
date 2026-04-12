@@ -1,3 +1,4 @@
+# Android
 *.iml
 .gradle
 /local.properties
@@ -13,4 +14,17 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Firebase — Android
+app/google-services.json
+
+# Firebase — Panel cocina
 panel-cocina/serviceAccountKey.json
+panel-cocina/__pycache__/
+panel-cocina/*.pyc
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
