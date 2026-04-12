@@ -44,7 +44,9 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
+    implementation(libs.glide)
     androidTestImplementation(libs.androidx.espresso.core)
+
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
