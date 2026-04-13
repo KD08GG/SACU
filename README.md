@@ -1,4 +1,4 @@
-# SACU — Sistema de Automatización de Cafetería Universitaria
+# SACU: Sistema de Automatización de Cafetería Universitaria
 
 > Digitalización de pedidos y pagos para la cafetería de la UDLAP. Reduce tiempos de espera, elimina filas y automatiza el proceso de cobro mediante una app móvil Android conectada a Firebase en tiempo real.
 
