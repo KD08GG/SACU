@@ -22,9 +22,20 @@ app/google-services.json
 panel-cocina/serviceAccountKey.json
 panel-cocina/__pycache__/
 panel-cocina/*.pyc
+serviceAccountKey.json
 
 # Python
 __pycache__/
 *.pyc
 *.pyo
 .env
+*.py[cod]
+
+# Entornos virtuales
+venv/
+ENV/
+env/
+
+# IDEs
+.idea/
+.vscode/
