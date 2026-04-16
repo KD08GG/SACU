@@ -14,7 +14,7 @@ class NotificacionAdapter(
     private val onMasDetallesClick: (Notificacion) -> Unit
 ) : RecyclerView.Adapter<NotificacionAdapter.NotificacionViewHolder>() {
 
-    inner class NotificacionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class NotificacionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val txtPedidoLabel: TextView    = itemView.findViewById(R.id.txtPedidoLabel)
         val txtNumeroPedido: TextView   = itemView.findViewById(R.id.txtNumeroPedido)
         val txtEstado: TextView         = itemView.findViewById(R.id.txtEstadoNotif)
@@ -29,9 +29,10 @@ class NotificacionAdapter(
 
     override fun onBindViewHolder(holder: NotificacionViewHolder, position: Int) {
         val notif = notificaciones[position]
+        val context = holder.itemView.context
 
-        holder.txtPedidoLabel.text  = "Notificación"
-        holder.txtNumeroPedido.text = "" // Opcional: mostrar algo relevante aquí
+        holder.txtPedidoLabel.text  = context.getString(R.string.notification_label)
+        holder.txtNumeroPedido.text = ""
         holder.txtEstado.text       = notif.mensaje
 
         holder.btnMasDetalles.setOnClickListener { onMasDetallesClick(notif) }

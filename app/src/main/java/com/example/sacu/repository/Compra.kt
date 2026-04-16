@@ -4,10 +4,10 @@ import android.util.Log
 import com.example.sacu.model.ItemPedido
 import com.example.sacu.model.Producto
 
-public var carritoTotal = mutableListOf<ItemPedido>()
+var carritoTotal = mutableListOf<ItemPedido>()
 
 class Compra {
-    public var carrito = mutableListOf<ItemPedido>()
+    var carrito = mutableListOf<ItemPedido>()
 
     fun agregarProducto(producto: Producto) {
         Log.d("SACU_CARRITO", "Agregado al carrito: ${producto.nombre}")
@@ -26,7 +26,7 @@ class Compra {
         eliminarDups()
     }
 
-    fun agruparProductos(producto: Producto): Int {
+    private fun agruparProductos(producto: Producto): Int {
         var n = 0
         for (item in carritoTotal) {
             if (item.nombre == producto.nombre) {
@@ -36,7 +36,7 @@ class Compra {
         return n + 1
     }
 
-    fun eliminarDups() {
+    private fun eliminarDups() {
         carritoTotal = carritoTotal
             .groupBy { it.nombre }
             .map { (_, lista) ->
@@ -53,7 +53,6 @@ class Compra {
         return total
     }
 
-    // Nueva función para vaciar el carrito
     fun limpiarCarrito() {
         carrito.clear()
         carritoTotal.clear()

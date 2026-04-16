@@ -1,7 +1,6 @@
 package com.example.sacu.repository
 
 import android.util.Log
-import com.example.sacu.model.ItemPedido
 import com.example.sacu.model.Notificacion
 import com.example.sacu.model.Pedido
 import com.example.sacu.model.Producto
@@ -58,9 +57,18 @@ class FirestoreRepository {
             .addOnFailureListener { onError(it) }
     }
 
-    // PEDIDOS: Lógica de cola secuencial diaria
+    fun obtenerTodosLosProductos(onSuccess: (List<Producto>) -> Unit, onError: (Exception) -> Unit) {
+        db.collection("productos")
+            .get()
+            .addOnSuccessListener { result ->
+                val productos = result.toObjects(Producto::class.java)
+                onSuccess(productos)
+            }
+            .addOnFailureListener(onError)
+    }
+
+    // PEDIDOS
     fun obtenerSiguienteNumeroPedido(onResult: (Int) -> Unit) {
-        // Obtener el inicio del día de hoy
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
@@ -75,7 +83,7 @@ class FirestoreRepository {
             .get()
             .addOnSuccessListener { snapshot ->
                 if (snapshot.isEmpty) {
-                    onResult(1) // Primer pedido del día
+                    onResult(1)
                 } else {
                     val ultimoPedido = snapshot.documents[0].toObject(Pedido::class.java)
                     val ultimoNumero = ultimoPedido?.numero_fila ?: 0
@@ -83,7 +91,7 @@ class FirestoreRepository {
                 }
             }
             .addOnFailureListener { e ->
-                Log.e("Firestore", "Error calculando turno: ${e.message}")
+                Log.e("Firestore", "Error turno: ${e.message}")
                 onResult(1) 
             }
     }
@@ -94,13 +102,12 @@ class FirestoreRepository {
             .addOnFailureListener { onError(it) }
     }
 
-    fun escucharPedidoActivo(usuarioId: String, onUpdate: (Pedido?) -> Unit, onError: (Exception) -> Unit): ListenerRegistration {
+    fun escucharPedidoActivo(usuarioId: String, onUpdate: (Pedido?) -> Unit): ListenerRegistration {
         return db.collection("pedidos")
             .whereEqualTo("usuario_id", usuarioId)
             .whereIn("estado", listOf("PENDIENTE", "EN_PREPARACION", "LISTO"))
             .orderBy("fecha", Query.Direction.DESCENDING)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) return@addSnapshotListener
+            .addSnapshotListener { snapshot, _ ->
                 val pedido = snapshot?.documents?.firstOrNull()?.let { doc ->
                     doc.toObject(Pedido::class.java)?.copy(id = doc.id)
                 }
@@ -113,7 +120,7 @@ class FirestoreRepository {
             .whereEqualTo("usuario_id", usuarioId)
             .orderBy("fecha", Query.Direction.DESCENDING)
             .limit(20)
-            .addSnapshotListener { snapshot, error ->
+            .addSnapshotListener { snapshot, _ ->
                 val pedidos = snapshot?.documents?.mapNotNull { doc ->
                     doc.toObject(Pedido::class.java)?.copy(id = doc.id)
                 } ?: emptyList()
@@ -121,20 +128,18 @@ class FirestoreRepository {
             }
     }
 
-    fun escucharPedidosEnFila(onUpdate: (Int) -> Unit, onError: (Exception) -> Unit): ListenerRegistration {
+    fun escucharPedidosEnFila(onUpdate: (Int) -> Unit): ListenerRegistration {
         return db.collection("pedidos")
             .whereIn("estado", listOf("PENDIENTE", "EN_PREPARACION"))
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) return@addSnapshotListener
+            .addSnapshotListener { snapshot, _ ->
                 onUpdate(snapshot?.size() ?: 0)
             }
     }
 
-    fun escucharNotificaciones(usuarioId: String, onUpdate: (List<Notificacion>) -> Unit, onError: (Exception) -> Unit): ListenerRegistration {
+    fun escucharNotificaciones(usuarioId: String, onUpdate: (List<Notificacion>) -> Unit): ListenerRegistration {
         return db.collection("notificaciones")
             .whereEqualTo("usuario_id", usuarioId)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) return@addSnapshotListener
+            .addSnapshotListener { snapshot, _ ->
                 val notificaciones = snapshot?.documents?.mapNotNull { doc ->
                     doc.toObject(Notificacion::class.java)?.copy(id = doc.id)
                 } ?: emptyList()
