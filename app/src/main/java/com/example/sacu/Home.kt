@@ -59,21 +59,16 @@ class Home : AppCompatActivity() {
         cargarInformacionUsuario()
         cargarProductos()
         
-        // Acciones de botones
-        findViewById<TextView>(R.id.btnDesayunos).setOnClickListener { irATodoComida("Desayunos") }
-        findViewById<TextView>(R.id.btnComidas).setOnClickListener { irATodoComida("Comidas") }
         setupNavegacion()
     }
 
     private fun cargarInformacionUsuario() {
-        // 1. Intentar desde sesión local
         val localUser = userSession.obtenerUsuario()
         if (localUser != null && localUser.nombre.isNotEmpty()) {
             txtNombre.text = localUser.nombre
             txtID.text = localUser.matricula
         }
 
-        // 2. Sincronizar con Firestore por si hubo cambios o la sesión está incompleta
         val uid = auth.currentUser?.uid ?: return
         repository.obtenerUsuario(uid, { cloudUser ->
             cloudUser?.let {
@@ -87,13 +82,15 @@ class Home : AppCompatActivity() {
     private fun setupListeners() {
         val uid = auth.currentUser?.uid ?: return
         
-        // Listener de pedidos en fila
+        // Listener de pedidos en fila (Corregido: ahora recibe los dos parámetros)
         filaListener = repository.escucharPedidosEnFila({ cantidad ->
             totalPedidos.text = cantidad.toString()
-            tiempoEspera.text = "${cantidad * 5}:00"
-        }, {})
+            tiempoEspera.text = getString(R.string.wait_time_format, cantidad * 5)
+        }, { error ->
+            Log.e("Home", "Error en fila: ${error.message}")
+        })
 
-        // Listener de mi pedido actual
+        // Listener de mi pedido actual (Corregido: ahora recibe los dos parámetros)
         pedidoActivoListener = repository.escucharPedidoActivo(uid, { pedido ->
             if (pedido != null) {
                 framePedido.visibility = View.VISIBLE
@@ -101,7 +98,9 @@ class Home : AppCompatActivity() {
             } else {
                 framePedido.visibility = View.GONE
             }
-        }, {})
+        }, { error ->
+            Log.e("Home", "Error pedido activo: ${error.message}")
+        })
     }
 
     private fun setupRecyclerViews() {
@@ -119,8 +118,16 @@ class Home : AppCompatActivity() {
     }
 
     private fun cargarProductos() {
-        repository.obtenerProductosPorCategoria("Desayunos", { listaDesayunos.clear(); listaDesayunos.addAll(it); desayunosAdapter.notifyDataSetChanged() }, {})
-        repository.obtenerProductosPorCategoria("Comidas", { listaComidas.clear(); listaComidas.addAll(it); comidasAdapter.notifyDataSetChanged() }, {})
+        repository.obtenerProductosPorCategoria("Desayunos", { 
+            listaDesayunos.clear()
+            listaDesayunos.addAll(it)
+            desayunosAdapter.notifyDataSetChanged() 
+        }, {})
+        repository.obtenerProductosPorCategoria("Comidas", { 
+            listaComidas.clear()
+            listaComidas.addAll(it)
+            comidasAdapter.notifyDataSetChanged() 
+        }, {})
     }
 
     private fun irATodoComida(tipo: String) {
@@ -128,6 +135,8 @@ class Home : AppCompatActivity() {
     }
 
     private fun setupNavegacion() {
+        findViewById<TextView>(R.id.btnDesayunos).setOnClickListener { irATodoComida("Desayunos") }
+        findViewById<TextView>(R.id.btnComidas).setOnClickListener { irATodoComida("Comidas") }
         findViewById<ImageButton>(R.id.btnPerfil).setOnClickListener { startActivity(Intent(this, Perfil::class.java)) }
         findViewById<ImageButton>(R.id.btnCarrito).setOnClickListener { startActivity(Intent(this, Carrito::class.java)) }
         findViewById<ImageButton>(R.id.btnNotif).setOnClickListener { startActivity(Intent(this, Notificaciones::class.java)) }

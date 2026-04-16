@@ -5,8 +5,8 @@
     <string name="status_ready">¡Listo!</string>
     <string name="status_collected">Recogido</string>
     <string name="status_delivered">Entregado</string>
-    <string name="verifying">Verificando...</string>
-    <string name="processing">Procesando...</string>
+    <string name="verifying">Verificando&#8230;</string>
+    <string name="processing">Procesando&#8230;</string>
     <string name="order_prefix">Pedido #</string>
     <string name="notification_label">Notificación</string>
     <string name="total_label">Total: %s</string>
@@ -14,4 +14,8 @@
     <string name="error_no_connection">Sin conexión</string>
     <string name="auth_error">Error al ingresar</string>
     <string name="unauthorized_matricula">Matrícula no autorizada</string>
+    <string name="invalid_credentials">Credenciales incorrectas</string>
+    <string name="complete_all_fields">Completa todos los campos</string>
+    <string name="default_user_name">Usuario SACU</string>
+    <string name="payment_method_default">Tarjeta Predeterminada</string>
 </resources>

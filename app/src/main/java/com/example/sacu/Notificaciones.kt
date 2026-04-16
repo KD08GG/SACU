@@ -33,8 +33,9 @@ class Notificaciones : AppCompatActivity() {
         rvNotif.layoutManager = LinearLayoutManager(this)
         
         adapter = NotificacionAdapter(listaNotificaciones) { notif ->
-            val intent = Intent(this, Detalles::class.java)
-            intent.putExtra("pedido_id", notif.pedido_id)
+            val intent = Intent(this, Detalles::class.java).apply {
+                putExtra("pedido_id", notif.pedido_id)
+            }
             startActivity(intent)
         }
         rvNotif.adapter = adapter
@@ -44,12 +45,14 @@ class Notificaciones : AppCompatActivity() {
 
     private fun escucharNotificacionesReales() {
         val uid = auth.currentUser?.uid ?: return
+        // Se pasan los dos parámetros: el bloque de éxito y el bloque de error
         notifListener = repository.escucharNotificaciones(uid, { notificaciones ->
             listaNotificaciones.clear()
             listaNotificaciones.addAll(notificaciones)
             adapter.notifyDataSetChanged()
-            Log.d("Notificaciones", "Se cargaron ${notificaciones.size} alertas")
-        }, { Log.e("Notif", "Error: ${it.message}") })
+        }, { error ->
+            Log.e("Notificaciones", "Error: ${error.message}")
+        })
     }
 
     private fun botonesMenu() {

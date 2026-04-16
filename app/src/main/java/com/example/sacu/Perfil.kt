@@ -38,7 +38,6 @@ class Perfil : AppCompatActivity() {
         botonesMenu()
         cargarInformacionUsuario(txtNombre, txtID)
 
-        // Configurar RecyclerView para últimos pedidos
         rvUltimosPedidos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         adapter = PedidoAdapter(listaPedidos) { pedido ->
             val intent = Intent(this, Detalles::class.java).apply { putExtra("pedido_id", pedido.id) }
@@ -46,20 +45,17 @@ class Perfil : AppCompatActivity() {
         }
         rvUltimosPedidos.adapter = adapter
 
-        // Listeners y acciones
         cargarUltimosPedidos()
         setupAcciones()
     }
 
     private fun cargarInformacionUsuario(txtNombre: TextView, txtID: TextView) {
-        // 1. Prioridad Local
         val localUser = userSession.obtenerUsuario()
         if (localUser != null && localUser.nombre.isNotEmpty()) {
             txtNombre.text = localUser.nombre
             txtID.text = localUser.matricula
         }
 
-        // 2. Sincronización Nube
         val uid = auth.currentUser?.uid ?: return
         repository.obtenerUsuario(uid, { cloudUser ->
             cloudUser?.let {
@@ -72,11 +68,14 @@ class Perfil : AppCompatActivity() {
 
     private fun cargarUltimosPedidos() {
         val uid = auth.currentUser?.uid ?: return
-        pedidosListener = repository.escucharTodosLosPedidosDelUsuario(uid) { pedidos ->
+        // Se agregaron los argumentos faltantes (onUpdate y onError) para coincidir con el repositorio
+        pedidosListener = repository.escucharTodosLosPedidosDelUsuario(uid, { pedidos ->
             listaPedidos.clear()
             listaPedidos.addAll(pedidos)
             adapter.notifyDataSetChanged()
-        }
+        }, { error ->
+            Log.e("Perfil", "Error cargando pedidos: ${error.message}")
+        })
     }
 
     private fun setupAcciones() {
