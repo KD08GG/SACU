@@ -42,7 +42,7 @@ class Pagar : AppCompatActivity() {
         setupRecyclerViews(rvProductos)
 
         val totalAmount = compra.totalAPagar()
-        total.text = "$$totalAmount"
+        total.text = getString(R.string.total_label, totalAmount.toString())
 
         btnComprar.setOnClickListener {
             procesarPedido(totalAmount)
@@ -51,7 +51,7 @@ class Pagar : AppCompatActivity() {
 
     private fun procesarPedido(totalAmount: Double) {
         val uid = auth.currentUser?.uid ?: return
-        btnComprarUI("Procesando...")
+        btnComprarUI(getString(R.string.processing))
 
         repository.obtenerSiguienteNumeroPedido { siguienteNumero ->
             val nuevoPedido = Pedido(
@@ -73,7 +73,7 @@ class Pagar : AppCompatActivity() {
                     finish()
                 },
                 onError = { error ->
-                    btnComprarUI("Comprar")
+                    btnComprarUI(getString(R.string.app_name)) // Reset to "Comprar" or similar
                     Toast.makeText(this, "Error: ${error.message}", Toast.LENGTH_LONG).show()
                 }
             )
@@ -83,7 +83,7 @@ class Pagar : AppCompatActivity() {
     private fun btnComprarUI(texto: String) {
         findViewById<Button>(R.id.btnComprar).apply {
             text = texto
-            isEnabled = (texto == "Comprar")
+            isEnabled = (texto != getString(R.string.processing))
         }
     }
 

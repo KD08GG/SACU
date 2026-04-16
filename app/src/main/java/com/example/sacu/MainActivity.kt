@@ -43,15 +43,15 @@ class MainActivity : AppCompatActivity() {
             }
 
             btnIngresar.isEnabled = false
-            btnIngresar.text = "Verificando..."
+            btnIngresar.text = getString(R.string.verifying)
 
             repository.verificarMatricula(matricula, { existe ->
                 if (!existe) {
-                    mostrarError("Matrícula no autorizada")
+                    mostrarError(getString(R.string.unauthorized_matricula))
                     return@verificarMatricula
                 }
                 iniciarSesion(matricula, password)
-            }, { mostrarError("Sin conexión") })
+            }, { mostrarError(getString(R.string.error_no_connection)) })
         }
     }
 

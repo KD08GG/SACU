@@ -2,18 +2,18 @@ package com.example.sacu.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.example.sacu.model.Usuario
 
 class UserSession(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("SACU_SESSION", Context.MODE_PRIVATE)
 
     fun guardarUsuario(usuario: Usuario) {
-        prefs.edit().apply {
+        prefs.edit {
             putString("uid", usuario.uid)
             putString("nombre", usuario.nombre)
             putString("matricula", usuario.matricula)
             putString("tipo", usuario.tipo)
-            apply()
         }
     }
 
@@ -28,6 +28,6 @@ class UserSession(context: Context) {
     }
 
     fun cerrarSesion() {
-        prefs.edit().clear().apply()
+        prefs.edit { clear() }
     }
 }
