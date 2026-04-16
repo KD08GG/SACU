@@ -2,57 +2,67 @@ package com.example.sacu
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sacu.adapter.NotificacionAdapter
+import com.example.sacu.model.Notificacion
+import com.example.sacu.repository.FirestoreRepository
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ListenerRegistration
 
 class Notificaciones : AppCompatActivity() {
+    
+    private val repository = FirestoreRepository()
+    private val auth = FirebaseAuth.getInstance()
+    private lateinit var adapter: NotificacionAdapter
+    private val listaNotificaciones = mutableListOf<Notificacion>()
+    private var notifListener: ListenerRegistration? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_notificaciones)
 
-        //BOTONES MENU
         botonesMenu()
 
-        //RECYCLE VIEW
         val rvNotif = findViewById<RecyclerView>(R.id.rvNotif)
+        rvNotif.layoutManager = LinearLayoutManager(this)
+        
+        adapter = NotificacionAdapter(listaNotificaciones) { notif ->
+            val intent = Intent(this, Detalles::class.java).apply {
+                putExtra("pedido_id", notif.pedido_id)
+            }
+            startActivity(intent)
+        }
+        rvNotif.adapter = adapter
 
+        escucharNotificacionesReales()
     }
 
-    private fun botonesMenu () {
-        //MENU DE BOTONES DE NAVEGACION
-        val btnHome = findViewById<ImageButton>(R.id.btnHome)
-        val btnPerfil = findViewById< ImageButton>(R.id.btnPerfil)
-        val btnCarrito = findViewById< ImageButton>(R.id.btnCarrito)
-        val btnNotif = findViewById< ImageButton>(R.id.btnNotif)
+    private fun escucharNotificacionesReales() {
+        val uid = auth.currentUser?.uid ?: return
+        // Se pasan los dos parámetros: el bloque de éxito y el bloque de error
+        notifListener = repository.escucharNotificaciones(uid, { notificaciones ->
+            listaNotificaciones.clear()
+            listaNotificaciones.addAll(notificaciones)
+            adapter.notifyDataSetChanged()
+        }, { error ->
+            Log.e("Notificaciones", "Error: ${error.message}")
+        })
+    }
 
-        //FUNCIONES BOTONES DE MENU
-        btnHome.setOnClickListener {
-            // Lógica para el botón de inicio de sesión
-            val intent = Intent(this, Home::class.java)
-            startActivity(intent)
-        }
+    private fun botonesMenu() {
+        findViewById<ImageButton>(R.id.btnHome).setOnClickListener { startActivity(Intent(this, Home::class.java)) }
+        findViewById<ImageButton>(R.id.btnPerfil).setOnClickListener { startActivity(Intent(this, Perfil::class.java)) }
+        findViewById<ImageButton>(R.id.btnCarrito).setOnClickListener { startActivity(Intent(this, Carrito::class.java)) }
+    }
 
-        btnPerfil.setOnClickListener {
-            // Lógica para el botón de inicio de sesión
-            val intent = Intent(this, Perfil::class.java)
-            startActivity(intent)
-        }
-
-        btnCarrito.setOnClickListener {
-            // Lógica para el botón de inicio de sesión
-            val intent = Intent(this, Carrito::class.java)
-            startActivity(intent)
-        }
-
-        btnNotif.setOnClickListener {
-            // Lógica para el botón de inicio de sesión
-            val intent = Intent(this, Notificaciones::class.java)
-            startActivity(intent)
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        notifListener?.remove()
     }
 }

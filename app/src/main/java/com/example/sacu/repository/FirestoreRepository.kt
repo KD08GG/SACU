@@ -1,160 +1,102 @@
 package com.example.sacu.repository
 
 import android.util.Log
-import com.example.sacu.model.ItemPedido
 import com.example.sacu.model.Notificacion
 import com.example.sacu.model.Pedido
 import com.example.sacu.model.Producto
-import com.example.sacu.model.Transaccion
 import com.example.sacu.model.Usuario
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
+import java.util.Calendar
 
 class FirestoreRepository {
 
-    // Conexión a Firestore y Auth
     private val db = FirebaseFirestore.getInstance()
-    private val auth = FirebaseAuth.getInstance()
 
-    // ─────────────────────────────────────────
     // USUARIOS
-    // ─────────────────────────────────────────
-
-    // Verifica si una matrícula existe en la lista blanca
-    fun verificarMatricula(
-        matricula: String,
-        onSuccess: (Boolean) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        db.collection("usuarios_autorizados")
-            .document(matricula)
-            .get()
-            .addOnSuccessListener { document ->
-                onSuccess(document.exists())
-            }
-            .addOnFailureListener { exception ->
-                onError(exception)
-            }
-    }
-
-    // Obtiene los datos del documento en usuarios_autorizados
-    fun obtenerUsuarioAutorizado(
-        matricula: String,
-        onSuccess: (Map<String, Any>?) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        db.collection("usuarios_autorizados")
-            .document(matricula)
-            .get()
-            .addOnSuccessListener { document ->
-                onSuccess(document.data)
-            }
+    fun verificarMatricula(matricula: String, onSuccess: (Boolean) -> Unit, onError: (Exception) -> Unit) {
+        db.collection("usuarios_autorizados").document(matricula).get()
+            .addOnSuccessListener { document -> onSuccess(document.exists()) }
             .addOnFailureListener { onError(it) }
     }
 
-    // Guarda el perfil del usuario en Firestore después del registro
-    fun guardarUsuario(
-        usuario: Usuario,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        db.collection("usuarios")
-            .document(usuario.uid)
-            .set(usuario)
+    fun obtenerUsuarioAutorizado(matricula: String, onSuccess: (Map<String, Any>?) -> Unit, onError: (Exception) -> Unit) {
+        db.collection("usuarios_autorizados").document(matricula).get()
+            .addOnSuccessListener { document -> onSuccess(document.data) }
+            .addOnFailureListener { onError(it) }
+    }
+
+    fun guardarUsuario(usuario: Usuario, onSuccess: () -> Unit, onError: (Exception) -> Unit) {
+        db.collection("usuarios").document(usuario.uid).set(usuario)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onError(it) }
     }
 
-    // Obtiene los datos del usuario actual
-    fun obtenerUsuario(
-        uid: String,
-        onSuccess: (Usuario?) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        db.collection("usuarios")
-            .document(uid)
-            .get()
-            .addOnSuccessListener { document ->
-                val usuario = document.toObject(Usuario::class.java)
-                onSuccess(usuario)
+    fun obtenerUsuario(uid: String, onSuccess: (Usuario?) -> Unit, onError: (Exception) -> Unit) {
+        db.collection("usuarios").document(uid).get()
+            .addOnSuccessListener { document -> 
+                val user = document.toObject(Usuario::class.java)
+                onSuccess(user) 
             }
             .addOnFailureListener { onError(it) }
     }
 
-    // ─────────────────────────────────────────
     // PRODUCTOS
-    // ─────────────────────────────────────────
-
-    // Obtiene productos filtrados por categoría (ej: "Desayunos", "Comidas")
-    fun obtenerProductosPorCategoria(
-        categoria: String,
-        onSuccess: (List<Producto>) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-
-        Log.d("SACU_CAT", "Cat a buscar $categoria")
-        if (categoria == "Comidas") {
-            db.collection("productos")
-                .whereEqualTo("categoria", "Comidas")
-                .get()
-                .addOnSuccessListener { result ->
-                    val productos = result.documents.map { doc ->
-                        val producto = doc.toObject(Producto::class.java)!!
-                        producto.copy(id = doc.id)
-                    }
-                    Log.d("SACU_CAT", "Prod ${productos.size} encontrado en $categoria")
-
-                    onSuccess(productos)
+    fun obtenerProductosPorCategoria(categoria: String, onSuccess: (List<Producto>) -> Unit, onError: (Exception) -> Unit) {
+        db.collection("productos")
+            .whereEqualTo("categoria", categoria)
+            .get()
+            .addOnSuccessListener { result ->
+                val productos = result.documents.mapNotNull { doc ->
+                    doc.toObject(Producto::class.java)?.copy(id = doc.id)
                 }
-                .addOnFailureListener { onError(it) }
-        } else {
-            db.collection("productos")
-                .whereEqualTo("categoria", categoria)
-                .whereEqualTo("disponible", true)
-                .get()
-                .addOnSuccessListener { result ->
-                    val productos = result.documents.map { doc ->
-                        val producto = doc.toObject(Producto::class.java)!!
-                        producto.copy(id = doc.id)
-                    }
-                    Log.d("SACU_CAT", "Prod ${productos.size} encontrado en $categoria")
-
-                    onSuccess(productos)
-                }
-                .addOnFailureListener { onError(it) }
-        }
-    }
-
-    // ─────────────────────────────────────────
-    // PEDIDOS
-    // ─────────────────────────────────────────
-
-    // Crea un nuevo pedido en Firestore
-    fun crearPedido(
-        pedido: Pedido,
-        onSuccess: (String) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        db.collection("pedidos")
-            .add(pedido)
-            .addOnSuccessListener { documentRef ->
-                onSuccess(documentRef.id)
+                onSuccess(productos)
             }
             .addOnFailureListener { onError(it) }
     }
 
-    // Escucha en tiempo real el pedido activo del usuario
-    // Retorna un ListenerRegistration para poder cancelarlo cuando la Activity se cierre
-    fun escucharPedidoActivo(
-        usuarioId: String,
-        onUpdate: (Pedido?) -> Unit,
-        onError: (Exception) -> Unit
-    ): ListenerRegistration {
+    // PEDIDOS
+    fun obtenerSiguienteNumeroPedido(onResult: (Int) -> Unit) {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startOfDay = calendar.time
+
+        db.collection("pedidos")
+            .whereGreaterThanOrEqualTo("fecha", Timestamp(startOfDay))
+            .orderBy("fecha", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.isEmpty) {
+                    onResult(1)
+                } else {
+                    val ultimoPedido = snapshot.documents[0].toObject(Pedido::class.java)
+                    val ultimoNumero = ultimoPedido?.numero_fila ?: 0
+                    onResult(ultimoNumero + 1)
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Error turno: ${e.message}")
+                onResult(1) 
+            }
+    }
+
+    fun crearPedido(pedido: Pedido, onSuccess: (String) -> Unit, onError: (Exception) -> Unit) {
+        db.collection("pedidos").add(pedido)
+            .addOnSuccessListener { onSuccess(it.id) }
+            .addOnFailureListener { onError(it) }
+    }
+
+    fun escucharPedidoActivo(usuarioId: String, onUpdate: (Pedido?) -> Unit, onError: (Exception) -> Unit): ListenerRegistration {
         return db.collection("pedidos")
             .whereEqualTo("usuario_id", usuarioId)
             .whereIn("estado", listOf("PENDIENTE", "EN_PREPARACION", "LISTO"))
-            .limit(1)
+            .orderBy("fecha", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     onError(error)
@@ -167,106 +109,47 @@ class FirestoreRepository {
             }
     }
 
-    // Actualiza el estado de un pedido
-    fun actualizarEstadoPedido(
-        pedidoId: String,
-        nuevoEstado: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        db.collection("pedidos")
-            .document(pedidoId)
-            .update("estado", nuevoEstado)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { onError(it) }
-    }
-
-    // ─────────────────────────────────────────
-    // NOTIFICACIONES
-    // ─────────────────────────────────────────
-
-    // Escucha en tiempo real las notificaciones no leídas del usuario
-    fun escucharNotificaciones(
-        usuarioId: String,
-        onUpdate: (List<Notificacion>) -> Unit,
-        onError: (Exception) -> Unit
-    ): ListenerRegistration {
-        return db.collection("notificaciones")
+    fun escucharTodosLosPedidosDelUsuario(usuarioId: String, onUpdate: (List<Pedido>) -> Unit, onError: (Exception) -> Unit): ListenerRegistration {
+        return db.collection("pedidos")
             .whereEqualTo("usuario_id", usuarioId)
-            .whereEqualTo("leida", false)
+            .orderBy("fecha", Query.Direction.DESCENDING)
+            .limit(20)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     onError(error)
                     return@addSnapshotListener
                 }
-                val notificaciones = snapshot?.documents?.map { doc ->
-                    doc.toObject(Notificacion::class.java)!!.copy(id = doc.id)
+                val pedidos = snapshot?.documents?.mapNotNull { doc ->
+                    doc.toObject(Pedido::class.java)?.copy(id = doc.id)
+                } ?: emptyList()
+                onUpdate(pedidos)
+            }
+    }
+
+    fun escucharPedidosEnFila(onUpdate: (Int) -> Unit, onError: (Exception) -> Unit): ListenerRegistration {
+        return db.collection("pedidos")
+            .whereIn("estado", listOf("PENDIENTE", "EN_PREPARACION"))
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    onError(error)
+                    return@addSnapshotListener
+                }
+                onUpdate(snapshot?.size() ?: 0)
+            }
+    }
+
+    fun escucharNotificaciones(usuarioId: String, onUpdate: (List<Notificacion>) -> Unit, onError: (Exception) -> Unit): ListenerRegistration {
+        return db.collection("notificaciones")
+            .whereEqualTo("usuario_id", usuarioId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    onError(error)
+                    return@addSnapshotListener
+                }
+                val notificaciones = snapshot?.documents?.mapNotNull { doc ->
+                    doc.toObject(Notificacion::class.java)?.copy(id = doc.id)
                 } ?: emptyList()
                 onUpdate(notificaciones)
             }
     }
-
-    // Marca una notificación como leída
-    fun marcarNotificacionLeida(
-        notificacionId: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        db.collection("notificaciones")
-            .document(notificacionId)
-            .update("leida", true)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { onError(it) }
-    }
-
-    // ─────────────────────────────────────────
-    // TRANSACCIONES
-    // ─────────────────────────────────────────
-
-    // Crea una transacción antes de enviar al usuario a pagar
-    fun crearTransaccion(
-        transaccion: Transaccion,
-        onSuccess: (String) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
-        db.collection("transacciones")
-            .add(transaccion)
-            .addOnSuccessListener { ref -> onSuccess(ref.id) }
-            .addOnFailureListener { onError(it) }
-    }
-
-    // En FirestoreRepository.kt
-    fun obtenerTodosLosProductos(onSuccess: (List<Producto>) -> Unit, onError: (Exception) -> Unit) {
-        db.collection("productos")
-            .get()
-            .addOnSuccessListener { result ->
-                val productos = result.toObjects(Producto::class.java)
-                onSuccess(productos)
-            }
-            .addOnFailureListener(onError)
-    }
-
-    fun obtenerHistorialPedidos(usuarioId: String, onResult: (List<ItemPedido>) -> Unit) {
-        val db = FirebaseFirestore.getInstance()
-
-        db.collection("transacciones")
-            .whereEqualTo("usuario_id", usuarioId)
-            .get()
-            .addOnSuccessListener { result ->
-                val lista = mutableListOf<ItemPedido>()
-
-                for (doc in result) {
-                    val item = ItemPedido(
-                        producto_id = doc.getString("pedido_id") ?: "",
-                        nombre = "", // ajusta si tienes nombre
-                        cantidad = 1,
-                        precio_unitario = doc.getString("monto")?.toDoubleOrNull() ?: 0.0
-                    )
-                    lista.add(item)
-                }
-
-                onResult(lista)
-            }
-    }
-
 }

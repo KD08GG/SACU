@@ -2,12 +2,13 @@ package com.example.sacu
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.sacu.model.Usuario
 import com.example.sacu.repository.FirestoreRepository
+import com.example.sacu.utils.UserSession
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -23,12 +24,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Vincular vistas
         etMatricula = findViewById(R.id.etMatricula)
         etPassword = findViewById(R.id.etPassword)
         btnIngresar = findViewById(R.id.btnIngresar)
 
-        // Si el usuario ya tiene sesión activa, ir directo a Home
         if (auth.currentUser != null) {
             irAHome()
             return
@@ -38,81 +37,62 @@ class MainActivity : AppCompatActivity() {
             val matricula = etMatricula.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
-            // Validaciones básicas
-            if (matricula.isEmpty()) {
-                etMatricula.error = "Ingresa tu matrícula"
-                return@setOnClickListener
-            }
-            if (password.isEmpty()) {
-                etPassword.error = "Ingresa tu contraseña"
+            if (matricula.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             btnIngresar.isEnabled = false
-            btnIngresar.text = "Verificando..."
+            btnIngresar.text = getString(R.string.verifying)
 
-            // Paso 1: verificar que la matrícula esté autorizada
-            repository.verificarMatricula(
-                matricula = matricula,
-                onSuccess = { existe ->
-                    if (!existe) {
-                        mostrarError("Matrícula no registrada en el sistema")
-                        return@verificarMatricula
-                    }
-                    // Paso 2: iniciar sesión con Firebase Auth
-                    // El email que usamos es matricula@sacu.udlap.mx
-                    val email = "$matricula@sacu.udlap.mx"
-                    iniciarSesion(email, password)
-                },
-                onError = { error ->
-                    mostrarError("Error de conexión: ${error.message}")
+            repository.verificarMatricula(matricula, { existe ->
+                if (!existe) {
+                    mostrarError(getString(R.string.unauthorized_matricula))
+                    return@verificarMatricula
                 }
-            )
+                iniciarSesion(matricula, password)
+            }, { mostrarError(getString(R.string.error_no_connection)) })
         }
     }
 
-    private fun iniciarSesion(email: String, password: String) {
+    private fun iniciarSesion(matricula: String, password: String) {
+        val email = "$matricula@sacu.udlap.mx"
         auth.signInWithEmailAndPassword(email, password)
-            .addOnSuccessListener {
-                // Login exitoso → ir a Home
-                irAHome()
+            .addOnSuccessListener { result ->
+                val uid = result.user?.uid ?: ""
+                repository.obtenerUsuario(uid, { usuario ->
+                    if (usuario != null) {
+                        UserSession(this).guardarUsuario(usuario)
+                        irAHome()
+                    } else {
+                        crearPerfilFirestore(uid, matricula)
+                    }
+                }, { irAHome() })
             }
-            .addOnFailureListener { error ->
-                // Si falla el login puede ser porque no tiene cuenta aún
-                // En el MVP el admin crea las cuentas, pero para pruebas
-                // intentamos registrar si el login falla
-                val matricula = email.replace("@sacu.udlap.mx", "")
-                registrarUsuario(email, password, matricula)
+            .addOnFailureListener {
+                registrarYCrearPerfil(email, password, matricula)
             }
     }
 
-    private fun registrarUsuario(email: String, password: String, matricula: String) {
+    private fun registrarYCrearPerfil(email: String, password: String, matricula: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener { result ->
-                val uid = result.user?.uid ?: return@addOnSuccessListener
+                crearPerfilFirestore(result.user?.uid ?: "", matricula)
+            }
+            .addOnFailureListener { mostrarError("Credenciales incorrectas") }
+    }
 
-                // Guardar perfil en Firestore
-                repository.obtenerUsuarioAutorizado(
-                    matricula = matricula,
-                    onSuccess = { datos ->
-                        val usuario = com.example.sacu.model.Usuario(
-                            uid = uid,
-                            nombre = datos?.get("nombre") as? String ?: "",
-                            matricula = matricula,
-                            tipo = datos?.get("tipo") as? String ?: "estudiante"
-                        )
-                        repository.guardarUsuario(
-                            usuario = usuario,
-                            onSuccess = { irAHome() },
-                            onError = { irAHome() }
-                        )
-                    },
-                    onError = { irAHome() }
-                )
-            }
-            .addOnFailureListener { error ->
-                mostrarError("Credenciales incorrectas")
-            }
+    private fun crearPerfilFirestore(uid: String, matricula: String) {
+        repository.obtenerUsuarioAutorizado(matricula, { datos ->
+            val nuevoUsuario = Usuario(
+                uid = uid,
+                nombre = datos?.get("nombre") as? String ?: "Usuario SACU",
+                matricula = matricula,
+                tipo = datos?.get("tipo") as? String ?: "estudiante"
+            )
+            UserSession(this).guardarUsuario(nuevoUsuario)
+            repository.guardarUsuario(nuevoUsuario, { irAHome() }, { irAHome() })
+        }, { irAHome() })
     }
 
     private fun irAHome() {
