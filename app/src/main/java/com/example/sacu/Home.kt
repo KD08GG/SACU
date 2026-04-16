@@ -31,6 +31,7 @@ class Home : AppCompatActivity() {
     private lateinit var tiempoEspera: TextView
     private lateinit var numPedido: TextView
     private lateinit var framePedido: FrameLayout
+    private lateinit var frameTurnoActual: FrameLayout
 
     private lateinit var desayunosAdapter: ProductoAdapter
     private lateinit var comidasAdapter: ProductoAdapter
@@ -53,6 +54,7 @@ class Home : AppCompatActivity() {
         tiempoEspera = findViewById(R.id.TiempoEspera)
         numPedido = findViewById(R.id.NumPedido)
         framePedido = findViewById(R.id.framePedido)
+        frameTurnoActual = findViewById(R.id.frameTurnoActual)
 
         setupRecyclerViews()
         setupListeners()
@@ -60,6 +62,9 @@ class Home : AppCompatActivity() {
         cargarProductos()
         
         setupNavegacion()
+
+        //FRAME QUE DICE EL TURNO ACTUAL
+        //frameTurnoActual
     }
 
     private fun cargarInformacionUsuario() {
@@ -94,9 +99,11 @@ class Home : AppCompatActivity() {
         pedidoActivoListener = repository.escucharPedidoActivo(uid, { pedido ->
             if (pedido != null) {
                 framePedido.visibility = View.VISIBLE
+                frameTurnoActual.visibility = View.VISIBLE
                 numPedido.text = pedido.numero_fila.toString()
             } else {
                 framePedido.visibility = View.GONE
+                frameTurnoActual.visibility = View.VISIBLE
             }
         }, { error ->
             Log.e("Home", "Error pedido activo: ${error.message}")
