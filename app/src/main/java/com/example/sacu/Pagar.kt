@@ -5,15 +5,19 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sacu.adapter.ItemCarritoAdapter
+import com.example.sacu.model.Pedido
 import com.example.sacu.repository.carritoTotal
 import com.example.sacu.repository.Compra
+import com.example.sacu.repository.FirestoreRepository
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import java.util.Date
 
 class Pagar : AppCompatActivity() {
 
@@ -21,87 +25,78 @@ class Pagar : AppCompatActivity() {
     private var listaComidas = carritoTotal
 
     private val compra = Compra()
+    private val repository = FirestoreRepository()
+    private val auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_pagar)
 
-        //BOTONES MENU
         botonesMenu()
 
-        //VARIABLES
-        val numPedido = findViewById<TextView>(R.id.txtNumPedido)
-        val tarjetaPred = findViewById<TextView>(R.id.textNumTarjeta)
         val total = findViewById<TextView>(R.id.txtTotal)
-        val fecha = findViewById<TextView>(R.id.txtFecha)
-
-        //BOTONES
         val btnComprar = findViewById<Button>(R.id.btnComprar)
-        val btncambiarMetodo = findViewById<ImageButton>(R.id.btncambiar)
-
-
-        //RECYCLE VIEW
         val rvProductos = findViewById<RecyclerView>(R.id.rvProductos)
-
-        //FUNCIONES BOTONES
-        btnComprar.setOnClickListener {
-            val intent = Intent(this, PagoProcesado::class.java)
-            startActivity(intent)
-        }
-
-        btncambiarMetodo.setOnClickListener {
-            val intent = Intent(this, CambiarMetodo::class.java)
-            startActivity(intent)
-        }
 
         setupRecyclerViews(rvProductos)
 
-        total.text = "$" + compra.totalAPagar().toString()
+        val totalAmount = compra.totalAPagar()
+        total.text = "$$totalAmount"
 
+        btnComprar.setOnClickListener {
+            procesarPedido(totalAmount)
+        }
+    }
+
+    private fun procesarPedido(totalAmount: Double) {
+        val uid = auth.currentUser?.uid ?: return
+        btnComprarUI("Procesando...")
+
+        repository.obtenerSiguienteNumeroPedido { siguienteNumero ->
+            val nuevoPedido = Pedido(
+                usuario_id = uid,
+                estado = "PENDIENTE",
+                total = totalAmount,
+                numero_fila = siguienteNumero,
+                fecha = Timestamp(Date())
+            )
+
+            repository.crearPedido(nuevoPedido, 
+                onSuccess = { pedidoId ->
+                    compra.limpiarCarrito()
+                    val intent = Intent(this, PagoProcesado::class.java).apply {
+                        putExtra("pedido_id", pedidoId)
+                        putExtra("numero_pedido", siguienteNumero)
+                    }
+                    startActivity(intent)
+                    finish()
+                },
+                onError = { error ->
+                    btnComprarUI("Comprar")
+                    Toast.makeText(this, "Error: ${error.message}", Toast.LENGTH_LONG).show()
+                }
+            )
+        }
+    }
+
+    private fun btnComprarUI(texto: String) {
+        findViewById<Button>(R.id.btnComprar).apply {
+            text = texto
+            isEnabled = (texto == "Comprar")
+        }
     }
 
     private fun setupRecyclerViews(rvComidas: RecyclerView) {
-        val layoutManagerComidas = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-        rvComidas.layoutManager = layoutManagerComidas
-
+        rvComidas.layoutManager = LinearLayoutManager(this)
         comidasAdapter = ItemCarritoAdapter(listaComidas)
-
         rvComidas.adapter = comidasAdapter
     }
 
-    private fun botonesMenu () {
-        //MENU DE BOTONES DE NAVEGACION
-        val btnHome = findViewById<ImageButton>(R.id.btnHome)
-        val btnPerfil = findViewById< ImageButton>(R.id.btnPerfil)
-        val btnCarrito = findViewById< ImageButton>(R.id.btnCarrito)
-        val btnNotif = findViewById< ImageButton>(R.id.btnNotif)
-
-        //FUNCIONES BOTONES DE MENU
-        btnHome.setOnClickListener {
-            // Lógica para el botón de inicio de sesión
-            val intent = Intent(this, Home::class.java)
-            startActivity(intent)
-        }
-
-        btnPerfil.setOnClickListener {
-            // Lógica para el botón de inicio de sesión
-            val intent = Intent(this, Perfil::class.java)
-            startActivity(intent)
-        }
-
-        btnCarrito.setOnClickListener {
-            // Lógica para el botón de inicio de sesión
-            val intent = Intent(this, Carrito::class.java)
-            startActivity(intent)
-        }
-
-        btnNotif.setOnClickListener {
-            // Lógica para el botón de inicio de sesión
-            val intent = Intent(this, Notificaciones::class.java)
-            startActivity(intent)
-        }
+    private fun botonesMenu() {
+        findViewById<ImageButton>(R.id.btnHome).setOnClickListener { startActivity(Intent(this, Home::class.java)) }
+        findViewById<ImageButton>(R.id.btnPerfil).setOnClickListener { startActivity(Intent(this, Perfil::class.java)) }
+        findViewById<ImageButton>(R.id.btnCarrito).setOnClickListener { startActivity(Intent(this, Carrito::class.java)) }
+        findViewById<ImageButton>(R.id.btnNotif).setOnClickListener { startActivity(Intent(this, Notificaciones::class.java)) }
     }
-
 }

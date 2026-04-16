@@ -30,8 +30,8 @@ class NotificacionAdapter(
     override fun onBindViewHolder(holder: NotificacionViewHolder, position: Int) {
         val notif = notificaciones[position]
 
-        holder.txtPedidoLabel.text  = "Pedido"
-        holder.txtNumeroPedido.text = notif.pedido_id.takeLast(4) // muestra los últimos 4 chars del ID
+        holder.txtPedidoLabel.text  = "Notificación"
+        holder.txtNumeroPedido.text = "" // Opcional: mostrar algo relevante aquí
         holder.txtEstado.text       = notif.mensaje
 
         holder.btnMasDetalles.setOnClickListener { onMasDetallesClick(notif) }

@@ -3,7 +3,7 @@ package com.example.sacu
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
@@ -14,185 +14,128 @@ import com.example.sacu.adapter.ProductoAdapter
 import com.example.sacu.model.Producto
 import com.example.sacu.repository.Compra
 import com.example.sacu.repository.FirestoreRepository
+import com.example.sacu.utils.UserSession
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ListenerRegistration
 
 class Home : AppCompatActivity() {
 
     private val repository = FirestoreRepository()
+    private val auth = FirebaseAuth.getInstance()
     private val compra = Compra()
+    private lateinit var userSession: UserSession
 
+    private lateinit var txtNombre: TextView
+    private lateinit var txtID: TextView
+    private lateinit var totalPedidos: TextView
+    private lateinit var tiempoEspera: TextView
+    private lateinit var numPedido: TextView
+    private lateinit var framePedido: FrameLayout
 
-    // Adaptadores para los RecyclerViews
     private lateinit var desayunosAdapter: ProductoAdapter
     private lateinit var comidasAdapter: ProductoAdapter
 
-    // Listas de productos
     private var listaDesayunos = mutableListOf<Producto>()
     private var listaComidas = mutableListOf<Producto>()
+
+    private var filaListener: ListenerRegistration? = null
+    private var pedidoActivoListener: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        userSession = UserSession(this)
 
-        // Imprimir todos los productos de Firestore
-        repository.obtenerTodosLosProductos(
-            onSuccess = { productos ->
-                Log.d("SACU_TEST", "========== TODOS LOS PRODUCTOS ==========")
-                Log.d("SACU_TEST", "Total de productos: ${productos.size}")
+        // Vincular vistas
+        txtNombre = findViewById(R.id.txtNombre)
+        txtID = findViewById(R.id.txtID)
+        totalPedidos = findViewById(R.id.TotalPedidos)
+        tiempoEspera = findViewById(R.id.TiempoEspera)
+        numPedido = findViewById(R.id.NumPedido)
+        framePedido = findViewById(R.id.framePedido)
 
-                productos.forEachIndexed { index, producto ->
-                    Log.d("SACU_TEST", "Producto ${index + 1}:")
-                    Log.d("SACU_TEST", "  Nombre: ${producto.nombre}")
-                    Log.d("SACU_TEST", "  Categoría: ${producto.categoria}")
-                    Log.d("SACU_TEST", "  Precio: $${producto.precio}")
-                    Log.d("SACU_TEST", "  Imagen URL: ${producto.imagen_url}")
-                    Log.d("SACU_TEST", "  Disp: ${producto.disponible}")
-                    Log.d("SACU_TEST", "  ---")
-                }
-                Log.d("SACU_TEST", "==========================================")
-            },
-            onError = { error ->
-                Log.e("SACU_TEST", "Error al obtener productos: ${error.message}")
-            }
-        )
-
-        // BOTONES MENU
-        botonesMenu()
-
-        // VARIABLES
-        val nombre = findViewById<TextView>(R.id.txtNombre)
-        val id = findViewById<TextView>(R.id.txtID)
-        val totalPedidos = findViewById<TextView>(R.id.TotalPedidos)
-        val tiempoEspera = findViewById<TextView>(R.id.TiempoEspera)
-        val numPedido = findViewById<TextView>(R.id.NumPedido)
-
-        // BOTONES DE LA PANTALLA
-        val btnDesayunos = findViewById<Button>(R.id.btnDesayunos)
-        val btnComidas = findViewById<Button>(R.id.btnComidas)
-
-        // RECYCLE VIEW
-        val rvDesayunos = findViewById<RecyclerView>(R.id.rvDesayunos)
-        val rvComidas = findViewById<RecyclerView>(R.id.rvComidas)
-
-        // Configurar RecyclerViews
-        setupRecyclerViews(rvDesayunos, rvComidas)
-
-        // FRAMES LAYOUT
-        val framePedido = findViewById<FrameLayout>(R.id.framePedido)
-        // framePedido.visibility = FrameLayout.VISIBLE
-
-        // FUNCIONES BOTONES
-        btnDesayunos.setOnClickListener {
-            val intent = Intent(this, TodoComida::class.java)
-            intent.putExtra("tipo", "Desayunos")
-            startActivity(intent)
-        }
-
-        btnComidas.setOnClickListener {
-            val intent = Intent(this, TodoComida::class.java)
-            intent.putExtra("tipo", "Comidas")
-            startActivity(intent)
-        }
-
-        // Cargar datos desde Firestore
-        cargarDesayunos()
-        cargarComidas()
+        setupRecyclerViews()
+        setupListeners()
+        cargarInformacionUsuario()
+        cargarProductos()
+        
+        // Acciones de botones
+        findViewById<TextView>(R.id.btnDesayunos).setOnClickListener { irATodoComida("Desayunos") }
+        findViewById<TextView>(R.id.btnComidas).setOnClickListener { irATodoComida("Comidas") }
+        setupNavegacion()
     }
 
-    private fun setupRecyclerViews(rvDesayunos: RecyclerView, rvComidas: RecyclerView) {
-        // Configurar layout managers (horizontal)
-        val layoutManagerDesayunos = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val layoutManagerComidas = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-        rvDesayunos.layoutManager = layoutManagerDesayunos
-        rvComidas.layoutManager = layoutManagerComidas
-
-        // Inicializar adaptadores
-        desayunosAdapter = ProductoAdapter(listaDesayunos) { producto ->
-            onAgregarProductoClick(producto)
+    private fun cargarInformacionUsuario() {
+        // 1. Intentar desde sesión local
+        val localUser = userSession.obtenerUsuario()
+        if (localUser != null && localUser.nombre.isNotEmpty()) {
+            txtNombre.text = localUser.nombre
+            txtID.text = localUser.matricula
         }
 
-        comidasAdapter = ProductoAdapter(listaComidas) { producto ->
-            onAgregarProductoClick(producto)
-        }
+        // 2. Sincronizar con Firestore por si hubo cambios o la sesión está incompleta
+        val uid = auth.currentUser?.uid ?: return
+        repository.obtenerUsuario(uid, { cloudUser ->
+            cloudUser?.let {
+                userSession.guardarUsuario(it)
+                txtNombre.text = it.nombre
+                txtID.text = it.matricula
+            }
+        }, { Log.e("Home", "Error sincronizando: ${it.message}") })
+    }
 
+    private fun setupListeners() {
+        val uid = auth.currentUser?.uid ?: return
+        
+        // Listener de pedidos en fila
+        filaListener = repository.escucharPedidosEnFila({ cantidad ->
+            totalPedidos.text = cantidad.toString()
+            tiempoEspera.text = "${cantidad * 5}:00"
+        }, {})
+
+        // Listener de mi pedido actual
+        pedidoActivoListener = repository.escucharPedidoActivo(uid, { pedido ->
+            if (pedido != null) {
+                framePedido.visibility = View.VISIBLE
+                numPedido.text = pedido.numero_fila.toString()
+            } else {
+                framePedido.visibility = View.GONE
+            }
+        }, {})
+    }
+
+    private fun setupRecyclerViews() {
+        val rvDesayunos = findViewById<RecyclerView>(R.id.rvDesayunos)
+        val rvComidas = findViewById<RecyclerView>(R.id.rvComidas)
+        
+        rvDesayunos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rvComidas.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        
+        desayunosAdapter = ProductoAdapter(listaDesayunos) { compra.agregarProducto(it) }
+        comidasAdapter = ProductoAdapter(listaComidas) { compra.agregarProducto(it) }
+        
         rvDesayunos.adapter = desayunosAdapter
         rvComidas.adapter = comidasAdapter
     }
 
-    private fun cargarDesayunos() {
-        repository.obtenerProductosPorCategoria(
-            categoria = "Desayunos",
-            onSuccess = { productos ->
-                listaDesayunos.clear()
-                listaDesayunos.addAll(productos)
-                desayunosAdapter.notifyDataSetChanged()
-
-                Log.d("SACU_HOME", "Desayunos cargados: ${productos.size}")
-            },
-            onError = { error ->
-                Log.e("SACU_HOME", "Error cargando desayunos: ${error.message}")
-            }
-        )
+    private fun cargarProductos() {
+        repository.obtenerProductosPorCategoria("Desayunos", { listaDesayunos.clear(); listaDesayunos.addAll(it); desayunosAdapter.notifyDataSetChanged() }, {})
+        repository.obtenerProductosPorCategoria("Comidas", { listaComidas.clear(); listaComidas.addAll(it); comidasAdapter.notifyDataSetChanged() }, {})
     }
 
-    private fun cargarComidas() {
-        Log.d("SACU_HOME", "Iniciando carga de comidas...")
-
-        repository.obtenerProductosPorCategoria(
-            categoria = "Comidas",
-            onSuccess = { productos ->
-                Log.d("SACU_HOME", "Comidas encontradas: ${productos.size}")
-
-                // Imprime cada producto para depurar
-                productos.forEach { producto ->
-                    Log.d("SACU_HOME", "Comida: ${producto.nombre} - Categoría: ${producto.categoria}")
-                }
-
-                listaComidas.clear()
-                listaComidas.addAll(productos)
-                comidasAdapter.notifyDataSetChanged()
-
-                // Verifica si el adapter tiene los datos
-                Log.d("SACU_HOME", "Adapter de comidas tiene: ${comidasAdapter.itemCount} items")
-            },
-            onError = { error ->
-                Log.e("SACU_HOME", "Error cargando comidas: ${error.message}")
-            }
-        )
+    private fun irATodoComida(tipo: String) {
+        startActivity(Intent(this, TodoComida::class.java).apply { putExtra("tipo", tipo) })
     }
 
-    private fun onAgregarProductoClick(producto: Producto) {
-        // Por ahora solo mostramos en log que se agregó
-        Log.d("SACU_HOME", "Agregar al carrito: ${producto.nombre}")
-        compra.agregarProducto(producto)
-
+    private fun setupNavegacion() {
+        findViewById<ImageButton>(R.id.btnPerfil).setOnClickListener { startActivity(Intent(this, Perfil::class.java)) }
+        findViewById<ImageButton>(R.id.btnCarrito).setOnClickListener { startActivity(Intent(this, Carrito::class.java)) }
+        findViewById<ImageButton>(R.id.btnNotif).setOnClickListener { startActivity(Intent(this, Notificaciones::class.java)) }
     }
 
-    private fun botonesMenu() {
-        // MENU DE BOTONES DE NAVEGACION
-        val btnHome = findViewById<ImageButton>(R.id.btnHome)
-        val btnPerfil = findViewById<ImageButton>(R.id.btnPerfil)
-        val btnCarrito = findViewById<ImageButton>(R.id.btnCarrito)
-        val btnNotif = findViewById<ImageButton>(R.id.btnNotif)
-
-        btnHome.setOnClickListener {
-            // Ya estamos en Home
-        }
-
-        btnPerfil.setOnClickListener {
-            val intent = Intent(this, Perfil::class.java)
-            startActivity(intent)
-        }
-
-        btnCarrito.setOnClickListener {
-            val intent = Intent(this, Carrito::class.java)
-            startActivity(intent)
-        }
-
-        btnNotif.setOnClickListener {
-            val intent = Intent(this, Notificaciones::class.java)
-            startActivity(intent)
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        filaListener?.remove()
+        pedidoActivoListener?.remove()
     }
 }
-
