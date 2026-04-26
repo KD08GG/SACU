@@ -6,6 +6,9 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.sacu.adapter.ItemPedidoDisplayAdapter
 import com.example.sacu.model.Pedido
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
@@ -14,6 +17,7 @@ import java.util.Locale
 class Detalles : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
+    private lateinit var productosAdapter: ItemPedidoDisplayAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +35,10 @@ class Detalles : AppCompatActivity() {
         val hora = findViewById<TextView>(R.id.txtHora)
         val pago = findViewById<TextView>(R.id.txtMetodo)
         val folio = findViewById<TextView>(R.id.txtFolio)
+        val rvProductos = findViewById<RecyclerView>(R.id.rvProductosDetalles)
+
+        // Configurar RecyclerView horizontal para que coincida con el diseño de CardView pequeño
+        rvProductos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         // Cargar información real desde Firestore
         db.collection("pedidos").document(pedidoId).get()
@@ -46,7 +54,11 @@ class Detalles : AppCompatActivity() {
                     }
                     
                     folio.text = document.id.takeLast(8).uppercase()
-                    pago.text = "Tarjeta Predeterminada" // O el método usado
+                    pago.text = "Tarjeta Predeterminada"
+
+                    // Usar el nuevo adaptador que utiliza item_producto_display.xml
+                    productosAdapter = ItemPedidoDisplayAdapter(it.productos)
+                    rvProductos.adapter = productosAdapter
                 }
             }
     }

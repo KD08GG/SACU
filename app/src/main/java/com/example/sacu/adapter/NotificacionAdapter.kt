@@ -32,7 +32,7 @@ class NotificacionAdapter(
         val context = holder.itemView.context
 
         holder.txtPedidoLabel.text  = context.getString(R.string.notification_label)
-        holder.txtNumeroPedido.text = ""
+        holder.txtNumeroPedido.text = notif.numero_pedido.toString()
         holder.txtEstado.text       = notif.mensaje
 
         holder.btnMasDetalles.setOnClickListener { onMasDetallesClick(notif) }

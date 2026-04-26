@@ -3,49 +3,103 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="110dp"
-    android:layout_height="130dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="120dp"
+    android:layout_height="180dp"
     android:layout_margin="8dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
     app:cardBackgroundColor="@color/white">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:gravity="center">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imgPedido"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/icono_nota" />
+        <GridLayout
+            android:id="@+id/gridImagenesPedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:columnCount="2"
+            android:padding="1dp"
+            android:rowCount="2"
+            app:layout_constraintBottom_toTopOf="@+id/txtNombrePedido"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imgProducto1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icono_nota" />
+
+            <ImageView
+                android:id="@+id/imgProducto2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icono_nota" />
+
+            <ImageView
+                android:id="@+id/imgProducto3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icono_nota" />
+
+            <ImageView
+                android:id="@+id/imgMasProductos"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="2dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/moreicon_outline" />
+        </GridLayout>
 
         <TextView
             android:id="@+id/txtNombrePedido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Chilaquiles rojos"
-            android:textSize="10sp"
-            android:textStyle="bold"
+            android:ellipsize="end"
             android:gravity="center"
             android:maxLines="2"
-            android:ellipsize="end"
+            android:text="Chilaquiles rojos"
             android:textColor="@color/on_surface"
-            android:layout_marginTop="4dp" />
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/txtFechaPedido" />
+
 
         <TextView
             android:id="@+id/txtFechaPedido"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="07/03/2026"
-            android:textSize="10sp"
             android:textColor="@color/gray_medium"
-            android:layout_marginTop="2dp" />
+            android:textSize="10sp"
+            app:layout_constraintBottom_toTopOf="@+id/my_image_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </LinearLayout>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/my_image_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/primary"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/rebuy"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:shapeAppearanceOverlay="@style/RoundedCorners"
+            tools:layout_editor_absoluteX="0dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

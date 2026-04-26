@@ -19,7 +19,7 @@ class Compra {
             nombre = producto.nombre,
             cantidad = n,
             precio_unitario = producto.precio,
-            //imagen_url = producto.imagen_url // Agregamos la URL de la imagen al ItemPedido
+            imagen_url = producto.imagen_url // Agregamos la URL de la imagen al ItemPedido
         )
         carrito.add(item)
         carritoTotal.add(item)

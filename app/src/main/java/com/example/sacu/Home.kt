@@ -25,14 +25,21 @@ class Home : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private val compra = Compra()
     private lateinit var userSession: UserSession
+    private lateinit var orderNotificationManager: OrderNotificationManager
+    private lateinit var orderStateManager: OrderStateManager
+    private var lastKnownStatus: String? = null
 
     private lateinit var txtNombre: TextView
     private lateinit var txtID: TextView
+    private lateinit var frameEnFila: FrameLayout
+    private lateinit var frameTiempo: FrameLayout
+    private lateinit var framePedido: FrameLayout
+    private lateinit var frameTurnoActual: FrameLayout
+
     private lateinit var totalPedidos: TextView
     private lateinit var tiempoEspera: TextView
     private lateinit var numPedido: TextView
-    private lateinit var framePedido: FrameLayout
-    private lateinit var frameTurnoActual: FrameLayout
+    private lateinit var turnoActual: TextView
 
     private lateinit var desayunosAdapter: ProductoAdapter
     private lateinit var comidasAdapter: ProductoAdapter
@@ -44,11 +51,14 @@ class Home : AppCompatActivity() {
 
     private var filaListener: ListenerRegistration? = null
     private var pedidoActivoListener: ListenerRegistration? = null
+    private var globalStateListener: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         userSession = UserSession(this)
+        orderNotificationManager = OrderNotificationManager(this)
+        orderStateManager = OrderStateManager(orderNotificationManager)
 
         // Vincular vistas
         txtNombre = findViewById(R.id.txtNombre)
@@ -56,6 +66,9 @@ class Home : AppCompatActivity() {
         totalPedidos = findViewById(R.id.TotalPedidos)
         tiempoEspera = findViewById(R.id.TiempoEspera)
         numPedido = findViewById(R.id.NumPedido)
+        turnoActual = findViewById(R.id.TurnoActual)
+        frameEnFila = findViewById(R.id.frameEnFila)
+        frameTiempo = findViewById(R.id.frameTiempo)
         framePedido = findViewById(R.id.framePedido)
         frameTurnoActual = findViewById(R.id.frameTurnoActual)
 
@@ -65,9 +78,6 @@ class Home : AppCompatActivity() {
         cargarProductos()
         
         setupNavegacion()
-
-        //FRAME QUE DICE EL TURNO ACTUAL
-        //frameTurnoActual
     }
 
     private fun cargarInformacionUsuario() {
@@ -90,23 +100,56 @@ class Home : AppCompatActivity() {
     private fun setupListeners() {
         val uid = auth.currentUser?.uid ?: return
         
-        // Listener de pedidos en fila (Corregido: ahora recibe los dos parámetros)
+        // Listener de pedidos en fila
         filaListener = repository.escucharPedidosEnFila({ cantidad ->
             totalPedidos.text = cantidad.toString()
-            tiempoEspera.text = getString(R.string.wait_time_format, cantidad * 5)
         }, { error ->
             Log.e("Home", "Error en fila: ${error.message}")
         })
 
-        // Listener de mi pedido actual (Corregido: ahora recibe los dos parámetros)
+        // Listener de estado global
+        globalStateListener = repository.escucharEstadoGlobal({ tiempo, turno ->
+            tiempoEspera.text = getString(R.string.wait_time_format, tiempo)
+            turnoActual.text = turno.toString()
+        }, { error ->
+            Log.e("Home", "Error estado global: ${error.message}")
+        })
+
+        // Listener de mi pedido actual con lógica de cascada
         pedidoActivoListener = repository.escucharPedidoActivo(uid, { pedido ->
             if (pedido != null) {
-                framePedido.visibility = View.VISIBLE
-                frameTurnoActual.visibility = View.VISIBLE
-                numPedido.text = pedido.numero_fila.toString()
+                // Notificaciones: Detectar cambios SIEMPRE (incluyendo LISTO)
+                val stateKey = "${pedido.id}_${pedido.estado}"
+                if (stateKey != lastKnownStatus) {
+                    lastKnownStatus = stateKey
+                    val orderStatus: OrderStatus? = when (pedido.estado) {
+                        "PENDIENTE" -> OrderStatus.Pendiente
+                        "EN_PREPARACION" -> OrderStatus.Pendiente
+                        "LISTO" -> OrderStatus.Listo
+                        "RECOGIDO" -> OrderStatus.Recogido
+                        "TERMINADO" -> OrderStatus.Terminado
+                        else -> null
+                    }
+                    orderStatus?.let {
+                        orderStateManager.onOrderStatusChanged(pedido.id, uid, it, pedido.numero_fila)
+                    }
+                }
+
+                // UI: Mostrar el widget SOLO si el pedido actual está en preparación
+                if (pedido.estado == "PENDIENTE" || pedido.estado == "EN_PREPARACION") {
+                    numPedido.text = pedido.numero_fila.toString()
+                    framePedido.visibility = View.VISIBLE
+                    frameTurnoActual.visibility = View.VISIBLE
+                } else {
+                    // Si el pedido prioritario está LISTO, el widget se oculta.
+                    // El repository nos dará el siguiente PENDIENTE si existe, disparando este listener de nuevo.
+                    framePedido.visibility = View.GONE
+                    frameTurnoActual.visibility = View.GONE
+                }
             } else {
                 framePedido.visibility = View.GONE
-                frameTurnoActual.visibility = View.VISIBLE
+                frameTurnoActual.visibility = View.GONE
+                lastKnownStatus = null
             }
         }, { error ->
             Log.e("Home", "Error pedido activo: ${error.message}")
@@ -176,6 +219,7 @@ class Home : AppCompatActivity() {
         super.onDestroy()
         filaListener?.remove()
         pedidoActivoListener?.remove()
+        globalStateListener?.remove()
     }
 
     private fun onAgregarProductoClick(producto: Producto) {

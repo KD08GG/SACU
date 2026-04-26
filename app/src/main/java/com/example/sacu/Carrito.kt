@@ -21,6 +21,7 @@ import com.example.sacu.model.ItemPedido
 import com.example.sacu.model.Producto
 import com.example.sacu.repository.Compra
 import com.example.sacu.repository.carritoTotal
+import androidx.core.view.isVisible
 
 private var carritoTotal = carritoTotal
 private val compra = Compra()
@@ -45,6 +46,8 @@ class Carrito : AppCompatActivity() {
 
         //BOTONES DE LA PANTALLA
         val btnComprar = findViewById<Button>(R.id.btnComprar)
+        val btnExplorarMenu = findViewById<Button>(R.id.btnExplorarMenu)
+        val tvCarritoVacio = findViewById<TextView>(R.id.tvCarritoVacio)
 
         //RECYCLE VIEW
         val rvProductos = findViewById<RecyclerView>(R.id.rvComidas)
@@ -56,6 +59,8 @@ class Carrito : AppCompatActivity() {
         } else {
             txtVacio.visibility = View.GONE
         }
+        // Actualizar visibilidad basado en si el carrito está vacío
+        updateCartVisibility(btnComprar, btnExplorarMenu, tvCarritoVacio)
 
         // FUNCION BOTON COMPRAR
         btnComprar.setOnClickListener {
@@ -66,6 +71,12 @@ class Carrito : AppCompatActivity() {
                 val intent = Intent(this, Pagar::class.java)
                 startActivity(intent)
             }
+        }
+
+        // FUNCION BOTON EXPLORAR MENU
+        btnExplorarMenu.setOnClickListener {
+            val intent = Intent(this, Home::class.java)
+            startActivity(intent)
         }
 
         setupRecyclerViews(rvProductos)
@@ -97,6 +108,17 @@ class Carrito : AppCompatActivity() {
     }
 
 
+    private fun updateCartVisibility(btnComprar: Button, btnExplorarMenu: Button, tvCarritoVacio: TextView) {
+        if (listaComidas.isEmpty()) {
+            btnComprar.isVisible = false
+            btnExplorarMenu.isVisible = true
+            tvCarritoVacio.isVisible = true
+        } else {
+            btnComprar.isVisible = true
+            btnExplorarMenu.isVisible = false
+            tvCarritoVacio.isVisible = false
+        }
+    }
 
     private fun botonesMenu () {
         //MENU DE BOTONES DE NAVEGACION

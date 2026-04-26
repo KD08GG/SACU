@@ -5,9 +5,12 @@ import com.google.firebase.Timestamp
 data class Pedido(
     val id: String = "",
     val usuario_id: String = "",
+    val nombre_usuario: String = "",
+    val matricula: String = "",
     val estado: String = "",
     val total: Double = 0.0,
     val numero_fila: Int = 0,
     val tiempo_estimado: Int = 0,
-    val fecha: Timestamp? = null
+    val fecha: Timestamp? = null,
+    val productos: List<ItemPedido> = emptyList()
 )
