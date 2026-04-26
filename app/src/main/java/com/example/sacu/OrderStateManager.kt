@@ -2,7 +2,7 @@ package com.example.sacu
 
 class OrderStateManager(private val notificationManager: OrderNotificationManager) {
 
-    fun onOrderStatusChanged(orderId: String, userId: String, newStatus: OrderStatus) {
+    fun onOrderStatusChanged(orderId: String, userId: String, newStatus: OrderStatus, numeroPedido: Int = 0) {
         when (newStatus) {
             is OrderStatus.Pendiente -> {
                 // Mostrar notificación "en preparación"
