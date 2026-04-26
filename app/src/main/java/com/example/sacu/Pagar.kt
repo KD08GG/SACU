@@ -103,8 +103,11 @@ class Pagar : AppCompatActivity() {
         btnComprarUI(getString(R.string.processing))
 
         repository.obtenerSiguienteNumeroPedido { siguienteNumero ->
+            val localUser = userSession.obtenerUsuario()
             val nuevoPedido = Pedido(
                 usuario_id = uid,
+                nombre_usuario = localUser?.nombre ?: "",
+                matricula = localUser?.matricula ?: "",
                 estado = "PENDIENTE",
                 total = totalAmount,
                 numero_fila = siguienteNumero,

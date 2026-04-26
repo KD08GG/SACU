@@ -24,6 +24,9 @@ class Home : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private val compra = Compra()
     private lateinit var userSession: UserSession
+    private lateinit var orderNotificationManager: OrderNotificationManager
+    private lateinit var orderStateManager: OrderStateManager
+    private var lastKnownStatus: String? = null
 
     private lateinit var txtNombre: TextView
     private lateinit var txtID: TextView
@@ -51,6 +54,8 @@ class Home : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         userSession = UserSession(this)
+        orderNotificationManager = OrderNotificationManager(this)
+        orderStateManager = OrderStateManager(orderNotificationManager)
 
         // Vincular vistas
         txtNombre = findViewById(R.id.txtNombre)
@@ -111,14 +116,34 @@ class Home : AppCompatActivity() {
         })
 
         // Listener de mi pedido actual
+        // frameEnFila y frameTiempo siempre son visibles (info global).
+        // framePedido y frameTurnoActual aparecen solo cuando hay un pedido activo.
         pedidoActivoListener = repository.escucharPedidoActivo(uid, { pedido ->
             if (pedido != null) {
                 numPedido.text = pedido.numero_fila.toString()
                 framePedido.visibility = View.VISIBLE
                 frameTurnoActual.visibility = View.VISIBLE
+
+                // Dispatch notifications only when the status actually changes
+                val newStatus = pedido.estado
+                if (newStatus != lastKnownStatus) {
+                    lastKnownStatus = newStatus
+                    val orderStatus: OrderStatus? = when (newStatus) {
+                        "PENDIENTE" -> OrderStatus.Pendiente
+                        "LISTO" -> OrderStatus.Listo
+                        "RECOGIDO" -> OrderStatus.Recogido
+                        "TERMINADO" -> OrderStatus.Terminado
+                        else -> null
+                    }
+                    orderStatus?.let {
+                        orderStateManager.onOrderStatusChanged(pedido.id, uid, it, pedido.numero_fila)
+                    }
+                }
             } else {
+                lastKnownStatus = null
                 framePedido.visibility = View.GONE
                 frameTurnoActual.visibility = View.GONE
+                // frameEnFila and frameTiempo remain visible — they show global queue info
             }
         }, { error ->
             Log.e("Home", "Error pedido activo: ${error.message}")
