@@ -131,6 +131,7 @@ class AppState:
         self._next_id: int = 1
         self._menu_items: list = self._default_menu()
         self._firestore_ids: dict = {}  # mapea order.id → firestore document id
+        self._usuario_ids: dict = {}   # mapea firestore_id → usuario_id real
         self._turno_actual: int = 0
         self._turno_siguiente: int = 1
         self._tiempo_espera: int = 0
@@ -217,7 +218,7 @@ class AppState:
                     print("Pedido recibido:", data)
 
                     # Convertir items de Firestore a objetos OrderItem
-                    items_raw = data.get('items', [])
+                    items_raw = data.get('productos', data.get('items', []))
                     items = [
                         OrderItem(
                             name=i.get('nombre', ''),
@@ -231,7 +232,7 @@ class AppState:
                     order = Order(
                         id=hash(change.document.id) % 100000,
                         order_number=str(data.get('numero_fila', 0)).zfill(4),
-                        user_id=data.get('usuario_id', ''),
+                        user_id=data.get('matricula', data.get('usuario_id', '')),
                         user_name=data.get('nombre_usuario', 'Usuario'),
                         payment_type=data.get('metodo_pago', 'cash'),
                         items=items,
@@ -241,6 +242,7 @@ class AppState:
 
                     # Guardar referencia al ID de Firestore para actualizarlo después
                     self._firestore_ids[order.id] = change.document.id
+                    self._usuario_ids[change.document.id] = data.get('usuario_id', '')
 
                     self._orders.append(order)
 
@@ -309,6 +311,16 @@ class AppState:
                 db.collection('pedidos').document(firestore_id).update({
                     'estado': 'LISTO',
                 })
+                # Escribir notificación para el usuario en la app
+                db.collection('notificaciones').document(firestore_id).set({
+                    'usuario_id': self._get_usuario_id(firestore_id),
+                    'pedido_id': firestore_id,
+                    'numero_pedido': int(order.order_number),
+                    'mensaje': 'Pasa a recogerlo',
+                    'titulo': 'Pedido Listo',
+                    'leida': False,
+                    'fecha': firestore.SERVER_TIMESTAMP,
+                })
 
     def mark_order_recogido(self, order_id: int):
         """
@@ -353,6 +365,20 @@ class AppState:
                     'motivo_cancelacion': reason,
                     'fecha_completado': firestore.SERVER_TIMESTAMP,
                 })
+                # Escribir notificación para el usuario en la app
+                db.collection('notificaciones').document(firestore_id).set({
+                    'usuario_id': self._get_usuario_id(firestore_id),
+                    'pedido_id': firestore_id,
+                    'numero_pedido': int(order.order_number),
+                    'mensaje': reason,
+                    'titulo': 'Pedido Cancelado',
+                    'leida': False,
+                    'fecha': firestore.SERVER_TIMESTAMP,
+                })
+
+    def _get_usuario_id(self, firestore_id: str) -> str:
+        """Obtiene el usuario_id real del pedido desde Firestore (caché local)."""
+        return self._usuario_ids.get(firestore_id, '')
 
     # ── MENU ITEMS ───────────────────────────────────────
 
@@ -832,6 +858,10 @@ class KitchenDisplayTab(ctk.CTkFrame):
 
     # ── STATE OBSERVER ───────────────────────────────────
     def _on_state_change(self):
+        """Called by AppState._notify(). Routes to main thread."""
+        self.after(0, self._do_state_change)
+
+    def _do_state_change(self):
         """Called by AppState._notify(). Only adds new cards; removal
         is triggered by the card's own animation → _handle_ready()."""
         pending     = self._state.get_pending_orders()
@@ -1041,6 +1071,10 @@ class OrderHistoryTab(ctk.CTkFrame):
         self._res_scroll.pack(fill="both", expand=True, padx=8, pady=(0, 8))
 
     def _refresh_results(self, *_):
+        # Ensure we run on the main Tk thread when called from state subscribers
+        self.after(0, self._do_refresh)
+
+    def _do_refresh(self, *_):
         for w in self._res_scroll.winfo_children():
             w.destroy()
 
