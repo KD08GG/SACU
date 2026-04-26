@@ -5,70 +5,63 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.sacu.model.Tarjeta
+import com.example.sacu.utils.UserSession
+import java.util.UUID
 
 class AgregarTarjeta : AppCompatActivity() {
+
+    private lateinit var userSession: UserSession
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_agregar_tarjeta)
+        userSession = UserSession(this)
 
-        //BOTONES MENU
         botonesMenu()
 
-        //VARIABLES
-        val apodo = findViewById<EditText>(R.id.txtApodo)
-        val nombre = findViewById<EditText>(R.id.txtNombre)
-        val digitos = findViewById<EditText>(R.id.txtDigitos)
-        val fecha = findViewById<EditText>(R.id.txtFecha)
-        val cvv = findViewById<EditText>(R.id.txtCVV)
-
-        //BOTONES
+        val etApodo = findViewById<EditText>(R.id.txtApodo)
+        val etNombre = findViewById<EditText>(R.id.txtNombre)
+        val etDigitos = findViewById<EditText>(R.id.txtDigitos)
+        val etFecha = findViewById<EditText>(R.id.txtFecha)
+        val etCvv = findViewById<EditText>(R.id.txtCVV)
         val btnGuardar = findViewById<Button>(R.id.btnGuardar)
 
-
-        // FUNCION BOTON GUARDAR
         btnGuardar.setOnClickListener {
-            val intent = Intent(this, MetodosDePago::class.java)
-            startActivity(intent)
-        }
+            val apodo = etApodo.text.toString().trim()
+            val nombre = etNombre.text.toString().trim()
+            val numero = etDigitos.text.toString().trim()
+            val fecha = etFecha.text.toString().trim()
+            val cvv = etCvv.text.toString().trim()
 
-    }
+            if (nombre.isEmpty() || numero.length < 16 || fecha.isEmpty() || cvv.length < 3) {
+                Toast.makeText(this, "Por favor completa correctamente los datos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-    private fun botonesMenu () {
-        //MENU DE BOTONES DE NAVEGACION
-        val btnHome = findViewById<ImageButton>(R.id.btnHome)
-        val btnPerfil = findViewById< ImageButton>(R.id.btnPerfil)
-        val btnCarrito = findViewById< ImageButton>(R.id.btnCarrito)
-        val btnNotif = findViewById< ImageButton>(R.id.btnNotif)
+            val nuevaTarjeta = Tarjeta(
+                id = UUID.randomUUID().toString(),
+                nombreTitular = if (apodo.isNotEmpty()) apodo else nombre,
+                numero = numero,
+                fechaExpiracion = fecha,
+                cvv = cvv,
+                esPredeterminada = userSession.obtenerTarjetas().isEmpty()
+            )
 
-        //FUNCIONES BOTONES DE MENU
-        btnHome.setOnClickListener {
-            // Lógica para el botón de inicio de sesión
-            val intent = Intent(this, Home::class.java)
-            startActivity(intent)
-        }
-
-        btnPerfil.setOnClickListener {
-            // Lógica para el botón de inicio de sesión
-            val intent = Intent(this, Perfil::class.java)
-            startActivity(intent)
-        }
-
-        btnCarrito.setOnClickListener {
-            // Lógica para el botón de inicio de sesión
-            val intent = Intent(this, Carrito::class.java)
-            startActivity(intent)
-        }
-
-        btnNotif.setOnClickListener {
-            // Lógica para el botón de inicio de sesión
-            val intent = Intent(this, Notificaciones::class.java)
-            startActivity(intent)
+            userSession.guardarTarjeta(nuevaTarjeta)
+            Toast.makeText(this, "Tarjeta agregada", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
+    private fun botonesMenu() {
+        findViewById<ImageButton>(R.id.btnHome).setOnClickListener { startActivity(Intent(this, Home::class.java)) }
+        findViewById<ImageButton>(R.id.btnPerfil).setOnClickListener { startActivity(Intent(this, Perfil::class.java)) }
+        findViewById<ImageButton>(R.id.btnCarrito).setOnClickListener { startActivity(Intent(this, Carrito::class.java)) }
+        findViewById<ImageButton>(R.id.btnNotif).setOnClickListener { startActivity(Intent(this, Notificaciones::class.java)) }
+    }
 }

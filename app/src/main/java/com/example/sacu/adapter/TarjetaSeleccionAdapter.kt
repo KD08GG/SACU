@@ -7,11 +7,14 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sacu.R
+import com.example.sacu.model.Tarjeta
 
 class TarjetaSeleccionAdapter(
-    private val tarjetas: List<Tarjeta>,
-    private var selectedPosition: Int = 0     // índice de la tarjeta predeterminada actual
+    private var tarjetas: List<Tarjeta>,
+    private val onTarjetaSeleccionada: (Tarjeta) -> Unit
 ) : RecyclerView.Adapter<TarjetaSeleccionAdapter.TarjetaSeleccionViewHolder>() {
+
+    private var selectedPosition: Int = tarjetas.indexOfFirst { it.esPredeterminada }
 
     inner class TarjetaSeleccionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val txtNombre: TextView      = itemView.findViewById(R.id.txtNombreTarjetaSel)
@@ -28,8 +31,8 @@ class TarjetaSeleccionAdapter(
     override fun onBindViewHolder(holder: TarjetaSeleccionViewHolder, position: Int) {
         val tarjeta = tarjetas[position]
 
-        holder.txtNombre.text = tarjeta.nombre
-        holder.txtNumero.text = tarjeta.numero
+        holder.txtNombre.text = tarjeta.nombreTitular
+        holder.txtNumero.text = "**** **** **** ${tarjeta.numero.takeLast(4)}"
 
         // Estrella amarilla si es la seleccionada, gris si no
         if (position == selectedPosition) {
@@ -50,14 +53,17 @@ class TarjetaSeleccionAdapter(
         holder.btnEstrella.setOnClickListener {
             val anterior = selectedPosition
             selectedPosition = holder.adapterPosition
-            notifyItemChanged(anterior)          // repinta la estrella anterior → gris
-            notifyItemChanged(selectedPosition)  // repinta la nueva → amarilla
+            notifyItemChanged(anterior)
+            notifyItemChanged(selectedPosition)
+            onTarjetaSeleccionada(tarjeta)
         }
     }
 
     override fun getItemCount(): Int = tarjetas.size
 
-    /** Devuelve la tarjeta actualmente marcada como predeterminada */
-    fun getTarjetaSeleccionada(): Tarjeta? =
-        tarjetas.getOrNull(selectedPosition)
+    fun actualizarLista(nuevaLista: List<Tarjeta>) {
+        this.tarjetas = nuevaLista
+        this.selectedPosition = nuevaLista.indexOfFirst { it.esPredeterminada }
+        notifyDataSetChanged()
+    }
 }
