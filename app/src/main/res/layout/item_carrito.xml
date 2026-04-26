@@ -52,23 +52,62 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txtCantidadCarrito"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:text="1"
-            android:gravity="center"
-            android:textColor="@color/on_secondary"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:background="@drawable/circle_background"
-            android:backgroundTint="@color/secondary" />
+        <LinearLayout
+            android:id="@+id/btnCantidadProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/pill_secondary"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            >
+
+            <TextView
+                android:id="@+id/btnRestarProducto"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:text="−"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/txtCantidadCarrito"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="1"
+                android:layout_gravity="center"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/btnSumarProducto"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:text="+"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:gravity="right"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+
 
         <ImageButton
             android:layout_marginLeft="10dp"
             android:id="@+id/btnEliminar"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:gravity="center"
             android:textColor="@color/on_secondary"
             android:textStyle="bold"

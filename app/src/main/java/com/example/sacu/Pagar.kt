@@ -2,6 +2,7 @@ package com.example.sacu
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
@@ -61,8 +62,12 @@ class Pagar : AppCompatActivity() {
 
         setupRecyclerViews(rvProductos)
 
-        val totalAmount = compra.totalAPagar()
-        total.text = getString(R.string.total_label, totalAmount.toString())
+        actualizarTotal()
+
+        btnComprar.setOnClickListener { it: View? ->
+            val totalActual = compra.totalAPagar()
+            procesarPedido(totalActual)
+        }
 
         btnComprar.setOnClickListener {
             val tarjeta = userSession.obtenerTarjetaPredeterminada()
@@ -142,7 +147,11 @@ class Pagar : AppCompatActivity() {
 
     private fun setupRecyclerViews(rvComidas: RecyclerView) {
         rvComidas.layoutManager = LinearLayoutManager(this)
-        comidasAdapter = ItemCarritoAdapter(listaComidas)
+
+        comidasAdapter = ItemCarritoAdapter(listaComidas) {
+            actualizarTotal()
+        }
+
         rvComidas.adapter = comidasAdapter
     }
 
@@ -151,5 +160,17 @@ class Pagar : AppCompatActivity() {
         findViewById<ImageButton>(R.id.btnPerfil).setOnClickListener { startActivity(Intent(this, Perfil::class.java)) }
         findViewById<ImageButton>(R.id.btnCarrito).setOnClickListener { startActivity(Intent(this, Carrito::class.java)) }
         findViewById<ImageButton>(R.id.btnNotif).setOnClickListener { startActivity(Intent(this, Notificaciones::class.java)) }
+    }
+
+    private fun actualizarTotal() {
+        val total = findViewById<TextView>(R.id.txtTotal)
+        val totalAmount = compra.totalAPagar()
+        total.text = " $totalAmount"
+
+        if (totalAmount == 0.0) {
+            Toast.makeText(this, "El carrito está vacío", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, Home::class.java)
+            startActivity(intent)
+        }
     }
 }

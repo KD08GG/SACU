@@ -14,6 +14,7 @@ import com.example.sacu.adapter.ProductoAdapter
 import com.example.sacu.model.Producto
 import com.example.sacu.repository.Compra
 import com.example.sacu.repository.FirestoreRepository
+import com.example.sacu.repository.carritoTotal
 import com.example.sacu.utils.UserSession
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
@@ -45,6 +46,8 @@ class Home : AppCompatActivity() {
 
     private var listaDesayunos = mutableListOf<Producto>()
     private var listaComidas = mutableListOf<Producto>()
+
+    private var listaCarrito = carritoTotal
 
     private var filaListener: ListenerRegistration? = null
     private var pedidoActivoListener: ListenerRegistration? = null
@@ -156,13 +159,33 @@ class Home : AppCompatActivity() {
     private fun setupRecyclerViews() {
         val rvDesayunos = findViewById<RecyclerView>(R.id.rvDesayunos)
         val rvComidas = findViewById<RecyclerView>(R.id.rvComidas)
-        
+
         rvDesayunos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvComidas.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        
-        desayunosAdapter = ProductoAdapter(listaDesayunos) { compra.agregarProducto(it) }
-        comidasAdapter = ProductoAdapter(listaComidas) { compra.agregarProducto(it) }
-        
+
+        //desayunosAdapter = ProductoAdapter(listaDesayunos) { producto, _ -> compra.agregarProducto(producto) }
+        //comidasAdapter = ProductoAdapter(listaComidas) { producto, _ -> compra.agregarProducto(producto) }
+
+        desayunosAdapter = ProductoAdapter(
+            productos = listaComidas,
+            onAgregarClick = { producto ->
+                onAgregarProductoClick(producto)
+            },
+            onRestarClick = { producto ->
+                onRestarProductoClick(producto)
+            }
+        )
+
+        comidasAdapter = ProductoAdapter(
+            productos = listaComidas,
+            onAgregarClick = { producto ->
+                onAgregarProductoClick(producto)
+            },
+            onRestarClick = { producto ->
+                onRestarProductoClick(producto)
+            }
+        )
+
         rvDesayunos.adapter = desayunosAdapter
         rvComidas.adapter = comidasAdapter
     }
@@ -197,5 +220,17 @@ class Home : AppCompatActivity() {
         filaListener?.remove()
         pedidoActivoListener?.remove()
         globalStateListener?.remove()
+    }
+
+    private fun onAgregarProductoClick(producto: Producto) {
+        // Por ahora solo mostramos en log que se agregó
+        Log.d("SACU_HOME", "Agregar al carrito: ${producto.nombre}")
+        compra.agregarProducto(producto)
+    }
+
+    private fun onRestarProductoClick(producto: Producto) {
+        // Por ahora solo mostramos en log que se agregó
+        Log.d("SACU_HOME", "Quitar al carrito: ${producto.nombre}")
+        compra.quitarProducto(producto)
     }
 }

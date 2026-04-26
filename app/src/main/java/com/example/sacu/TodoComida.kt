@@ -17,12 +17,15 @@ import com.example.sacu.adapter.ProductoAdapter
 import com.example.sacu.model.Producto
 import com.example.sacu.repository.Compra
 import com.example.sacu.repository.FirestoreRepository
+import com.example.sacu.repository.carritoTotal
 
 class TodoComida : AppCompatActivity() {
     private val repository = FirestoreRepository()
     private val compra = Compra()
     private lateinit var comidasAdapter: ProductoAdapter
     private var listaComidas = mutableListOf<Producto>()
+
+    private var listaCarrito = carritoTotal
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,14 +60,19 @@ class TodoComida : AppCompatActivity() {
 
 
     private fun setupRecyclerViews(rvComidas: RecyclerView) {
-        // Grid con 2 columnas
-        val layoutManagerComidas = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
+        val layoutManagerComidas = GridLayoutManager(this, 2)
 
         rvComidas.layoutManager = layoutManagerComidas
 
-        comidasAdapter = ProductoAdapter(listaComidas) { producto ->
-            onAgregarProductoClick(producto)
-        }
+        comidasAdapter = ProductoAdapter(
+            productos = listaComidas,
+            onAgregarClick = { producto ->
+                onAgregarProductoClick(producto)
+            },
+            onRestarClick = { producto ->
+                onRestarProductoClick(producto)
+            }
+        )
         rvComidas.adapter = comidasAdapter
     }
 
@@ -72,6 +80,12 @@ class TodoComida : AppCompatActivity() {
         // Por ahora solo mostramos en log que se agregó
         Log.d("SACU_HOME", "Agregar al carrito: ${producto.nombre}")
         compra.agregarProducto(producto)
+    }
+
+    private fun onRestarProductoClick(producto: Producto) {
+        // Por ahora solo mostramos en log que se agregó
+        Log.d("SACU_HOME", "Quitar al carrito: ${producto.nombre}")
+        compra.quitarProducto(producto)
     }
 
     private fun cargarComidas(tipo: String) {
