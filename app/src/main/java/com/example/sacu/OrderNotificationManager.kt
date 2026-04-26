@@ -52,21 +52,9 @@ class OrderNotificationManager(private val context: Context) {
         val content = when (status) {
             is OrderStatus.Pendiente -> NotificationContent("Pedido Realizado", "En preparación")
             is OrderStatus.Listo -> NotificationContent("Pedido Listo", "Pasa a recogerlo")
-            is OrderStatus.Recogido -> return // No mostrar notificación
-            is OrderStatus.Terminado -> return // No mostrar notificación
-            is OrderStatus.Cancelado -> NotificationContent(
-                "Pedido Cancelado",
-                status.reason,
-                listOf(
-                    NotificationCompat.Action.Builder(
-                        0, "Dismiss", PendingIntent.getBroadcast(
-                            context, 0, Intent("DISMISS_NOTIFICATION").apply { putExtra("orderId", orderId) },
-                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                        )
-                    ).build()
-                ),
-                true
-            )
+            is OrderStatus.Recogido -> NotificationContent("Pedido Recogido", "Recogido", canDismiss = true)
+            is OrderStatus.Terminado -> NotificationContent("Pedido Finalizado", "Recogido", canDismiss = true)
+            is OrderStatus.Cancelado -> NotificationContent("Pedido Cancelado", "Cancelado: ${status.reason}", canDismiss = true)
         }
 
         // Show push notification
@@ -82,13 +70,16 @@ class OrderNotificationManager(private val context: Context) {
 
         notificationManager.notify(orderId.hashCode(), notification)
 
+        // Marcar como leída solo si es un estado final (Recogido, Terminado, Cancelado)
+        val esEstadoFinal = status is OrderStatus.Recogido || status is OrderStatus.Terminado || status is OrderStatus.Cancelado
+
         // Save to Firestore
         val notificationData = hashMapOf(
             "usuario_id"    to userId,
             "pedido_id"     to orderId,
             "numero_pedido" to numeroPedido,
             "mensaje"       to content.message,
-            "leida"         to false,
+            "leida"         to esEstadoFinal,
             "fecha"         to com.google.firebase.Timestamp.now()
         )
 

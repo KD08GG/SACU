@@ -28,6 +28,7 @@ import time
 # ── FIREBASE ──────────────────────────────────────────
 import firebase_admin
 from firebase_admin import credentials, firestore
+from google.cloud.firestore import FieldFilter
 
 cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
@@ -135,6 +136,7 @@ class AppState:
         self._turno_actual: int = 0
         self._turno_siguiente: int = 1
         self._tiempo_espera: int = 0
+        self._load_history_from_firestore()
 
     def subscribe(self, callback: Callable):
         self._listeners.append(callback)
@@ -158,17 +160,20 @@ class AppState:
     def get_pending_orders(self) -> list:
         return [o for o in self._orders if o.status == "pendiente"]
 
+    def get_active_orders(self) -> list:
+        return [o for o in self._orders if o.status in ("pendiente", "listo")]
+
     def get_history(self) -> list:
         return list(self._order_history)
 
     def _calculate_tiempo_espera(self) -> int:
         pending_count = len(self.get_pending_orders())
-        # W = (L + 1) / u, with service capacity u = 0.5
-        wait_minutes = (pending_count + 1) / 0.5
-        # Cada 20 pedidos en fila agrega 2 minutos adicionales
-        extra_blocks = pending_count // 20
-        wait_minutes += extra_blocks * 2
-        return int(wait_minutes)
+        if pending_count == 0:
+            return 0
+        else:
+            # W = (L + 1) / u, with service capacity u = 0.5
+            wait_minutes = (pending_count + 1) / 0.5
+            return int(wait_minutes)
 
     def _update_global_state(self):
         """
@@ -283,15 +288,68 @@ class AppState:
                                 if new_status in ['recogido', 'terminado', 'cancelado']:
                                     self._orders.remove(order)
                                     self._order_history.insert(0, order)
-                                self._tiempo_espera = self._calculate_tiempo_espera()
-                                self._update_global_state()
-                                self._notify()
+                            self._tiempo_espera = self._calculate_tiempo_espera()
+                            self._update_global_state()
+                        self._notify()
 
         # Escuchar solo pedidos activos
         query = (db.collection('pedidos')
-                   .where('estado', 'in', ['PENDIENTE', 'EN_PREPARACION']))
+                   .where(filter=FieldFilter('estado', 'in', ['PENDIENTE', 'EN_PREPARACION', 'LISTO'])))
 
         self._watcher = query.on_snapshot(on_snapshot)
+
+
+    def _load_history_from_firestore(self):
+        """
+        ── DATABASE HOOK: LOAD HISTORY ──────────────────
+        Carga el historial de pedidos terminados/cancelados desde Firestore.
+        """
+        try:
+            # Consultar pedidos terminados o cancelados
+            docs = db.collection('pedidos').order_by('fecha', direction=firestore.Query.DESCENDING).limit(200).stream()
+            for doc in docs:
+                data = doc.to_dict()
+
+                estado = data.get('estado', '')
+                if estado not in ['TERMINADO', 'CANCELADO', 'RECOGIDO']:
+                    continue
+
+                # Convertir items
+                items_raw = data.get('productos', data.get('items', []))
+                items = [
+                    OrderItem(
+                        name=i.get('nombre', ''),
+                        quantity=i.get('cantidad', 1),
+                        notes=i.get('notas', '')
+                    )
+                    for i in items_raw
+                ]
+
+                # Crear Order
+                completed_at = data.get('fecha_completado')
+                if isinstance(completed_at, datetime):
+                    pass
+                else:
+                    completed_at = datetime.now()  # fallback
+
+                order = Order(
+                    id=hash(doc.id) % 100000,
+                    order_number=str(data.get('numero_fila', 0)).zfill(4),
+                    user_id=data.get('matricula', data.get('usuario_id', '')),
+                    user_name=data.get('nombre_usuario', 'Usuario'),
+                    payment_type=data.get('metodo_pago', 'cash'),
+                    items=items,
+                    timestamp=data.get('fecha', datetime.now()),
+                    status='terminado' if data.get('estado') == 'TERMINADO' else 'cancelado',
+                    completed_at=completed_at,
+                    cancel_reason=data.get('motivo_cancelacion')
+                )
+
+                self._order_history.append(order)
+                self._total_completed += 1
+
+        except Exception as e:
+            print(f"Error loading history from Firestore: {e}")
 
 
     def mark_order_listo(self, order_id: int):
@@ -321,15 +379,18 @@ class AppState:
                     'leida': False,
                     'fecha': firestore.SERVER_TIMESTAMP,
                 })
+            # Asegurar actualización inmediata del tiempo de espera
+            self._tiempo_espera = self._calculate_tiempo_espera()
+            self._update_global_state()
 
     def mark_order_recogido(self, order_id: int):
         """
         Marca el pedido como RECOGIDO en Firestore.
-        Luego cambia a TERMINADO y remueve del panel.
+        Luego remueve el pedido del panel y lo archiva.
         """
         order = next((o for o in self._orders if o.id == order_id), None)
         if order:
-            order.status = "terminado"
+            order.status = "recogido"
             order.completed_at = datetime.now()
             self._orders.remove(order)
             self._order_history.insert(0, order)
@@ -340,9 +401,12 @@ class AppState:
             firestore_id = self._firestore_ids.get(order_id)
             if firestore_id:
                 db.collection('pedidos').document(firestore_id).update({
-                    'estado': 'TERMINADO',
+                    'estado': 'RECOGIDO',
                     'fecha_completado': firestore.SERVER_TIMESTAMP,
                 })
+            # Asegurar actualización inmediata del tiempo de espera
+            self._tiempo_espera = self._calculate_tiempo_espera()
+            self._update_global_state()
 
     def mark_order_cancelado(self, order_id: int, reason: str):
         """
@@ -375,6 +439,9 @@ class AppState:
                     'leida': False,
                     'fecha': firestore.SERVER_TIMESTAMP,
                 })
+            # Asegurar actualización inmediata del tiempo de espera
+            self._tiempo_espera = self._calculate_tiempo_espera()
+            self._update_global_state()
 
     def _get_usuario_id(self, firestore_id: str) -> str:
         """Obtiene el usuario_id real del pedido desde Firestore (caché local)."""
@@ -543,6 +610,7 @@ class OrderTicketCard(ctk.CTkFrame):
         self._alpha       = 1.0        # logical opacity (0–1)
         self._removing    = False
         self._buttons_frame = None
+        self._status_btn = None
         self._build()
 
     def _build(self):
@@ -629,6 +697,7 @@ class OrderTicketCard(ctk.CTkFrame):
                 command=self._on_listo_click,
             )
             listo_btn.pack(side="left", fill="x", expand=True, padx=(0, 5))
+            self._status_btn = listo_btn
 
             cancel_btn = ctk.CTkButton(
                 self._buttons_frame, text="✗ Cancelado",
@@ -639,7 +708,6 @@ class OrderTicketCard(ctk.CTkFrame):
             )
             cancel_btn.pack(side="right", fill="x", expand=True, padx=(5, 0))
         elif self._order.status == "listo":
-            # One button: Recogido
             recogido_btn = ctk.CTkButton(
                 self._buttons_frame, text="✓ Recogido",
                 font=ctk.CTkFont(size=13, weight="bold"),
@@ -648,6 +716,7 @@ class OrderTicketCard(ctk.CTkFrame):
                 command=self._on_recogido_click,
             )
             recogido_btn.pack(fill="x")
+            self._status_btn = recogido_btn
 
     def _on_listo_click(self):
         self._on_listo(self._order.id)
@@ -708,11 +777,12 @@ class OrderTicketCard(ctk.CTkFrame):
 
     # ── ANIMATED REMOVAL ─────────────────────────────────
     def _request_remove(self):
-        """Called when cook clicks ready. Animates out, then notifies state."""
+        """Called when cook clicks ready or picked up. Animates out, then notifies state."""
         if self._removing:
             return
         self._removing = True
-        self._ready_btn.configure(state="disabled", text="✓  Done!")
+        if self._status_btn:
+            self._status_btn.configure(state="disabled", text="✓  Done!")
         # Step 1: fade to green tint
         self.configure(fg_color="#E8F5E9", border_color=C["green_mid"])
         self.after(60, self._start_fade)
@@ -864,22 +934,25 @@ class KitchenDisplayTab(ctk.CTkFrame):
     def _do_state_change(self):
         """Called by AppState._notify(). Only adds new cards; removal
         is triggered by the card's own animation → _handle_ready()."""
-        pending     = self._state.get_pending_orders()
-        pending_ids = {o.id for o in pending}
+        active_orders = self._state.get_active_orders()
+        active_ids = {o.id for o in active_orders}
 
         # Update counters only
-        self._active_pill._num.configure(text=str(len(pending)))
+        self._active_pill._num.configure(text=str(len(active_orders)))
         self._done_pill._num.configure(text=str(self._state.total_completed))
 
-        # Add cards for brand-new orders
-        for order in pending:
-            if order.id not in self._cards:
+        # Refresh buttons on existing active cards and add brand-new orders
+        for order in active_orders:
+            card = self._cards.get(order.id)
+            if card:
+                card._update_buttons()
+            elif order.id not in self._cards:
                 self._add_card(order)
 
         # Clean up any cards whose orders vanished without animation
         # (e.g. external cancellation from Firebase)
         for oid in list(self._cards.keys()):
-            if oid not in pending_ids:
+            if oid not in active_ids:
                 card = self._cards.pop(oid)
                 if oid in self._order_seq:
                     self._order_seq.remove(oid)
@@ -887,7 +960,7 @@ class KitchenDisplayTab(ctk.CTkFrame):
                     card.destroy()
                 self._reflow_grid()
 
-        self._toggle_empty_state(len(pending) == 0)
+        self._toggle_empty_state(len(active_orders) == 0)
 
     def _add_card(self, order: Order):
         """Place a new card into the next available grid cell."""
@@ -1008,9 +1081,10 @@ class OrderHistoryTab(ctk.CTkFrame):
         self._state = state
         self._search_var = tk.StringVar()
         self._filter_var = tk.StringVar(value="all")
-        self._date_var   = tk.StringVar(value=date.today().strftime("%Y-%m-%d"))
+        self._date_var   = tk.StringVar(value="")
         self._build()
         state.subscribe(self._refresh_results)
+        self._do_refresh()
 
     def _build(self):
         # Filter card
@@ -1031,7 +1105,7 @@ class OrderHistoryTab(ctk.CTkFrame):
         ctk.CTkLabel(c1, text="📅 Date", font=ctk.CTkFont(size=12),
                      text_color=C["gray_text"]).pack(anchor="w")
         ctk.CTkEntry(c1, textvariable=self._date_var,
-                     height=36, placeholder_text="YYYY-MM-DD").pack(fill="x", pady=2)
+                     height=36, placeholder_text="YYYY-MM-DD (leave empty for all)").pack(fill="x", pady=2)
 
         # Filter type
         c2 = ctk.CTkFrame(row, fg_color="transparent")
@@ -1076,7 +1150,7 @@ class OrderHistoryTab(ctk.CTkFrame):
 
     def _do_refresh(self, *_):
         for w in self._res_scroll.winfo_children():
-            w.destroy()
+            self.after(0, w.destroy)
 
         q      = self._search_var.get().lower()
         ftype  = self._filter_var.get()
@@ -1084,7 +1158,7 @@ class OrderHistoryTab(ctk.CTkFrame):
         filtered = []
 
         for o in self._state.get_history():
-            if o.completed_at:
+            if seldat and o.completed_at:
                 if o.completed_at.strftime("%Y-%m-%d") != seldat:
                     continue
             if q:
@@ -1222,7 +1296,7 @@ class MenuManagementTab(ctk.CTkFrame):
     def _show_form(self, item: Optional[MenuItem] = None):
         self._form_outer.pack(fill="x", padx=20, pady=(4, 0))
         for w in self._form_outer.winfo_children():
-            w.destroy()
+            self.after(0, w.destroy)
 
         self._editing_id = item.id if item else None
         title = "Edit Menu Item" if item else "Add New Menu Item"
@@ -1320,7 +1394,7 @@ class MenuManagementTab(ctk.CTkFrame):
     # ── GRID ─────────────────────────────────────────────
     def _refresh_grid(self, *_):
         for w in self._grid_scroll.winfo_children():
-            w.destroy()
+            self.after(0, w.destroy)
 
         cat = self._cat_filter.get()
         items = [m for m in self._state.get_menu_items()
