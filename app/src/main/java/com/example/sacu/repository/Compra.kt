@@ -45,6 +45,30 @@ class Compra {
             .toMutableList()
     }
 
+    fun quitarProducto(producto: Producto) {
+        val cantidadActual = carritoTotal
+            .filter { it.nombre == producto.nombre }
+            .maxOfOrNull { it.cantidad } ?: return
+
+        if (cantidadActual <= 1) {
+            carritoTotal.removeAll { it.nombre == producto.nombre }
+            carrito.removeAll { it.nombre == producto.nombre }
+            Log.d("SACU_CARRITO", "Eliminado del carrito: ${producto.nombre}")
+        } else {
+            val nuevaCantidad = cantidadActual - 1
+            val item = ItemPedido(
+                producto_id = producto.id,
+                nombre = producto.nombre,
+                cantidad = nuevaCantidad,
+                precio_unitario = producto.precio
+            )
+            carritoTotal.add(item)
+            carrito.add(item)
+            eliminarDups()
+            Log.d("SACU_CARRITO", "Restado del carrito: ${producto.nombre} → $nuevaCantidad")
+        }
+    }
+
     fun totalAPagar(): Double {
         var total = 0.0
         for (item in carritoTotal) {

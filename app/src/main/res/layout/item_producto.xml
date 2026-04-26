@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="130dp"
-    android:layout_height="160dp"
+    android:layout_height="170dp"
     android:layout_margin="8dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
@@ -36,33 +36,60 @@
             android:ellipsize="end"
             android:textColor="@color/on_surface" />
 
+        <TextView
+            android:id="@+id/txtPrecioProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$28"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="10dp">
+            android:gravity="center"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/pill_secondary"
+            android:paddingHorizontal="4dp"
+            android:paddingVertical="2dp">
 
             <TextView
-                android:id="@+id/txtPrecioProducto"
+                android:id="@+id/btnRestarProducto"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:text="−"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/txtCantidadProducto"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="$28"
+                android:text="1"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="@color/black" />
+                android:textColor="@color/white"
+                android:gravity="center" />
 
-            <ImageButton
-                android:id="@+id/btnAgregarProducto"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/icono_mas"
-                android:scaleType="centerCrop"
-                android:padding="4dp"
-                android:scaleX="1.5"
-                android:scaleY="1.5"
-                android:background="@drawable/circle_background" />
+            <TextView
+                android:id="@+id/btnSumarProducto"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:text="+"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true" />
 
         </LinearLayout>
 

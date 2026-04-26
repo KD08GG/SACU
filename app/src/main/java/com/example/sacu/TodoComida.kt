@@ -62,14 +62,13 @@ class TodoComida : AppCompatActivity() {
 
         rvComidas.layoutManager = layoutManagerComidas
 
-        comidasAdapter = ProductoAdapter(listaComidas) { producto ->
+        comidasAdapter = ProductoAdapter(listaComidas) { producto, _ ->
             onAgregarProductoClick(producto)
         }
         rvComidas.adapter = comidasAdapter
     }
 
     private fun onAgregarProductoClick(producto: Producto) {
-        // Por ahora solo mostramos en log que se agregó
         Log.d("SACU_HOME", "Agregar al carrito: ${producto.nombre}")
         compra.agregarProducto(producto)
     }

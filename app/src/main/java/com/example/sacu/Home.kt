@@ -116,10 +116,10 @@ class Home : AppCompatActivity() {
         
         rvDesayunos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvComidas.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        
-        desayunosAdapter = ProductoAdapter(listaDesayunos) { compra.agregarProducto(it) }
-        comidasAdapter = ProductoAdapter(listaComidas) { compra.agregarProducto(it) }
-        
+
+        desayunosAdapter = ProductoAdapter(listaDesayunos) { producto, _ -> compra.agregarProducto(producto) }
+        comidasAdapter = ProductoAdapter(listaComidas) { producto, _ -> compra.agregarProducto(producto) }
+
         rvDesayunos.adapter = desayunosAdapter
         rvComidas.adapter = comidasAdapter
     }
