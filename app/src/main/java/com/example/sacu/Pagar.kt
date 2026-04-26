@@ -2,6 +2,7 @@ package com.example.sacu
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -61,9 +62,12 @@ class Pagar : AppCompatActivity() {
                 numero_fila = siguienteNumero,
                 fecha = Timestamp(Date())
             )
+            Log.d("FirestoreRepositoryyyyy", "Creando pedido: $nuevoPedido")
 
             repository.crearPedido(nuevoPedido, 
                 onSuccess = { pedidoId ->
+                    Log.d("FirestoreRepositoryyyyy", "pedidoId creado: $pedidoId")
+
                     compra.limpiarCarrito()
                     val intent = Intent(this, PagoProcesado::class.java).apply {
                         putExtra("pedido_id", pedidoId)
