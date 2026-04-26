@@ -27,11 +27,15 @@ class Home : AppCompatActivity() {
 
     private lateinit var txtNombre: TextView
     private lateinit var txtID: TextView
+    private lateinit var frameEnFila: FrameLayout
+    private lateinit var frameTiempo: FrameLayout
+    private lateinit var framePedido: FrameLayout
+    private lateinit var frameTurnoActual: FrameLayout
+
     private lateinit var totalPedidos: TextView
     private lateinit var tiempoEspera: TextView
     private lateinit var numPedido: TextView
-    private lateinit var framePedido: FrameLayout
-    private lateinit var frameTurnoActual: FrameLayout
+    private lateinit var turnoActual: TextView
 
     private lateinit var desayunosAdapter: ProductoAdapter
     private lateinit var comidasAdapter: ProductoAdapter
@@ -41,6 +45,7 @@ class Home : AppCompatActivity() {
 
     private var filaListener: ListenerRegistration? = null
     private var pedidoActivoListener: ListenerRegistration? = null
+    private var globalStateListener: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +58,9 @@ class Home : AppCompatActivity() {
         totalPedidos = findViewById(R.id.TotalPedidos)
         tiempoEspera = findViewById(R.id.TiempoEspera)
         numPedido = findViewById(R.id.NumPedido)
+        turnoActual = findViewById(R.id.TurnoActual)
+        frameEnFila = findViewById(R.id.frameEnFila)
+        frameTiempo = findViewById(R.id.frameTiempo)
         framePedido = findViewById(R.id.framePedido)
         frameTurnoActual = findViewById(R.id.frameTurnoActual)
 
@@ -87,23 +95,30 @@ class Home : AppCompatActivity() {
     private fun setupListeners() {
         val uid = auth.currentUser?.uid ?: return
         
-        // Listener de pedidos en fila (Corregido: ahora recibe los dos parámetros)
+        // Listener de pedidos en fila
         filaListener = repository.escucharPedidosEnFila({ cantidad ->
             totalPedidos.text = cantidad.toString()
-            tiempoEspera.text = getString(R.string.wait_time_format, cantidad * 5)
         }, { error ->
             Log.e("Home", "Error en fila: ${error.message}")
         })
 
-        // Listener de mi pedido actual (Corregido: ahora recibe los dos parámetros)
+        // Listener de estado global: tiempo de espera real y turno actual desde panel cocina
+        globalStateListener = repository.escucharEstadoGlobal({ tiempo, turno ->
+            tiempoEspera.text = getString(R.string.wait_time_format, tiempo)
+            turnoActual.text = turno.toString()
+        }, { error ->
+            Log.e("Home", "Error estado global: ${error.message}")
+        })
+
+        // Listener de mi pedido actual
         pedidoActivoListener = repository.escucharPedidoActivo(uid, { pedido ->
             if (pedido != null) {
+                numPedido.text = pedido.numero_fila.toString()
                 framePedido.visibility = View.VISIBLE
                 frameTurnoActual.visibility = View.VISIBLE
-                numPedido.text = pedido.numero_fila.toString()
             } else {
                 framePedido.visibility = View.GONE
-                frameTurnoActual.visibility = View.VISIBLE
+                frameTurnoActual.visibility = View.GONE
             }
         }, { error ->
             Log.e("Home", "Error pedido activo: ${error.message}")
@@ -153,5 +168,6 @@ class Home : AppCompatActivity() {
         super.onDestroy()
         filaListener?.remove()
         pedidoActivoListener?.remove()
+        globalStateListener?.remove()
     }
 }

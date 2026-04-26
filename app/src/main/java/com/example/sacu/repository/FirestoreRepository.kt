@@ -138,6 +138,19 @@ class FirestoreRepository {
             }
     }
 
+    fun escucharEstadoGlobal(onUpdate: (tiempoEspera: Int, turnoActual: Int) -> Unit, onError: (Exception) -> Unit): ListenerRegistration {
+        return db.collection("global_state").document("current")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    onError(error)
+                    return@addSnapshotListener
+                }
+                val tiempoEspera = snapshot?.getLong("tiempo_espera")?.toInt() ?: 0
+                val turnoActual  = snapshot?.getLong("turno_actual")?.toInt()  ?: 0
+                onUpdate(tiempoEspera, turnoActual)
+            }
+    }
+
     fun escucharNotificaciones(usuarioId: String, onUpdate: (List<Notificacion>) -> Unit, onError: (Exception) -> Unit): ListenerRegistration {
         return db.collection("notificaciones")
             .whereEqualTo("usuario_id", usuarioId)

@@ -54,6 +54,20 @@ class Compra {
         return total
     }
 
+    fun quitarProducto(producto: Producto) {
+        val itemExistente = carritoTotal.find { it.nombre == producto.nombre }
+
+        itemExistente?.let { item ->
+            if (item.cantidad > 1) {
+                item.cantidad -= 1
+                Log.d("SACU_CARRITO", "Se restó 1 a: ${producto.nombre}, ahora hay ${item.cantidad}")
+            } else {
+                carritoTotal.remove(item)
+                Log.d("SACU_CARRITO", "Se eliminó del carrito: ${producto.nombre}")
+            }
+        }
+    }
+
     fun limpiarCarrito() {
         carrito.clear()
         carritoTotal.clear()
