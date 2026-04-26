@@ -20,7 +20,7 @@ class PedidoAdapter(
     private val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     inner class PedidoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imgProducto: ImageView  = itemView.findViewById(R.id.imgPedido)
+        val imgProducto: ImageView  = itemView.findViewById(R.id.imgProducto1)
         val txtNombre: TextView     = itemView.findViewById(R.id.txtNombrePedido)
         val txtFecha: TextView      = itemView.findViewById(R.id.txtFechaPedido)
     }
