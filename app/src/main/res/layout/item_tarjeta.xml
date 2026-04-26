@@ -53,8 +53,8 @@
 
         <ImageButton
             android:id="@+id/btnEliminarTarjeta"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
             android:backgroundTint="@color/transparent"
             android:src="@drawable/icono_borrar"
             android:scaleType="centerCrop" />
