@@ -75,7 +75,7 @@ class Pagar : AppCompatActivity() {
                 Toast.makeText(this, "No tienes seleccionada ningún método de pago", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            procesarPedido(totalAmount)
+            procesarPedido(compra.totalAPagar())
         }
 
         btnCambiar.setOnClickListener {

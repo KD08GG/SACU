@@ -54,11 +54,6 @@ class Carrito : AppCompatActivity() {
 
         val txtVacio = findViewById<TextView>(R.id.txtVacio)
 
-        if (listaComidas.isEmpty()) {
-            txtVacio.visibility = View.VISIBLE
-        } else {
-            txtVacio.visibility = View.GONE
-        }
         // Actualizar visibilidad basado en si el carrito está vacío
         updateCartVisibility(btnComprar, btnExplorarMenu, tvCarritoVacio)
 
