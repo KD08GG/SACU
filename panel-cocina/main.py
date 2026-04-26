@@ -161,15 +161,19 @@ class AppState:
         return self._next_order_number
 
     def start_order_listener(self, ui_callback):
+
+        print("Listener activo")
         """
         Escucha en tiempo real los pedidos con estado PENDIENTE o EN_PREPARACION.
         Cada vez que la app Android crea un pedido nuevo, este método lo recibe
         y actualiza la UI del panel de cocina automáticamente.
         """
         def on_snapshot(col_snapshot, changes, read_time):
+
             for change in changes:
                 if change.type.name == 'ADDED':
                     data = change.document.to_dict()
+                    print("Pedido recibido:", data)
 
                     # Convertir items de Firestore a objetos OrderItem
                     items_raw = data.get('items', [])
@@ -546,6 +550,7 @@ class OrderTicketCard(ctk.CTkFrame):
 # ════════════════════════════════════════════════════════
 
 class KitchenDisplayTab(ctk.CTkFrame):
+    
     COLS = 4   # tickets per row — change to 3 if window is narrower
 
     def __init__(self, parent, state: AppState, toast_fn: Callable, **kwargs):
@@ -557,6 +562,8 @@ class KitchenDisplayTab(ctk.CTkFrame):
         self._empty_lbl = None
         self._build()
         state.subscribe(self._on_state_change)
+
+        self._state.start_order_listener(self._on_state_change)
 
     def _build(self):
         # ── Stats bar ────────────────────────────────────
@@ -1201,7 +1208,6 @@ class CafeteriaApp(ctk.CTk):
         self._build()
 
         # ── DATABASE HOOK: CONNECTING TO FIREBASE ──
-        self._state.start_order_listener(self._build)
 
         self.after(60_000, self._date_check_loop)
 
@@ -1277,11 +1283,25 @@ class CafeteriaApp(ctk.CTk):
     def on_close(self):
         self.destroy()
 
+
+    def _reflow_grid(self):
+        """Re-grid all remaining cards in insertion order — no rebuild."""
+        row, col = 0, 0
+        for oid in self._order_seq:
+            card = self._cards.get(oid)
+            if card:
+                card.grid(row=row, column=col, padx=6, pady=6, sticky="nsew")
+                col += 1
+                if col >= self.COLS:
+                    col = 0
+                    row += 1
+        self._next_row = row
+        self._next_col = col
+
 # ════════════════════════════════════════════════════════
 #  ENTRY POINT
 # ════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
     app = CafeteriaApp()
-    app.protocol("WM_DELETE_WINDOW", app.on_close)
     app.mainloop()

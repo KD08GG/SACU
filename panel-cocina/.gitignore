@@ -1,1 +1,15 @@
 panel-cocina/serviceAccountKey.json
+serviceAccountKey.json
+
+# Entornos virtuales
+venv/
+ENV/
+env/
+
+# IDEs
+.idea/
+.vscode/
+
+# Python cache
+__pycache__/
+*.py[cod]
