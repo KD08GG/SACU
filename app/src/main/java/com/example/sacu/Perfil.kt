@@ -3,6 +3,7 @@ package com.example.sacu
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sacu.adapter.PedidoAdapter
 import com.example.sacu.model.Pedido
+import com.example.sacu.model.Tarjeta
 import com.example.sacu.repository.FirestoreRepository
 import com.example.sacu.utils.UserSession
 import com.google.firebase.auth.FirebaseAuth
@@ -49,6 +51,25 @@ class Perfil : AppCompatActivity() {
         setupAcciones()
     }
 
+    override fun onResume() {
+        super.onResume()
+        actualizarTarjetaPredeterminada()
+    }
+
+    private fun actualizarTarjetaPredeterminada() {
+        val tarjeta = userSession.obtenerTarjetaPredeterminada()
+        val textTitulo = findViewById<TextView>(R.id.textTarjetaPred)
+        val textNumero = findViewById<TextView>(R.id.textNumTarjeta)
+        
+        if (tarjeta != null) {
+            textTitulo.text = tarjeta.nombreTitular
+            textNumero.text = "**** **** **** ${tarjeta.numero.takeLast(4)}"
+        } else {
+            textTitulo.text = "Sin tarjeta"
+            textNumero.text = "Agrega una para pagar"
+        }
+    }
+
     private fun cargarInformacionUsuario(txtNombre: TextView, txtID: TextView) {
         val localUser = userSession.obtenerUsuario()
         if (localUser != null && localUser.nombre.isNotEmpty()) {
@@ -68,7 +89,6 @@ class Perfil : AppCompatActivity() {
 
     private fun cargarUltimosPedidos() {
         val uid = auth.currentUser?.uid ?: return
-        // Se agregaron los argumentos faltantes (onUpdate y onError) para coincidir con el repositorio
         pedidosListener = repository.escucharTodosLosPedidosDelUsuario(uid, { pedidos ->
             listaPedidos.clear()
             listaPedidos.addAll(pedidos)
@@ -79,8 +99,24 @@ class Perfil : AppCompatActivity() {
     }
 
     private fun setupAcciones() {
-        findViewById<ImageButton>(R.id.btnEditar).setOnClickListener { startActivity(Intent(this, TarjetaPred::class.java)) }
-        findViewById<ImageButton>(R.id.btnEditar2).setOnClickListener { startActivity(Intent(this, TarjetaPred::class.java)) }
+        findViewById<ImageButton>(R.id.btnEditar).setOnClickListener { 
+            val tarjeta = userSession.obtenerTarjetaPredeterminada()
+            if (tarjeta != null) {
+                val intent = Intent(this, TarjetaPred::class.java).apply {
+                    putExtra("tarjeta_id", tarjeta.id)
+                }
+                startActivity(intent)
+            }
+        }
+        findViewById<ImageButton>(R.id.btnEditar2).setOnClickListener { 
+            val tarjeta = userSession.obtenerTarjetaPredeterminada()
+            if (tarjeta != null) {
+                val intent = Intent(this, TarjetaPred::class.java).apply {
+                    putExtra("tarjeta_id", tarjeta.id)
+                }
+                startActivity(intent)
+            }
+        }
         findViewById<ImageButton>(R.id.btnMasTarjetas).setOnClickListener { startActivity(Intent(this, AgregarTarjeta::class.java)) }
         findViewById<Button>(R.id.btnMetodos).setOnClickListener { startActivity(Intent(this, MetodosDePago::class.java)) }
         findViewById<Button>(R.id.btnComidas).setOnClickListener { startActivity(Intent(this, Notificaciones::class.java)) }

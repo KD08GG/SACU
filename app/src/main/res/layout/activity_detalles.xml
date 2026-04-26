@@ -64,7 +64,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="600dp"
         android:layout_gravity="center"
         android:background="@drawable/round_container"
         android:layout_marginLeft="20dp"
@@ -109,6 +109,10 @@
 
         >
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -117,7 +121,6 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="15dp"
             >
-
 
 
             <TextView
@@ -228,9 +231,15 @@
                 android:layout_gravity="center"
                 />
 
-
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvProductosDetalles"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
+        </ScrollView>
 
         </FrameLayout>
 

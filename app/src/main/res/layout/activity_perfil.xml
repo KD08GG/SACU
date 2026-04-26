@@ -431,14 +431,13 @@
 
                 <ImageButton
                     android:id="@+id/btnEditar2"
-                    android:layout_width="60dp"
+                    android:layout_width="56dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/icono_edit"
-                    android:scaleType="centerCrop"
-                    android:backgroundTint="@color/white"
-                    android:layout_marginTop="-10dp"
                     android:layout_gravity="center"
-                    />
+                    android:layout_marginTop="-10dp"
+                    android:backgroundTint="@color/white"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_edit" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
