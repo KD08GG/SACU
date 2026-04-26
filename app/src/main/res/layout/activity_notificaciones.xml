@@ -100,13 +100,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvNotif"
                 android:layout_width="wrap_content"
-                android:layout_height="470dp"
+                android:layout_height="570dp"
                 android:layout_gravity="center"
                 />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="57dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

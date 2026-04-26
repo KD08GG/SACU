@@ -18,7 +18,8 @@ class Compra {
             producto_id = producto.id,
             nombre = producto.nombre,
             cantidad = n,
-            precio_unitario = producto.precio
+            precio_unitario = producto.precio,
+            //imagen_url = producto.imagen_url // Agregamos la URL de la imagen al ItemPedido
         )
         carrito.add(item)
         carritoTotal.add(item)
@@ -45,36 +46,26 @@ class Compra {
             .toMutableList()
     }
 
-    fun quitarProducto(producto: Producto) {
-        val cantidadActual = carritoTotal
-            .filter { it.nombre == producto.nombre }
-            .maxOfOrNull { it.cantidad } ?: return
-
-        if (cantidadActual <= 1) {
-            carritoTotal.removeAll { it.nombre == producto.nombre }
-            carrito.removeAll { it.nombre == producto.nombre }
-            Log.d("SACU_CARRITO", "Eliminado del carrito: ${producto.nombre}")
-        } else {
-            val nuevaCantidad = cantidadActual - 1
-            val item = ItemPedido(
-                producto_id = producto.id,
-                nombre = producto.nombre,
-                cantidad = nuevaCantidad,
-                precio_unitario = producto.precio
-            )
-            carritoTotal.add(item)
-            carrito.add(item)
-            eliminarDups()
-            Log.d("SACU_CARRITO", "Restado del carrito: ${producto.nombre} → $nuevaCantidad")
-        }
-    }
-
     fun totalAPagar(): Double {
         var total = 0.0
         for (item in carritoTotal) {
             total += item.precio_unitario * item.cantidad
         }
         return total
+    }
+
+    fun quitarProducto(producto: Producto) {
+        val itemExistente = carritoTotal.find { it.nombre == producto.nombre }
+
+        itemExistente?.let { item ->
+            if (item.cantidad > 1) {
+                item.cantidad -= 1
+                Log.d("SACU_CARRITO", "Se restó 1 a: ${producto.nombre}, ahora hay ${item.cantidad}")
+            } else {
+                carritoTotal.remove(item)
+                Log.d("SACU_CARRITO", "Se eliminó del carrito: ${producto.nombre}")
+            }
+        }
     }
 
     fun limpiarCarrito() {

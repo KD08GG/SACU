@@ -24,6 +24,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/logito" />
 
+
         <TextView
             android:id="@+id/txtNombreProducto"
             android:layout_width="match_parent"
@@ -47,6 +48,7 @@
             android:layout_marginTop="4dp" />
 
         <LinearLayout
+            android:id="@+id/btnCantidadProducto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -54,7 +56,8 @@
             android:layout_marginTop="6dp"
             android:background="@drawable/pill_secondary"
             android:paddingHorizontal="4dp"
-            android:paddingVertical="2dp">
+            android:paddingVertical="2dp"
+            android:visibility="invisible">
 
             <TextView
                 android:id="@+id/btnRestarProducto"
@@ -94,5 +97,27 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_margin="8dp"
+       android:paddingTop="120dp"
+
+        >
+
+        <ImageButton
+            android:id="@+id/empProd"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icono_mas"
+            android:background="#00FFFFFF"/>
+
+    </FrameLayout>
+
+
 
 </androidx.cardview.widget.CardView>

@@ -26,6 +26,18 @@
                 android:layout_gravity="center"
                 android:background="@drawable/circle_background" />
 
+            <TextView
+                android:id="@+id/txtVacio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tu carrito está vacio"
+                android:textSize="20dp"
+                android:textStyle="italic"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_marginTop="100dp"
+                />
+
         </LinearLayout>
     </FrameLayout>
 
@@ -98,6 +110,8 @@
                 android:layout_height="40dp"
                 />
 
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvComidas"
                 android:layout_width="match_parent"
@@ -105,6 +119,17 @@
                 android:layout_height="520dp"
                 android:layout_gravity="center"
                 />
+
+            <TextView
+                android:id="@+id/txtTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$$$"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_gravity="right"
+                android:layout_marginEnd="30dp"
+               />
 
             <Button
                 android:id="@+id/btnComprar"

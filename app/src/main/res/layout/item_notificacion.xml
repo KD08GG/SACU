@@ -52,7 +52,8 @@
             android:textStyle="bold"
             android:textSize="14sp"
             android:textColor="@color/black"
-            android:gravity="center" />
+            android:gravity="left"
+            android:layout_gravity="center" />
 
         <Button
             android:id="@+id/btnMasDetalles"

@@ -3,8 +3,11 @@ package com.example.sacu
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -20,11 +23,13 @@ import com.example.sacu.repository.Compra
 import com.example.sacu.repository.carritoTotal
 
 private var carritoTotal = carritoTotal
+private val compra = Compra()
 
 
 class Carrito : AppCompatActivity() {
     private lateinit var comidasAdapter: ItemCarritoAdapter
     private var listaComidas = carritoTotal
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,26 +49,51 @@ class Carrito : AppCompatActivity() {
         //RECYCLE VIEW
         val rvProductos = findViewById<RecyclerView>(R.id.rvComidas)
 
+        val txtVacio = findViewById<TextView>(R.id.txtVacio)
+
+        if (listaComidas.isEmpty()) {
+            txtVacio.visibility = View.VISIBLE
+        } else {
+            txtVacio.visibility = View.GONE
+        }
+
         // FUNCION BOTON COMPRAR
         btnComprar.setOnClickListener {
-            val intent = Intent(this, Pagar::class.java)
-            startActivity(intent)
+
+            if (listaComidas.isEmpty()) {
+                Toast.makeText(this, "El carrito está vacío", Toast.LENGTH_SHORT).show()
+            } else {
+                val intent = Intent(this, Pagar::class.java)
+                startActivity(intent)
+            }
         }
 
         setupRecyclerViews(rvProductos)
+        actualizarTotal()
 
 
 
     }
 
     private fun setupRecyclerViews(rvComidas: RecyclerView) {
-        val layoutManagerComidas = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rvComidas.layoutManager = LinearLayoutManager(this)
 
-        rvComidas.layoutManager = layoutManagerComidas
-
-        comidasAdapter = ItemCarritoAdapter(listaComidas)
+        comidasAdapter = ItemCarritoAdapter(listaComidas) {
+            actualizarTotal()
+        }
 
         rvComidas.adapter = comidasAdapter
+    }
+
+    private fun actualizarTotal() {
+        val total = findViewById<TextView?>(R.id.txtTotal)
+
+        total?.text = "$  ${compra.totalAPagar()}"
+
+        if (listaComidas.isEmpty()) {
+            val txtVacio = findViewById<TextView>(R.id.txtVacio)
+            txtVacio.visibility = View.VISIBLE
+        }
     }
 
 
@@ -100,5 +130,7 @@ class Carrito : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+
 
 }
