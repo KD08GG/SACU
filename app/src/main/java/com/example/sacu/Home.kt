@@ -27,12 +27,15 @@ class Home : AppCompatActivity() {
 
     private lateinit var txtNombre: TextView
     private lateinit var txtID: TextView
+    private lateinit var frameEnFila: FrameLayout
+    private lateinit var frameTiempo: FrameLayout
+    private lateinit var framePedido: FrameLayout
+    private lateinit var frameTurnoActual: FrameLayout
+
     private lateinit var totalPedidos: TextView
     private lateinit var tiempoEspera: TextView
     private lateinit var numPedido: TextView
     private lateinit var turnoActual: TextView
-    private lateinit var framePedido: FrameLayout
-    private lateinit var frameTurnoActual: FrameLayout
 
     private lateinit var desayunosAdapter: ProductoAdapter
     private lateinit var comidasAdapter: ProductoAdapter
@@ -56,6 +59,8 @@ class Home : AppCompatActivity() {
         tiempoEspera = findViewById(R.id.TiempoEspera)
         numPedido = findViewById(R.id.NumPedido)
         turnoActual = findViewById(R.id.TurnoActual)
+        frameEnFila = findViewById(R.id.frameEnFila)
+        frameTiempo = findViewById(R.id.frameTiempo)
         framePedido = findViewById(R.id.framePedido)
         frameTurnoActual = findViewById(R.id.frameTurnoActual)
 
@@ -101,7 +106,6 @@ class Home : AppCompatActivity() {
         globalStateListener = repository.escucharEstadoGlobal({ tiempo, turno ->
             tiempoEspera.text = getString(R.string.wait_time_format, tiempo)
             turnoActual.text = turno.toString()
-            frameTurnoActual.visibility = if (turno > 0) View.VISIBLE else View.GONE
         }, { error ->
             Log.e("Home", "Error estado global: ${error.message}")
         })
@@ -109,10 +113,12 @@ class Home : AppCompatActivity() {
         // Listener de mi pedido actual
         pedidoActivoListener = repository.escucharPedidoActivo(uid, { pedido ->
             if (pedido != null) {
-                framePedido.visibility = View.VISIBLE
                 numPedido.text = pedido.numero_fila.toString()
+                framePedido.visibility = View.VISIBLE
+                frameTurnoActual.visibility = View.VISIBLE
             } else {
                 framePedido.visibility = View.GONE
+                frameTurnoActual.visibility = View.GONE
             }
         }, { error ->
             Log.e("Home", "Error pedido activo: ${error.message}")
