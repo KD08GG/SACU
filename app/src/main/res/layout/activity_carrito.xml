@@ -114,6 +114,24 @@
                 android:layout_gravity="center"
                 android:backgroundTint="@color/primary"/>
 
+            <TextView
+                android:id="@+id/tvCarritoVacio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No hay productos en el carrito."
+                android:textSize="16sp"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/btnExplorarMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Explora el menú"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/primary"
+                android:visibility="gone"/>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
