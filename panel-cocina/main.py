@@ -371,8 +371,15 @@ class AppState:
             })
         ─────────────────────────────────────────────────────
         """
+        doc_ref = db.collection('productos').add({
+            'nombre': name,
+            'categoria': next((k for k, v in {'Desayunos': 'breakfast', 'Comidas': 'main'}.items() if v == category), name),
+            'precio': price,
+            'disponible': available,
+            'descripcion': description,
+        })
         item = MenuItem(
-            id=str(int(time.time() * 1000)),
+            id=doc_ref[1].id,
             name=name, category=category,
             price=price, available=available, description=description,
         )
@@ -389,6 +396,12 @@ class AppState:
         """
         item = next((m for m in self._menu_items if m.id == item_id), None)
         if item:
+            firestore_kwargs = {}
+            key_map = {'name': 'nombre', 'category': 'categoria', 'price': 'precio',
+                       'available': 'disponible', 'description': 'descripcion'}
+            for k, v in kwargs.items():
+                firestore_kwargs[key_map.get(k, k)] = v
+            db.collection('productos').document(item_id).update(firestore_kwargs)
             for k, v in kwargs.items():
                 setattr(item, k, v)
             self._notify()
@@ -400,6 +413,7 @@ class AppState:
             db.collection('menuItems').document(item_id).delete()
         ─────────────────────────────────────────────────────
         """
+        db.collection('productos').document(item_id).delete()
         self._menu_items = [m for m in self._menu_items if m.id != item_id]
         self._notify()
 
@@ -881,7 +895,7 @@ class KitchenDisplayTab(ctk.CTkFrame):
     def _handle_listo(self, order_id: int):
         """Called when listo button is clicked."""
         self._state.mark_order_listo(order_id)
-        self._toast(f"✅  Order marked as Listo!")
+        self._toast(f"Order ready!")
 
     def _handle_cancelado(self, order_id: int, reason: str):
         """Called when cancelado is confirmed."""
@@ -894,7 +908,7 @@ class KitchenDisplayTab(ctk.CTkFrame):
             card.destroy()
         self._reflow_grid()
         self._toggle_empty_state(len(self._cards) == 0)
-        self._toast(f"❌  Order cancelled: {reason}")
+        self._toast(f"Order cancelled: {reason}")
 
     def _handle_recogido(self, order_id: int):
         """Called AFTER the card's animation completes for recogido."""
@@ -911,7 +925,7 @@ class KitchenDisplayTab(ctk.CTkFrame):
         # Update state
         if order:
             self._state.mark_order_recogido(order_id)
-            self._toast(f"✅  Order #{order.order_number} Recogido!")
+            self._toast(f"Order #{order.order_number} picked up!")
 
         # Reflow remaining cards into clean grid positions
         self._reflow_grid()
@@ -1432,7 +1446,7 @@ class CafeteriaApp(ctk.CTk):
         #self._simulator = MockOrderSimulator(self._state)
         self._build()
 
-        # ── DATABASE HOOK: CONNECTING TO FIREBASE ──
+        self._state._update_global_state()  # sync initial state to Firestore on startup
 
         self.after(60_000, self._date_check_loop)
 

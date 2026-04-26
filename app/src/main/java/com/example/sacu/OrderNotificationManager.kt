@@ -29,7 +29,7 @@ class OrderNotificationManager(private val context: Context) {
         notificationManager.createNotificationChannel(channel)
     }
 
-    fun showNotification(orderId: String, status: OrderStatus, userId: String) {
+    fun showNotification(orderId: String, status: OrderStatus, userId: String, numeroPedido: Int = 0) {
         val (title, message, actions, canDismiss) = when (status) {
             is OrderStatus.Pendiente -> "Pedido Realizado" to "En preparación" to emptyList() to false
             is OrderStatus.Listo -> "Pedido Listo" to "Pasa a recogerlo" to emptyList() to false
@@ -60,14 +60,12 @@ class OrderNotificationManager(private val context: Context) {
 
         // Save to Firestore
         val notificationData = hashMapOf(
-            "orderId" to orderId,
-            "userId" to userId,
-            "title" to title,
-            "message" to message,
-            "timestamp" to System.currentTimeMillis(),
-            "canDismiss" to canDismiss,
-            "status" to status::class.simpleName,
-            "isActive" to true
+            "usuario_id"    to userId,
+            "pedido_id"     to orderId,
+            "numero_pedido" to numeroPedido,
+            "mensaje"       to message,
+            "leida"         to false,
+            "fecha"         to com.google.firebase.Timestamp.now()
         )
 
         db.collection("notificaciones").document(orderId).set(notificationData)
@@ -75,7 +73,7 @@ class OrderNotificationManager(private val context: Context) {
 
     fun dismissNotification(orderId: String) {
         notificationManager.cancel(orderId.hashCode())
-        // Mark as inactive in Firestore
-        db.collection("notificaciones").document(orderId).update("isActive", false)
+        // Mark as read in Firestore
+        db.collection("notificaciones").document(orderId).update("leida", true)
     }
 }
