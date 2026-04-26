@@ -45,10 +45,15 @@ class Notificaciones : AppCompatActivity() {
 
     private fun escucharNotificacionesReales() {
         val uid = auth.currentUser?.uid ?: return
-        // Se pasan los dos parámetros: el bloque de éxito y el bloque de error
         notifListener = repository.escucharNotificaciones(uid, { notificaciones ->
+            val ordenadas = notificaciones.sortedWith(compareByDescending<Notificacion> { 
+                !it.leida // Primero las no leídas (activas)
+            }.thenByDescending { 
+                it.fecha // Luego por fecha más reciente
+            })
+            
             listaNotificaciones.clear()
-            listaNotificaciones.addAll(notificaciones)
+            listaNotificaciones.addAll(ordenadas)
             adapter.notifyDataSetChanged()
         }, { error ->
             Log.e("Notificaciones", "Error: ${error.message}")
