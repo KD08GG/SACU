@@ -19,6 +19,7 @@ import com.example.sacu.model.ItemPedido
 import com.example.sacu.model.Producto
 import com.example.sacu.repository.Compra
 import com.example.sacu.repository.carritoTotal
+import androidx.core.view.isVisible
 
 private var carritoTotal = carritoTotal
 
