@@ -18,7 +18,7 @@ class FirestoreRepository {
     // USUARIOS
     fun verificarMatricula(matricula: String, onSuccess: (Boolean) -> Unit, onError: (Exception) -> Unit) {
         db.collection("usuarios_autorizados").document(matricula).get()
-            .addOnSuccessListener { document -> onSuccess(document.exists()) }
+             .addOnSuccessListener { document -> onSuccess(document.exists()) }
             .addOnFailureListener { onError(it) }
     }
 
