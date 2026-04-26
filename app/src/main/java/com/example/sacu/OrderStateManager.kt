@@ -13,12 +13,11 @@ class OrderStateManager(private val notificationManager: OrderNotificationManage
                 notificationManager.showNotification(orderId, newStatus, userId, numeroPedido)
             }
             is OrderStatus.Recogido -> {
-                // No mostrar notificación, mostrar en historial
+                // Actualizar historial y quitar de notificaciones push
                 notificationManager.dismissNotification(orderId)
-                        // lógica para un historial de pedidos pendiente
             }
             is OrderStatus.Terminado -> {
-                // Ya no mostrar notificación
+                // Ya no mostrar notificación push, marcar en historial
                 notificationManager.dismissNotification(orderId)
             }
             is OrderStatus.Cancelado -> {

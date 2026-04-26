@@ -95,17 +95,28 @@ class FirestoreRepository {
     fun escucharPedidoActivo(usuarioId: String, onUpdate: (Pedido?) -> Unit, onError: (Exception) -> Unit): ListenerRegistration {
         return db.collection("pedidos")
             .whereEqualTo("usuario_id", usuarioId)
-            .whereIn("estado", listOf("PENDIENTE", "EN_PREPARACION", "LISTO"))
+            .whereIn("estado", listOf("PENDIENTE", "EN_PREPARACION", "LISTO", "RECOGIDO", "TERMINADO"))
             .orderBy("fecha", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     onError(error)
                     return@addSnapshotListener
                 }
-                val pedido = snapshot?.documents?.firstOrNull()?.let { doc ->
+                
+                val pedidos = snapshot?.documents?.mapNotNull { doc ->
                     doc.toObject(Pedido::class.java)?.copy(id = doc.id)
+                } ?: emptyList()
+
+                // BUSCAMOS EL SIGUIENTE PEDIDO EN PREPARACIÓN (CASCADA)
+                // Siempre priorizamos mostrar el que se está cocinando.
+                val enPreparacion = pedidos.find { it.estado == "PENDIENTE" || it.estado == "EN_PREPARACION" }
+                
+                if (enPreparacion != null) {
+                    onUpdate(enPreparacion)
+                } else {
+                    // Si no hay ninguno en preparación, enviamos el más reciente LISTO (para notificar y cerrar)
+                    onUpdate(pedidos.find { it.estado == "LISTO" })
                 }
-                onUpdate(pedido)
             }
     }
 
