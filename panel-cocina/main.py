@@ -171,7 +171,7 @@ class AppState:
         if pending_count == 0:
             return 0
         else:
-            # W = (L + 1) / u, with service capacity u = 0.5
+            # W = (L + 1) / u, with ser.vice capacity u = 0.5
             wait_minutes = (pending_count + 1) / 0.5
             return int(wait_minutes)
 
