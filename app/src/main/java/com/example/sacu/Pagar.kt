@@ -2,7 +2,6 @@ package com.example.sacu
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
@@ -33,54 +32,44 @@ class Pagar : AppCompatActivity() {
     private val repository = FirestoreRepository()
     private val auth = FirebaseAuth.getInstance()
     private lateinit var userSession: UserSession
+    private lateinit var paymentNotifManager: PaymentNotificationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_pagar)
         userSession = UserSession(this)
+        paymentNotifManager = PaymentNotificationManager(this)
 
         botonesMenu()
 
-        val total = findViewById<TextView>(R.id.txtTotal)
-        val btnComprar = findViewById<Button>(R.id.btnComprar)
+        val btnComprar  = findViewById<Button>(R.id.btnComprar)
         val rvProductos = findViewById<RecyclerView>(R.id.rvProductos)
-        val txtFecha = findViewById<TextView>(R.id.txtFecha)
+        val txtFecha    = findViewById<TextView>(R.id.txtFecha)
         val txtNumPedido = findViewById<TextView>(R.id.txtNumPedido)
-        val btnCambiar = findViewById<ImageButton>(R.id.btncambiar)
+        val btnCambiar  = findViewById<ImageButton>(R.id.btncambiar)
 
-        // Configurar fecha actual
         txtFecha.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
-        // Configurar siguiente número de pedido
         repository.obtenerSiguienteNumeroPedido { numero ->
             txtNumPedido.text = numero.toString()
         }
 
-        // Configurar información de tarjeta
         actualizarInfoTarjeta()
-
         setupRecyclerViews(rvProductos)
-
         actualizarTotal()
-
-        btnComprar.setOnClickListener { it: View? ->
-            val totalActual = compra.totalAPagar()
-            procesarPedido(totalActual)
-        }
 
         btnComprar.setOnClickListener {
             val tarjeta = userSession.obtenerTarjetaPredeterminada()
             if (tarjeta == null) {
-                Toast.makeText(this, "No tienes seleccionada ningún método de pago", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "No tienes ningún método de pago seleccionado", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            procesarPedido(compra.totalAPagar())
+            procesarPedido(compra.totalAPagar(), tarjeta.numero)
         }
 
         btnCambiar.setOnClickListener {
-            val intent = Intent(this, MetodosDePago::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, MetodosDePago::class.java))
         }
     }
 
@@ -90,10 +79,10 @@ class Pagar : AppCompatActivity() {
     }
 
     private fun actualizarInfoTarjeta() {
-        val tarjeta = userSession.obtenerTarjetaPredeterminada()
-        val textTitulo = findViewById<TextView>(R.id.textTarjetaPred)
-        val textNumero = findViewById<TextView>(R.id.textNumTarjeta)
-        
+        val tarjeta     = userSession.obtenerTarjetaPredeterminada()
+        val textTitulo  = findViewById<TextView>(R.id.textTarjetaPred)
+        val textNumero  = findViewById<TextView>(R.id.textNumTarjeta)
+
         if (tarjeta != null) {
             textTitulo.text = tarjeta.nombreTitular
             textNumero.text = "**** **** **** ${tarjeta.numero.takeLast(4)}"
@@ -103,55 +92,66 @@ class Pagar : AppCompatActivity() {
         }
     }
 
-    private fun procesarPedido(totalAmount: Double) {
+    private fun procesarPedido(totalAmount: Double, numeroTarjeta: String) {
         val uid = auth.currentUser?.uid ?: return
-        btnComprarUI(getString(R.string.processing))
+        val terminacion = numeroTarjeta.replace(" ", "").takeLast(4)
 
-        repository.obtenerSiguienteNumeroPedido { siguienteNumero ->
-            val localUser = userSession.obtenerUsuario()
-            val nuevoPedido = Pedido(
-                usuario_id = uid,
-                nombre_usuario = localUser?.nombre ?: "",
-                matricula = localUser?.matricula ?: "",
-                estado = "PENDIENTE",
-                total = totalAmount,
-                numero_fila = siguienteNumero,
-                fecha = Timestamp(Date()),
-                productos = ArrayList(carritoTotal)
-            )
-            
-            repository.crearPedido(nuevoPedido, 
-                onSuccess = { pedidoId ->
-                    compra.limpiarCarrito()
-                    val intent = Intent(this, PagoProcesado::class.java).apply {
-                        putExtra("pedido_id", pedidoId)
-                        putExtra("numero_pedido", siguienteNumero)
-                    }
-                    startActivity(intent)
-                    finish()
-                },
-                onError = { error ->
-                    btnComprarUI("Comprar")
-                    Toast.makeText(this, "Error: ${error.message}", Toast.LENGTH_LONG).show()
+        setBtnComprar(getString(R.string.processing), enabled = false)
+        paymentNotifManager.mostrarProcesandoPago(terminacion, totalAmount)
+
+        repository.procesarPago(numeroTarjeta, totalAmount, uid,
+            onSuccess = { termActual ->
+                paymentNotifManager.mostrarPagoExitoso(termActual, totalAmount)
+
+                repository.obtenerSiguienteNumeroPedido { siguienteNumero ->
+                    val localUser = userSession.obtenerUsuario()
+                    val nuevoPedido = Pedido(
+                        usuario_id    = uid,
+                        nombre_usuario = localUser?.nombre ?: "",
+                        matricula     = localUser?.matricula ?: "",
+                        estado        = "PENDIENTE",
+                        total         = totalAmount,
+                        numero_fila   = siguienteNumero,
+                        fecha         = Timestamp(Date()),
+                        productos     = ArrayList(carritoTotal)
+                    )
+
+                    repository.crearPedido(nuevoPedido,
+                        onSuccess = { pedidoId ->
+                            compra.limpiarCarrito()
+                            val intent = Intent(this, PagoProcesado::class.java).apply {
+                                putExtra("pedido_id", pedidoId)
+                                putExtra("numero_pedido", siguienteNumero)
+                            }
+                            startActivity(intent)
+                            finish()
+                        },
+                        onError = { error ->
+                            Log.e("Pagar", "Error creando pedido: ${error.message}")
+                            setBtnComprar("Comprar", enabled = true)
+                            Toast.makeText(this, "Error al crear el pedido: ${error.message}", Toast.LENGTH_LONG).show()
+                        }
+                    )
                 }
-            )
-        }
+            },
+            onError = { reason ->
+                setBtnComprar("Comprar", enabled = true)
+                paymentNotifManager.mostrarPagoRechazado(terminacion, reason.mensaje)
+                Toast.makeText(this, "Pago rechazado: ${reason.mensaje}", Toast.LENGTH_LONG).show()
+            }
+        )
     }
 
-    private fun btnComprarUI(texto: String) {
+    private fun setBtnComprar(texto: String, enabled: Boolean) {
         findViewById<Button>(R.id.btnComprar).apply {
             text = texto
-            isEnabled = (texto != getString(R.string.processing))
+            isEnabled = enabled
         }
     }
 
     private fun setupRecyclerViews(rvComidas: RecyclerView) {
         rvComidas.layoutManager = LinearLayoutManager(this)
-
-        comidasAdapter = ItemCarritoAdapter(listaComidas) {
-            actualizarTotal()
-        }
-
+        comidasAdapter = ItemCarritoAdapter(listaComidas) { actualizarTotal() }
         rvComidas.adapter = comidasAdapter
     }
 
@@ -163,14 +163,12 @@ class Pagar : AppCompatActivity() {
     }
 
     private fun actualizarTotal() {
-        val total = findViewById<TextView>(R.id.txtTotal)
         val totalAmount = compra.totalAPagar()
-        total.text = " $totalAmount"
+        findViewById<TextView>(R.id.txtTotal).text = " $totalAmount"
 
         if (totalAmount == 0.0) {
             Toast.makeText(this, "El carrito está vacío", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, Home::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, Home::class.java))
         }
     }
 }
