@@ -30,6 +30,11 @@ class MetodosDePago : AppCompatActivity() {
 
         botonesMenu()
 
+        findViewById<TextView>(R.id.txtTituloMetodos).setOnLongClickListener {
+            startActivity(Intent(this, AdminTarjetas::class.java))
+            true
+        }
+
         // RecyclerView de otras tarjetas
         val rvTarjetas = findViewById<RecyclerView>(R.id.rvProductos)
         rvTarjetas.layoutManager = LinearLayoutManager(this)
