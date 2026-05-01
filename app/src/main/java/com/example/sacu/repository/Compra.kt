@@ -38,12 +38,11 @@ class Compra {
     }
 
     private fun eliminarDups() {
-        carritoTotal = carritoTotal
+        val deduplicados = carritoTotal
             .groupBy { it.nombre }
-            .map { (_, lista) ->
-                lista.maxByOrNull { it.cantidad }!!
-            }
-            .toMutableList()
+            .map { (_, lista) -> lista.maxByOrNull { it.cantidad }!! }
+        carritoTotal.clear()
+        carritoTotal.addAll(deduplicados)
     }
 
     fun totalAPagar(): Double {

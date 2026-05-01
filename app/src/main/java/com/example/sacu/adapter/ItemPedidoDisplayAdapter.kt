@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.sacu.R
 import com.example.sacu.model.ItemPedido
 
@@ -32,9 +33,13 @@ class ItemPedidoDisplayAdapter(
         holder.txtNombre.text = item.nombre
         holder.txtPrecio.text = "$${item.precio_unitario.toInt()}"
         holder.txtCantidad.text = "x${item.cantidad}"
-        
-        // Aquí podrías usar Glide si tuvieras la URL de la imagen en ItemPedido
-        // Glide.with(holder.itemView.context).load(item.imagenUrl).into(holder.imgProducto)
+
+        if (item.imagen_url.isNotEmpty()) {
+            Glide.with(holder.itemView.context)
+                .load(item.imagen_url)
+                .placeholder(R.drawable.icono_mas)
+                .into(holder.imgProducto)
+        }
     }
 
     override fun getItemCount(): Int = items.size

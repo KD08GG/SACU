@@ -47,6 +47,13 @@ class ItemCarritoAdapter(
         holder.txtPrecio.text = "$${item.precio_unitario.toInt()}"
         holder.txtCantidad.text = item.cantidad.toString()
 
+        if (item.imagen_url.isNotEmpty()) {
+            Glide.with(holder.itemView.context)
+                .load(item.imagen_url)
+                .placeholder(R.drawable.icono_mas)
+                .into(holder.imgProducto)
+        }
+
         holder.btnAgregar.setOnClickListener {
             val pos = holder.bindingAdapterPosition
 
