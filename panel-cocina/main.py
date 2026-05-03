@@ -163,6 +163,64 @@ class AppState:
     def get_active_orders(self) -> list:
         return [o for o in self._orders if o.status in ("pendiente", "listo")]
 
+    def refresh_orders(self):
+        """
+        Manually refresh active orders from Firestore.
+        Called by refresh button in UI.
+        """
+        print("Manual refresh triggered: fetching active orders from Firestore...")
+        try:
+            docs = db.collection('pedidos').where(
+                filter=FieldFilter('estado', 'in', ['PENDIENTE', 'EN_PREPARACION', 'LISTO'])
+            ).stream()
+            
+            # Clear and rebuild active orders
+            self._orders.clear()
+            self._firestore_ids.clear()
+            self._usuario_ids.clear()
+            self._turno_actual = 0
+            self._turno_siguiente = 1
+            
+            for doc in docs:
+                data = doc.to_dict()
+                print(f"  Refreshed: {data.get('numero_fila')} - {data.get('nombre_usuario')}")
+                
+                items_raw = data.get('productos', data.get('items', []))
+                items = [
+                    OrderItem(
+                        name=i.get('nombre', ''),
+                        quantity=i.get('cantidad', 1),
+                        notes=i.get('notas', '')
+                    )
+                    for i in items_raw
+                ]
+                
+                order = Order(
+                    id=hash(doc.id) % 100000,
+                    order_number=str(data.get('numero_fila', 0)).zfill(4),
+                    user_id=data.get('matricula', data.get('usuario_id', '')),
+                    user_name=data.get('nombre_usuario', 'Usuario'),
+                    payment_type=data.get('metodo_pago', 'cash'),
+                    items=items,
+                    timestamp=data.get('fecha', datetime.now()),
+                    status='pendiente',
+                )
+                
+                self._firestore_ids[order.id] = doc.id
+                self._usuario_ids[doc.id] = data.get('usuario_id', '')
+                self._orders.append(order)
+                
+                if self._turno_actual == 0:
+                    self._turno_actual = int(order.order_number)
+                    self._turno_siguiente = self._turno_actual + 1
+            
+            self._tiempo_espera = self._calculate_tiempo_espera()
+            self._update_global_state()
+            print(f"Refresh complete: {len(self._orders)} active orders loaded")
+            self._notify()
+        except Exception as e:
+            print(f"Error during manual refresh: {e}")
+
     def get_history(self) -> list:
         return list(self._order_history)
 
@@ -171,7 +229,7 @@ class AppState:
         if pending_count == 0:
             return 0
         else:
-            # W = (L + 1) / u, with service capacity u = 0.5
+            # W = (L + 1) / u, with ser.vice capacity u = 0.5
             wait_minutes = (pending_count + 1) / 0.5
             return int(wait_minutes)
 
@@ -210,87 +268,97 @@ class AppState:
     def start_order_listener(self, ui_callback):
 
         print("Listener activo")
+        print("Configurando listener de Firestore para pedidos activos...")
         """
         Escucha en tiempo real los pedidos con estado PENDIENTE o EN_PREPARACION.
         Cada vez que la app Android crea un pedido nuevo, este método lo recibe
         y actualiza la UI del panel de cocina automáticamente.
         """
         def on_snapshot(col_snapshot, changes, read_time):
+            print(f"on_snapshot fired at {read_time}; {len(changes)} change(s)")
+            try:
+                for change in changes:
+                    print(f" Firestore event: {change.type.name} doc={change.document.id}")
+                    if change.type.name == 'ADDED':
+                        data = change.document.to_dict()
+                        print("Pedido recibido:", data)
 
-            for change in changes:
-                if change.type.name == 'ADDED':
-                    data = change.document.to_dict()
-                    print("Pedido recibido:", data)
+                        # Convertir items de Firestore a objetos OrderItem
+                        items_raw = data.get('productos', data.get('items', []))
+                        items = [
+                            OrderItem(
+                                name=i.get('nombre', ''),
+                                quantity=i.get('cantidad', 1),
+                                notes=i.get('notas', '')
+                            )
+                            for i in items_raw
+                        ]
 
-                    # Convertir items de Firestore a objetos OrderItem
-                    items_raw = data.get('productos', data.get('items', []))
-                    items = [
-                        OrderItem(
-                            name=i.get('nombre', ''),
-                            quantity=i.get('cantidad', 1),
-                            notes=i.get('notas', '')
+                        # Crear el objeto Order con datos reales
+                        order = Order(
+                            id=hash(change.document.id) % 100000,
+                            order_number=str(data.get('numero_fila', 0)).zfill(4),
+                            user_id=data.get('matricula', data.get('usuario_id', '')),
+                            user_name=data.get('nombre_usuario', 'Usuario'),
+                            payment_type=data.get('metodo_pago', 'cash'),
+                            items=items,
+                            timestamp=data.get('fecha', datetime.now()),
+                            status='pendiente',
                         )
-                        for i in items_raw
-                    ]
 
-                    # Crear el objeto Order con datos reales
-                    order = Order(
-                        id=hash(change.document.id) % 100000,
-                        order_number=str(data.get('numero_fila', 0)).zfill(4),
-                        user_id=data.get('matricula', data.get('usuario_id', '')),
-                        user_name=data.get('nombre_usuario', 'Usuario'),
-                        payment_type=data.get('metodo_pago', 'cash'),
-                        items=items,
-                        timestamp=data.get('fecha', datetime.now()),
-                        status='pendiente',
-                    )
+                        # Guardar referencia al ID de Firestore para actualizarlo después
+                        self._firestore_ids[order.id] = change.document.id
+                        self._usuario_ids[change.document.id] = data.get('usuario_id', '')
 
-                    # Guardar referencia al ID de Firestore para actualizarlo después
-                    self._firestore_ids[order.id] = change.document.id
-                    self._usuario_ids[change.document.id] = data.get('usuario_id', '')
+                        self._orders.append(order)
 
-                    self._orders.append(order)
+                        if self._turno_actual == 0:
+                            self._turno_actual = int(order.order_number)
+                            self._turno_siguiente = self._turno_actual + 1
 
-                    if self._turno_actual == 0:
-                        self._turno_actual = int(order.order_number)
-                        self._turno_siguiente = self._turno_actual + 1
+                        self._tiempo_espera = self._calculate_tiempo_espera()
+                        self._update_global_state()
 
-                    self._tiempo_espera = self._calculate_tiempo_espera()
-                    self._update_global_state()
-
-                    self._notify()
-
-                elif change.type.name == 'MODIFIED':
-                    # Si el pedido se modificó desde la app, actualizar localmente
-                    data = change.document.to_dict()
-                    firestore_id = change.document.id
-                    order_id = None
-                    for oid, fid in self._firestore_ids.items():
-                        if fid == firestore_id:
-                            order_id = oid
-                            break
-                    if order_id:
-                        order = next((o for o in self._orders if o.id == order_id), None)
-                        if order:
-                            estado_firestore = data.get('estado', 'PENDIENTE')
-                            status_map = {
-                                'PENDIENTE': 'pendiente',
-                                'LISTO': 'listo',
-                                'RECOGIDO': 'recogido',
-                                'TERMINADO': 'terminado',
-                                'CANCELADO': 'cancelado'
-                            }
-                            new_status = status_map.get(estado_firestore, 'pendiente')
-                            if new_status != order.status:
-                                order.status = new_status
-                                if new_status == 'listo':
-                                    self._update_turnos_on_listo(int(order.order_number))
-                                if new_status in ['recogido', 'terminado', 'cancelado']:
-                                    self._orders.remove(order)
-                                    self._order_history.insert(0, order)
-                            self._tiempo_espera = self._calculate_tiempo_espera()
-                            self._update_global_state()
                         self._notify()
+
+                    elif change.type.name == 'MODIFIED':
+                        # Si el pedido se modificó desde la app, actualizar localmente
+                        data = change.document.to_dict()
+                        firestore_id = change.document.id
+                        order_id = None
+                        for oid, fid in self._firestore_ids.items():
+                            if fid == firestore_id:
+                                order_id = oid
+                                break
+                        if order_id:
+                            order = next((o for o in self._orders if o.id == order_id), None)
+                            if order:
+                                estado_firestore = data.get('estado', 'PENDIENTE')
+                                status_map = {
+                                    'PENDIENTE': 'pendiente',
+                                    'LISTO': 'listo',
+                                    'RECOGIDO': 'recogido',
+                                    'TERMINADO': 'terminado',
+                                    'CANCELADO': 'cancelado'
+                                }
+                                new_status = status_map.get(estado_firestore, 'pendiente')
+                                print(f" Modificado: order {order.order_number} estado {estado_firestore} -> {new_status}")
+                                if new_status != order.status:
+                                    order.status = new_status
+                                    if new_status == 'listo':
+                                        self._update_turnos_on_listo(int(order.order_number))
+                                    if new_status in ['recogido', 'terminado', 'cancelado']:
+                                        self._orders.remove(order)
+                                        self._order_history.insert(0, order)
+                                self._tiempo_espera = self._calculate_tiempo_espera()
+                                self._update_global_state()
+                        self._notify()
+
+                    elif change.type.name == 'REMOVED':
+                        print(f"REMOVED event for doc {change.document.id}; this order no longer matches the active query")
+
+            except Exception as e:
+                print("Error in Firestore snapshot callback:", e)
 
         # Escuchar solo pedidos activos
         query = (db.collection('pedidos')
@@ -876,10 +944,13 @@ class KitchenDisplayTab(ctk.CTkFrame):
         self._cards: dict = {}          # order_id → OrderTicketCard
         self._order_seq: list = []      # insertion-order list of order ids
         self._empty_lbl = None
+        self._pending_state_change = False
+        self._pending_state_lock = threading.Lock()
         self._build()
         state.subscribe(self._on_state_change)
 
         self._state.start_order_listener(self._on_state_change)
+        self.after(100, self._poll_state_changes)
 
     def _build(self):
         # ── Stats bar ────────────────────────────────────
@@ -903,6 +974,17 @@ class KitchenDisplayTab(ctk.CTkFrame):
         self._active_pill.pack(side="left", padx=6)
         self._done_pill   = self._stat_pill(right, "0", "Completed Today", C["orange"])
         self._done_pill.pack(side="left", padx=6)
+
+        # Refresh button
+        ctk.CTkButton(
+            right,
+            text="🔄 Refresh",
+            font=ctk.CTkFont(size=12, weight="bold"),
+            fg_color=C["blue"],
+            hover_color="#1d4ed8",
+            height=40,
+            command=self._handle_refresh
+        ).pack(side="left", padx=6)
 
         # ── Scrollable grid ──────────────────────────────
         self._scroll = ctk.CTkScrollableFrame(self, fg_color=C["app_bg"])
@@ -929,7 +1011,23 @@ class KitchenDisplayTab(ctk.CTkFrame):
     # ── STATE OBSERVER ───────────────────────────────────
     def _on_state_change(self):
         """Called by AppState._notify(). Routes to main thread."""
-        self.after(0, self._do_state_change)
+        if threading.current_thread() is threading.main_thread():
+            self._do_state_change()
+        else:
+            with self._pending_state_lock:
+                self._pending_state_change = True
+
+    def _poll_state_changes(self):
+        with self._pending_state_lock:
+            if self._pending_state_change:
+                self._pending_state_change = False
+                self._do_state_change()
+        self.after(100, self._poll_state_changes)
+
+    def _handle_refresh(self):
+        """Manual refresh button clicked. Fetch active orders from Firestore."""
+        print("User clicked refresh button")
+        self._state.refresh_orders()
 
     def _do_state_change(self):
         """Called by AppState._notify(). Only adds new cards; removal
@@ -1082,9 +1180,12 @@ class OrderHistoryTab(ctk.CTkFrame):
         self._search_var = tk.StringVar()
         self._filter_var = tk.StringVar(value="all")
         self._date_var   = tk.StringVar(value="")
+        self._pending_history_refresh = False
+        self._pending_history_lock = threading.Lock()
         self._build()
         state.subscribe(self._refresh_results)
         self._do_refresh()
+        self.after(100, self._poll_history_refresh)
 
     def _build(self):
         # Filter card
@@ -1145,8 +1246,18 @@ class OrderHistoryTab(ctk.CTkFrame):
         self._res_scroll.pack(fill="both", expand=True, padx=8, pady=(0, 8))
 
     def _refresh_results(self, *_):
-        # Ensure we run on the main Tk thread when called from state subscribers
-        self.after(0, self._do_refresh)
+        if threading.current_thread() is threading.main_thread():
+            self._do_refresh()
+        else:
+            with self._pending_history_lock:
+                self._pending_history_refresh = True
+
+    def _poll_history_refresh(self):
+        with self._pending_history_lock:
+            if self._pending_history_refresh:
+                self._pending_history_refresh = False
+                self._do_refresh()
+        self.after(100, self._poll_history_refresh)
 
     def _do_refresh(self, *_):
         for w in self._res_scroll.winfo_children():
