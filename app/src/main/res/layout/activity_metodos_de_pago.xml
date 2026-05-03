@@ -90,6 +90,7 @@
                 />
 
             <TextView
+                android:id="@+id/txtTituloMetodos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Métodos de Pago"

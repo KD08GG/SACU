@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
         etPassword = findViewById(R.id.etPassword)
         btnIngresar = findViewById(R.id.btnIngresar)
 
+        repository.inicializarTarjetasVirtuales()
+
         if (auth.currentUser != null) {
             irAHome()
             return
