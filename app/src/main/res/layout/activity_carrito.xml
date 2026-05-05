@@ -7,116 +7,84 @@
     android:layout_height="match_parent"
     tools:context=".Carrito"
     android:background="@color/background"
-    >
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="122dp"
-                android:layout_gravity="center"
-                android:background="@drawable/circle_background" />
-
-            <TextView
-                android:id="@+id/txtVacio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tu carrito está vacio"
-                android:textSize="20dp"
-                android:textStyle="italic"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:layout_marginTop="100dp"
-                />
-
-        </LinearLayout>
-    </FrameLayout>
-
-
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:background="@color/white" />
-
-        </LinearLayout>
-    </FrameLayout>
-
-
-
+    tools:ignore="ExtraText">
+    /* ────────────────────────────────────────────────────────────── */
+    /*                    DECORACIÓN SUPERIOR                         */
+    /* ────────────────────────────────────────────────────────────── */
 
     <View
+        android:id="@+id/viewTopArc"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
+        android:layout_height="0dp"
+        android:background="@drawable/circle_background"
+        app:layout_constraintHeight_percent="0.16"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/viewTopWhite"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    /* ────────────────────────────────────────────────────────────── */
+    /*                    DECORACIÓN INFERIOR                         */
+    /* ────────────────────────────────────────────────────────────── */
+
+    <View
+        android:id="@+id/viewBottomArc"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:background="@drawable/circle_background"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintHeight_percent="0.16" />
 
     <View
+        android:id="@+id/viewBottomWhite"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
+        android:layout_height="0dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintHeight_percent="0.10" />
+
+    /* ────────────────────────────────────────────────────────────── */
+    /*                         TÍTULO                                 */
+    /* ────────────────────────────────────────────────────────────── */
+
+    <TextView
+        android:id="@+id/carrito"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Mi Carrito"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/viewTopArc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewTopWhite" />
+
 
 
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/viewBottomArc"
+        app:layout_constraintTop_toBottomOf="@+id/viewTopArc"
+        android:layout_margin="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                />
-
-            <TextView
-                android:id="@+id/carrito"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mi Carrito"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:layout_gravity="center"/>
-
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                />
-
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvComidas"
                 android:layout_width="match_parent"
                 android:layout_marginHorizontal="20dp"
-                android:layout_height="520dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 />
 
@@ -140,6 +108,17 @@
                 android:backgroundTint="@color/primary"/>
 
             <TextView
+                android:id="@+id/txtVacio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="100dp"
+                android:text="Tu carrito está vacío"
+                android:textSize="20sp"
+                android:textStyle="italic"
+                android:visibility="gone" />
+
+            <TextView
                 android:id="@+id/tvCarritoVacio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -156,84 +135,87 @@
                 android:layout_gravity="center"
                 android:backgroundTint="@color/primary"
                 android:visibility="gone"/>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="bottom"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="50dp">
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4" />
-
-                <ImageButton
-                    android:id="@+id/btnHome"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_home"
-                    android:backgroundTint="@color/transparent"
-                    />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <ImageButton
-                    android:id="@+id/btnCarrito"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:backgroundTint="@color/transparent"
-                    android:scaleType="centerCrop"
-                    android:scaleX="1.2"
-                    android:scaleY="1.2"
-                    android:src="@drawable/icono_cartnaranja" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <ImageButton
-                    android:id="@+id/btnNotif"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_notif"
-                    android:backgroundTint="@color/transparent"/>
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <ImageButton
-                    android:id="@+id/btnPerfil"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_perfil"
-                    android:backgroundTint="@color/transparent"/>
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4" />
-
-
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="28dp" />
         </LinearLayout>
     </FrameLayout>
+
+    /* ────────────────────────────────────────────────────────────── */
+    /*              MENÚ DE NAVEGACIÓN (siempre visible)              */
+    /* ────────────────────────────────────────────────────────────── */
+
+    <LinearLayout
+        android:id="@+id/navBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="8dp"
+        android:paddingBottom="24dp"
+        android:elevation="8dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="4" />
+
+        <ImageButton
+            android:id="@+id/btnHome"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:backgroundTint="@color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icono_home" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/btnCarrito"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:backgroundTint="@color/transparent"
+            android:scaleType="centerCrop"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:src="@drawable/icono_cartnaranja" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/btnNotif"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:backgroundTint="@color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icono_notif" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/btnPerfil"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:backgroundTint="@color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icono_perfil" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="4" />
+
+    </LinearLayout>
 
 
 

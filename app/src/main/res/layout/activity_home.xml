@@ -5,141 +5,317 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home"
     android:background="@color/background"
-    >
+    tools:context=".Home">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="167dp"
-                android:layout_gravity="center"
-                android:background="@drawable/circle_background" />
-
-        </LinearLayout>
-    </FrameLayout>
-
-
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:background="@color/white" />
-
-        </LinearLayout>
-    </FrameLayout>
-
-
-
+    /* ────────────────────────────────────────────────────────────── */
+    /*                    DECORACIÓN SUPERIOR                         */
+    /* ────────────────────────────────────────────────────────────── */
 
     <View
+        android:id="@+id/viewTopArc"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
+        android:layout_height="0dp"
+        android:background="@drawable/circle_background"
+        app:layout_constraintHeight_percent="0.16"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/viewTopWhite"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    /* ─── NOMBRE E ID DEL USUARIO (dentro del arco superior) ─── */
+    <TextView
+        android:id="@+id/txtNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:text="Nombre Apellido"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/viewTopArc"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/viewTopArc"
+        app:layout_constraintVertical_bias="0.6" />
+
+    <TextView
+        android:id="@+id/txtID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="4dp"
+        android:text="123456"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNombre" />
+
+    /* ────────────────────────────────────────────────────────────── */
+    /*                    DECORACIÓN INFERIOR                         */
+    /* ────────────────────────────────────────────────────────────── */
+
+    <View
+        android:id="@+id/viewBottomArc"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:background="@drawable/circle_background"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintHeight_percent="0.16" />
 
     <View
+        android:id="@+id/viewBottomWhite"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
+        android:layout_height="0dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintHeight_percent="0.10" />
 
+    /* ────────────────────────────────────────────────────────────── */
+    /*                   CARD DE ESTADÍSTICAS                         */
+    /* ────────────────────────────────────────────────────────────── */
 
+    <LinearLayout
+        android:id="@+id/llEstadisticas"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/round_container"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingVertical="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewTopArc">
 
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                />
-
-            <TextView
-                android:id="@+id/txtNombre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nombre Apellido"
-                android:layout_marginLeft="50dp"
-                android:textSize="20dp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/txtID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="123456"
-                android:layout_marginLeft="50dp"
-                android:textSize="15dp"
-                android:textColor="@color/gray_dark"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="60dp" />
-
-            <ImageView
-                android:id="@+id/contenedor"
-                android:layout_width="match_parent"
-                android:layout_height="98dp"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/round_container"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginHorizontal="50dp"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="22dp" />
+        /* ─── Frame: Pedidos en Fila ─── */
+        <FrameLayout
+            android:id="@+id/frameEnFila"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:orientation="vertical">
 
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_nota" />
 
+                <TextView
+                    android:id="@+id/TotalPedidos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="54"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/EnFila"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Pedidos en \nFila"
+                    android:textColor="@color/gray_medium"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        /* ─── Separador vertical ─── */
+        <View
+            android:layout_width="1dp"
+            android:layout_height="60dp"
+            android:background="@color/divider" />
+
+        /* ─── Frame: Tiempo de espera ─── */
+        <FrameLayout
+            android:id="@+id/frameTiempo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_tiempo" />
+
+                <TextView
+                    android:id="@+id/TiempoEspera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="10:00"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Tiemp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Tiempo de espera aprox"
+                    android:textColor="@color/gray_medium"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        /* ─── Separador vertical (oculto por defecto) ─── */
+        <View
+            android:id="@+id/dividerTurno"
+            android:layout_width="1dp"
+            android:layout_height="60dp"
+            android:background="@color/divider"
+            android:visibility="gone" />
+
+        /* ─── Frame: Turno Actual (oculto por defecto) ─── */
+        <FrameLayout
+            android:id="@+id/frameTurnoActual"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_pedturno" />
+
+                <TextView
+                    android:id="@+id/TurnoActual"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="26"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/TXturnoActual"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Turno\nActual"
+                    android:textColor="@color/gray_medium"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        /* ─── Separador vertical (oculto por defecto) ─── */
+        <View
+            android:id="@+id/dividerPedido"
+            android:layout_width="1dp"
+            android:layout_height="60dp"
+            android:background="@color/divider"
+            android:visibility="gone" />
+
+        /* ─── Frame: Mi número de pedido (oculto por defecto) ─── */
+        <FrameLayout
+            android:id="@+id/framePedido"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icono_num" />
+
+                <TextView
+                    android:id="@+id/NumPedido"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="26"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Mi número de pedido"
+                    android:textColor="@color/gray_medium"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </FrameLayout>
+
+    </LinearLayout>
+
+    /* ────────────────────────────────────────────────────────────── */
+    /*                   CONTENIDO PRINCIPAL                          */
+    /* ────────────────────────────────────────────────────────────── */
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@+id/viewBottomArc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llEstadisticas">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="30dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
+
+            /* ─── SECCIÓN DESAYUNOS ─── */
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/desayunos"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="Desayunos"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="50dp"/>
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/btnDesayunos"
@@ -149,402 +325,139 @@
                     android:backgroundTint="@color/white"
                     android:text="Ver todo"
                     android:textColor="@color/primary"
-                    android:layout_marginRight="50dp"/>
-
-
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="30dp"
                 android:id="@+id/rvDesayunos"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+            /* ─── SEPARADOR ─── */
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            /* ─── SECCIÓN COMIDAS ─── */
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/comidas"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="Comidas"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="50dp"/>
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/btnComidas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:layout_weight="1"
                     android:backgroundTint="@color/white"
                     android:text="Ver todo"
                     android:textColor="@color/primary"
-                    android:layout_marginRight="50dp"/>
-
-
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="30dp"
                 android:id="@+id/rvComidas"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                />
-
-
-
-            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="false"
                 android:orientation="horizontal"
-                android:gravity="bottom"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="50dp">
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4" />
-
-                <ImageButton
-                    android:id="@+id/btnHome"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:backgroundTint="@color/transparent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_homenaranja" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <ImageButton
-                    android:id="@+id/btnCarrito"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_cart"
-                    android:backgroundTint="@color/transparent"
-                    android:scaleX="1.2"
-                    android:scaleY="1.2"/>
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <ImageButton
-                    android:id="@+id/btnNotif"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_notif"
-                    android:backgroundTint="@color/transparent"/>
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <ImageButton
-                    android:id="@+id/btnPerfil"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_perfil"
-                    android:backgroundTint="@color/transparent"/>
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4" />
-
-
-            </LinearLayout>
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </LinearLayout>
-    </FrameLayout>
+    </ScrollView>
 
+    /* ────────────────────────────────────────────────────────────── */
+    /*              MENÚ DE NAVEGACIÓN (siempre visible)              */
+    /* ────────────────────────────────────────────────────────────── */
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/navBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="8dp"
+        android:paddingBottom="24dp"
+        android:elevation="8dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="169dp" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="4" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginHorizontal="50dp">
+        <ImageButton
+            android:id="@+id/btnHome"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:backgroundTint="@color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icono_homenaranja" />
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="150dp"
-                    android:layout_weight="1"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
-                <FrameLayout
-                    android:id="@+id/frameEnFila"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    >
+        <ImageButton
+            android:id="@+id/btnCarrito"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:backgroundTint="@color/transparent"
+            android:scaleType="centerCrop"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:src="@drawable/icono_cart" />
 
-                    <LinearLayout
-                        android:layout_width="60dp"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:layout_gravity="center">
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
-                        <ImageView
-                            android:id="@+id/imageView3"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/icono_nota"/>
+        <ImageButton
+            android:id="@+id/btnNotif"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:backgroundTint="@color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icono_notif" />
 
-                        <TextView
-                            android:id="@+id/TotalPedidos"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="54"
-                            android:textStyle="bold"
-                            android:textSize="20dp"
-                            android:layout_gravity="center"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
-                        <TextView
-                            android:id="@+id/EnFila"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLines="2"
-                            android:text="Pedidos en Fila"
-                            android:gravity="center"
-                            android:textSize="12dp"
-                            android:textColor="@color/gray_medium"/>
-                    </LinearLayout>
+        <ImageButton
+            android:id="@+id/btnPerfil"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:backgroundTint="@color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icono_perfil" />
 
-                    <Space
-                        android:layout_width="70dp"
-                        android:layout_height="wrap_content"
-                        />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="4" />
 
-                </FrameLayout>
-
-
-
-
-                <FrameLayout
-                    android:id="@+id/frameTiempo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2">
-
-                    <View
-                        android:layout_marginTop="10dp"
-                        android:layout_width="2dp"
-                        android:layout_height="96dp"
-                        android:background="@color/divider"
-                        />
-
-
-                    <LinearLayout
-                        android:layout_width="76dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/imageView4"
-                            android:layout_width="50dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/icono_tiempo" />
-
-                        <TextView
-                            android:id="@+id/TiempoEspera"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="10:00"
-                            android:textSize="20dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/Tiemp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:text="Tiempo de espera aprox"
-                            android:textColor="@color/gray_medium"
-                            android:textSize="12dp" />
-                    </LinearLayout>
-
-                    <Space
-                        android:layout_width="80dp"
-                        android:layout_height="wrap_content"
-                        />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/frameTurnoActual"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:visibility="gone"
-                    >
-
-                    <View
-                        android:layout_marginTop="10dp"
-                        android:layout_width="2dp"
-                        android:layout_height="96dp"
-                        android:background="@color/divider"
-                        />
-
-
-                    <LinearLayout
-                        android:layout_width="70dp"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:layout_marginTop="4dp"
-                        android:layout_gravity="center_horizontal">
-
-                        <ImageView
-                            android:id="@+id/imageView9"
-                            android:layout_width="50dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/icono_pedturno" />
-
-                        <TextView
-                            android:id="@+id/TurnoActual"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="26"
-                            android:textStyle="bold"
-                            android:textSize="20dp"
-                            android:layout_gravity="center"/>
-
-                        <TextView
-                            android:id="@+id/TXturnoActual"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLines="2"
-                            android:text="Turno\n Actual"
-                            android:gravity="center_horizontal"
-                            android:textSize="12dp"
-                            android:layout_gravity="center"
-                            android:textColor="@color/gray_medium"/>
-                    </LinearLayout>
-
-                    <Space
-                        android:layout_width="80dp"
-                        android:layout_height="wrap_content"
-                        />
-                </FrameLayout>
-
-
-
-                <FrameLayout
-                    android:id="@+id/framePedido"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:visibility="gone">
-
-                    <View
-                        android:layout_marginTop="10dp"
-                        android:layout_width="2dp"
-                        android:layout_height="96dp"
-                        android:background="@color/divider"
-                        />
-
-                    <LinearLayout
-                        android:layout_width="70dp"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:layout_gravity="center">
-
-                        <ImageView
-                            android:id="@+id/imageView5"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:scaleType="centerCrop"
-                            android:scaleY="1.2"
-                            android:scaleX="1.2"
-                            android:src="@drawable/icono_num"
-                            android:paddingTop="5dp"/>
-
-                        <TextView
-                            android:id="@+id/NumPedido"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="26"
-                            android:textStyle="bold"
-                            android:textSize="20dp"
-                            android:layout_gravity="center"/>
-
-                        <TextView
-                            android:id="@+id/num"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLines="2"
-                            android:text="Mi número de pedido"
-                            android:gravity="center"
-                            android:textSize="12dp"
-                            android:textColor="@color/gray_medium"/>
-                    </LinearLayout>
-                    <Space
-                        android:layout_width="70dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        />
-                </FrameLayout>
-
-
-
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-
-            </LinearLayout>
-        </LinearLayout>
-    </FrameLayout>
-
-
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
