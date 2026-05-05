@@ -297,7 +297,7 @@
             android:layout_height="64dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/button_rounded"
-            android:layout_marginBottom="20dp"/>
+            />
 
     </LinearLayout>
 
@@ -312,7 +312,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
 
 
         <TextView
@@ -332,10 +333,6 @@
             android:textColor="@color/black"
             android:layout_gravity="center"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="80dp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -343,7 +340,8 @@
             android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginHorizontal="35dp">
+            android:layout_marginHorizontal="35dp"
+            android:layout_marginTop="90dp">
 
             <ImageView
                 android:id="@+id/imageView2"

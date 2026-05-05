@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,413 +9,372 @@
     tools:context=".AgregarTarjeta"
     android:background="@color/background">
 
-    <FrameLayout
-        android:id="@+id/frameLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="122dp"
-                android:layout_gravity="center"
-                android:background="@drawable/circle_background" />
-
-        </LinearLayout>
-    </FrameLayout>
-
-
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:background="@color/white" />
-
-        </LinearLayout>
-    </FrameLayout>
-
-
+    <!-- ── FONDO DECORATIVO SUPERIOR (arco) ── -->
     <View
-        android:id="@+id/view3"
+        android:id="@+id/viewTopArc"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
+        android:layout_height="0dp"
+        android:background="@drawable/circle_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHeight_percent="0.16" />
+
+    <!-- Franja blanca que cubre la parte alta del arco -->
+    <View
+        android:id="@+id/viewTopWhite"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHeight_percent="0.08" />
+
+    <!-- ── FONDO DECORATIVO INFERIOR (arco) ── -->
+    <View
+        android:id="@+id/viewBottomArc"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:background="@drawable/circle_background"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintHeight_percent="0.16" />
 
+    <!-- Franja blanca que cubre la parte baja del arco -->
     <View
-        android:id="@+id/view4"
+        android:id="@+id/viewBottomWhite"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
+        android:layout_height="0dp"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.10" />
 
+    <!-- ── TÍTULO ── -->
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Agregar Tarjeta"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/viewTopArc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewTopWhite"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-
-
-    <FrameLayout
+    <!-- ── FORMULARIO centrado entre los dos banners ── -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:scrollbars="none"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
+        app:layout_constraintBottom_toTopOf="@id/navBar">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="40dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Agregar Tarjeta"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:layout_gravity="center"/>
-
-
-
-
+            <!-- Apodo -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="bottom"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="50dp">
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_container"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_marginBottom="10dp">
 
-                <Space
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4" />
+                    android:text="Apodo para la tarjeta"
+                    android:textColor="@color/gray_medium"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.05" />
 
-                <ImageButton
-                    android:id="@+id/btnHome"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_home"
-                    android:backgroundTint="@color/transparent"
-                    />
-
-                <Space
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/txtApodo"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:background="@null"
+                    android:hint="Tarjeta Nueva"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_hint"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp" />
 
-                <ImageButton
-                    android:id="@+id/btnCarrito"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:backgroundTint="@color/transparent"
-                    android:scaleType="centerCrop"
-                    android:scaleX="1.2"
-                    android:scaleY="1.2"
-                    android:src="@drawable/icono_cart" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <ImageButton
-                    android:id="@+id/btnNotif"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_notif"
-                    android:backgroundTint="@color/transparent"/>
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <ImageButton
-                    android:id="@+id/btnPerfil"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:backgroundTint="@color/transparent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/icono_perfilnaranja" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary"
+                    android:alpha="0.35" />
             </LinearLayout>
+
+            <!-- Nombre del titular -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_container"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre del titular"
+                    android:textColor="@color/gray_medium"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.05" />
+
+                <EditText
+                    android:id="@+id/txtNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="Nombre Apellido"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_hint"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary"
+                    android:alpha="0.35" />
+            </LinearLayout>
+
+            <!-- Número de tarjeta -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_container"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Número de tarjeta"
+                    android:textColor="@color/gray_medium"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.05" />
+
+                <EditText
+                    android:id="@+id/txtDigitos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="•••• •••• •••• ••••"
+                    android:textColorHint="@color/gray_hint"
+                    android:textColor="@color/black"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
+                    android:inputType="number"
+                    android:maxLength="16"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary"
+                    android:alpha="0.35" />
+            </LinearLayout>
+
+            <!-- Fecha de vencimiento -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_container"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fecha de vencimiento"
+                    android:textColor="@color/gray_medium"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.05" />
+
+                <EditText
+                    android:id="@+id/txtFecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="MM/AAAA"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray_hint"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary"
+                    android:alpha="0.35" />
+            </LinearLayout>
+
+            <!-- CVV -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_container"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CVV"
+                    android:textColor="@color/gray_medium"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.05" />
+
+                <EditText
+                    android:id="@+id/txtCVV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="•••"
+                    android:textColorHint="@color/gray_hint"
+                    android:textColor="@color/black"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
+                    android:inputType="numberPassword"
+                    android:maxLength="4"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/primary"
+                    android:alpha="0.35" />
+            </LinearLayout>
+
+            <!-- Botón -->
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/white"
+                android:text="Agregar Tarjeta"
+                android:textColor="@color/primary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.08" />
+
         </LinearLayout>
-    </FrameLayout>
+    </ScrollView>
 
-
-    <!-- Formulario: cada campo tiene su propio round_container -->
+    <!-- ── MENÚ DE NAVEGACIÓN (abajo, encima de todo con elevation) ── -->
     <LinearLayout
+        android:id="@+id/navBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginBottom="90dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="8dp"
+        android:paddingBottom="24dp"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Apodo -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_container"
-            android:orientation="vertical"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:layout_marginBottom="10dp">
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="4" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Apodo para la tarjeta"
-                android:textColor="@color/gray_medium"
-                android:textSize="14sp"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.05" />
+        <ImageButton
+            android:id="@+id/btnHome"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icono_home"
+            android:backgroundTint="@color/transparent" />
 
-            <EditText
-                android:id="@+id/txtApodo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:hint="Tarjeta Nueva"
-                android:textColor="@color/black"
-                android:textColorHint="@color/gray_hint"
-                android:textSize="18sp"
-                android:fontFamily="sans-serif"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp" />
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/primary"
-                android:alpha="0.35" />
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/btnCarrito"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:backgroundTint="@color/transparent"
+            android:scaleType="centerCrop"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:src="@drawable/icono_cart" />
 
-        <!-- Nombre del titular -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_container"
-            android:orientation="vertical"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:layout_marginBottom="10dp">
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nombre del titular"
-                android:textColor="@color/gray_medium"
-                android:textSize="14sp"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.05" />
+        <ImageButton
+            android:id="@+id/btnNotif"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icono_notif"
+            android:backgroundTint="@color/transparent" />
 
-            <EditText
-                android:id="@+id/txtNombre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:hint="Nombre Apellido"
-                android:textColor="@color/black"
-                android:textColorHint="@color/gray_hint"
-                android:textSize="19sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp" />
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/primary"
-                android:alpha="0.35" />
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/btnPerfil"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:backgroundTint="@color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icono_perfilnaranja" />
 
-        <!-- Número de tarjeta -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_container"
-            android:orientation="vertical"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:layout_marginBottom="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Número de tarjeta"
-                android:textColor="@color/gray_medium"
-                android:textSize="14sp"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.05" />
-
-            <EditText
-                android:id="@+id/txtDigitos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:hint="•••• •••• •••• ••••"
-                android:textColorHint="@color/gray_hint"
-                android:textColor="@color/black"
-                android:textSize="19sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif"
-                android:inputType="number"
-                android:maxLength="16"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/primary"
-                android:alpha="0.35" />
-        </LinearLayout>
-
-        <!-- Fecha de vencimiento -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_container"
-            android:orientation="vertical"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:layout_marginBottom="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fecha de vencimiento"
-                android:textColor="@color/gray_medium"
-                android:textSize="14sp"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.05" />
-
-            <EditText
-                android:id="@+id/txtFecha"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:hint="MM/AAAA"
-                android:textColor="@color/black"
-                android:textColorHint="@color/gray_hint"
-                android:textSize="19sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/primary"
-                android:alpha="0.35" />
-        </LinearLayout>
-
-        <!-- CVV -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_container"
-            android:orientation="vertical"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:layout_marginBottom="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="CVV"
-                android:textColor="@color/gray_medium"
-                android:textSize="14sp"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.05" />
-
-            <EditText
-                android:id="@+id/txtCVV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:hint="•••"
-                android:textColorHint="@color/gray_hint"
-                android:textColor="@color/black"
-                android:textSize="19sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif"
-                android:inputType="numberPassword"
-                android:maxLength="4"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/primary"
-                android:alpha="0.35" />
-        </LinearLayout>
-
-        <!-- Botón -->
-        <Button
-            android:id="@+id/btnGuardar"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/white"
-            android:text="Agregar Tarjeta"
-            android:textColor="@color/primary"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-medium"
-            android:letterSpacing="0.08" />
-
+        <Space android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="4" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
